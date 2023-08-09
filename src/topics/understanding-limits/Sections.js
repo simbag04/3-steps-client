@@ -1,4 +1,5 @@
 import Graph from "./Graph"
+import './styles.css'
 
 const Section1 = () => {
   return (
@@ -12,7 +13,7 @@ const Section2 = () => {
   return (
     <div>
       A limit is written as
-      <span dangerouslySetInnerHTML={{__html: `\\( \\color{var(--color1)}{\\lim}_\\color{var(--color2)}{{x \\to a}} \\color{var(--color3)}{f(x)} = \\color{var(--color4)}L \\)`}}></span>
+      <span dangerouslySetInnerHTML={{__html: ` \\( \\color{var(--color1)}{\\lim}_\\color{var(--color2)}{{x \\to a}} \\color{var(--color3)}{f(x)} = \\color{var(--color4)}L \\)`}}></span>
     </div>
   )
 }
@@ -37,7 +38,7 @@ const Section4 = () => {
   return (
     <div>
     To understand this, let’s look at an example: 
-    <span dangerouslySetInnerHTML={{__html: `\\( \\color{var(--color1)}{\\lim}_\\color{var(--color2)}{{x \\to 3}} \\color{var(--color3)}{x^2} = \\color{var(--color4)}9 \\)`}} />
+    <span dangerouslySetInnerHTML={{__html: ` \\( \\color{var(--color1)}{\\lim}_\\color{var(--color2)}{{x \\to 3}} \\color{var(--color3)}{x^2} = \\color{var(--color4)}9 \\)`}} />
   </div>
   )
 }
@@ -68,7 +69,7 @@ const Section7 = () => {
   return (
     <div>
       Conceptually, this means that the value of the 
-      <span class="c3"> function</span> 
+      <span class="c3"> function </span> 
       (in this case <span class="c3" dangerouslySetInnerHTML={{__html: ` \\(x^2\\)`}} />) gets closer and closer to <span class="c4">9</span> as the x-value gets closer and closer to <span class="c2">3</span>.
       <Graph />
     </div>
