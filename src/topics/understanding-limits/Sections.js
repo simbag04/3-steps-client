@@ -67,12 +67,16 @@ const Section6 = () => {
 
 const Section7 = () => {
   return (
-    <div>
-      Conceptually, this means that the value of the 
-      <span class="c3"> function </span> 
-      (in this case <span class="c3" dangerouslySetInnerHTML={{__html: ` \\(x^2\\)`}} />) gets closer and closer to <span class="c4">9</span> as the x-value gets closer and closer to <span class="c2">3</span>.
-      <Graph />
-    </div>
+    <>
+      <div>
+        Conceptually, this means that the value of the 
+        <span class="c3"> function </span> 
+        (in this case <span class="c3" dangerouslySetInnerHTML={{__html: ` \\(x^2\\)`}} />) gets closer and closer to <span class="c4">9</span> as the x-value gets closer and closer to <span class="c2">3</span>.
+      </div>
+      <div>
+        <Graph />
+      </div>
+    </>
   )
 }
 

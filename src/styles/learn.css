@@ -1,0 +1,19 @@
+.flex {
+  display: flex;
+}
+
+.vertical {
+  flex-direction: column;
+}
+
+.center {
+  align-items: center;
+}
+
+.medium-gap {
+  gap: 10px;
+}
+
+.medium-font {
+  font-size: 20px;;
+}

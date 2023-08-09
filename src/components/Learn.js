@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import '../styles/learn.css'
 
 const Learn = ({ learnContent }) => {
   const [step, setStep] = useState(0); 
@@ -40,9 +41,9 @@ const Learn = ({ learnContent }) => {
   });
 
   return (
-    <div className='learn-content'>
+    <div className='flex vertical center medium-gap medium-font'>
       {items.map((content, index) => {
-        return <div>{content}</div>
+        return <div className="flex vertical center medium-gap">{content}</div>
       })}
       {remaining ? <button onClick={addItem}>Add</button> : null }
     </div>

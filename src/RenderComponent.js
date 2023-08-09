@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Learn from './Learn';
+import Learn from './components/Learn';
 
 export const RenderComponent = () => {
   const { name } = useParams();
@@ -34,12 +34,9 @@ export const RenderComponent = () => {
     }
   });
 
-
   return (
     <Learn learnContent={learnContent} />
   );
-
-  
 }
 
 /*
