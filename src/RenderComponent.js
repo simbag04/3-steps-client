@@ -9,7 +9,6 @@ export const RenderComponent = () => {
 
   return (
     <div>
-      <h2>Rendering Component based on URL Parameter</h2>
       <Suspense fallback={<div>Loading...</div>}>
         <DynamicComponent />
       </Suspense>
