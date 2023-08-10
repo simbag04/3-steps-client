@@ -67,27 +67,88 @@ const Graph = () => {
 
 
     svg.selectAll('.line')
-      .data([data, data2, data3]) // Pass an array of datasets
+      .data([data, data2, data3.reverse()]) // Pass an array of datasets
       .enter().append('path')
       .attr('class', 'line')
       .attr('fill', 'none')
-      .attr('stroke', (_, i) => i === 0 ? 'blue' : 'green') // Different colors for different datasets
-      .attr('stroke-width', 2)
+      .attr('stroke', (_, i) => i === 0 ? 'blue' : 'green')
+      .attr('stroke-width', (_, i) => i === 0 ? 2 : 4)
       .attr('d', d => line(d));
 
-    // Append points for each dataset
-    // Append points for both datasets
     svg.selectAll('.point')
       .data([data, data2, data3])
       .enter().append('g')
-      .selectAll('.point') 
-        .data((d, i) => d.map((data) => ({...data, index: i})))
-        .enter().append('circle')
-        .attr('class', 'point')
-        .attr('cx', d => xScale(d.label))
-        .attr('cy', d => yScale(d.value))
-        .attr('r', 4)
-        .attr('fill', d => d.index == 0 ? 'blue' : 'green');
+      .selectAll('.point')
+      .data((d, i) => d.map((data) => ({ ...data, index: i })))
+      .enter().append('circle')
+      .attr('class', 'point')
+      .attr('class', (d) => d.index === 0 ? '' : 'animate')
+      .attr('cx', d => xScale(d.label))
+      .attr('cy', d => yScale(d.value))
+      .attr('r', function (d, i) {
+        if ((d.index === 1 && i === 1) ||
+          (d.index === 2 && i === 0) ||
+          (d.index === 0 && d.label === 3.0)) {
+          return 4;
+        }
+        return 0;
+      })
+      .attr('fill', d => d.index === 0 ? 'blue' : 'green');
+
+    const animateGreenLines = () => {
+      const greenLines = svg.selectAll('.line')
+        .filter((_, i) => i !== 0); // Exclude the first dataset (blue line)
+
+      greenLines
+        .attr('stroke-dasharray', function () {
+          const totalLength = this.getTotalLength();
+          return `${totalLength} ${totalLength}`;
+        })
+        .attr('stroke-dashoffset', function () {
+          const totalLength = this.getTotalLength();
+          return totalLength;
+        })
+        .transition()
+        .duration(500)
+        .ease(d3.easeLinear)
+        .attr('stroke-dashoffset', 0)
+        .on('start', animatePoints);
+    }
+
+    const animatePoints = () => {
+      const points = svg.selectAll('.animate');
+
+      points.transition()
+        .duration(500) // Adjust the animation duration as needed
+        .ease(d3.easeLinear)
+        .tween('position', function (d) {
+          const line = d3.select(this.parentNode)
+            .datum();
+    
+          const xInterpolator = d3.interpolate(line[0].label, line[line.length - 1].label);
+    
+          const point = d3.select(this);
+    
+          return function (t) {
+            const x = xScale(xInterpolator(t));
+            const y = yScale(d3.interpolateNumber(line[0].value, line[line.length - 1].value)(t));
+    
+            // Calculate radius based on t (from 0 to 1) and scale it from 0 to 4
+    
+            point.attr('cx', x).attr('cy', y);
+          };
+        });
+    };
+
+    // Initial animation on mount
+    animateGreenLines();
+
+    // Set up interval for animating green lines every 5 seconds
+    const animationInterval = setInterval(animateGreenLines, 1000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(animationInterval);
+
   }, []);
 
   return (

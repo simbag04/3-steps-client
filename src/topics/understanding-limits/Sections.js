@@ -45,15 +45,15 @@ const Section4 = () => {
 
 const Section5 = () => {
   return (
-    <li>
+    <div>
       Can you guess what this means?
-    </li>
+    </div>
   )
 }
 
 const Section6 = () => {
   return (
-    <li>
+    <div>
       This means that the <span className="c1">limit</span> of 
       <span className="c3" dangerouslySetInnerHTML={{__html: ` \\(x^2\\) `}} />
       <span className="c2">as 
@@ -61,7 +61,7 @@ const Section6 = () => {
         <span dangerouslySetInnerHTML={{__html: ` \\(3\\) `}} /> 
       </span> is 
       <span className="c4" dangerouslySetInnerHTML={{__html: ` \\(9\\) `}} />
-    </li>
+    </div>
   )
 }
 
