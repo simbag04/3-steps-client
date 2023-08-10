@@ -78,13 +78,16 @@ const Graph = () => {
     // Append points for each dataset
     // Append points for both datasets
     svg.selectAll('.point')
-      .data([...data, ...data2, ...data3]) // Combine data points from both datasets
-      .enter().append('circle')
-      .attr('class', 'point')
-      .attr('cx', d => xScale(d.label))
-      .attr('cy', d => yScale(d.value))
-      .attr('r', 4)
-      .attr('fill', (_, i) => i < data.length ? 'blue' : 'green');
+      .data([data, data2, data3])
+      .enter().append('g')
+      .selectAll('.point') 
+        .data((d, i) => d.map((data) => ({...data, index: i})))
+        .enter().append('circle')
+        .attr('class', 'point')
+        .attr('cx', d => xScale(d.label))
+        .attr('cy', d => yScale(d.value))
+        .attr('r', 4)
+        .attr('fill', d => d.index == 0 ? 'blue' : 'green');
   }, []);
 
   return (

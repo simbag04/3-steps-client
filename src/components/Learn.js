@@ -43,7 +43,7 @@ const Learn = ({ learnContent }) => {
   return (
     <div className='flex vertical center medium-gap medium-font'>
       {items.map((content, index) => {
-        return <div className="flex vertical center medium-gap">{content}</div>
+        return <div key={index} className="flex vertical center medium-gap">{content}</div>
       })}
       {remaining ? <button onClick={addItem}>Add</button> : null }
     </div>
