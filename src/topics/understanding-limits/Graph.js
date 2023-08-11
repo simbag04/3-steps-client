@@ -134,13 +134,10 @@ const Graph = () => {
         xScale(targetPoint.label) - xScale(currentPoint.label)
       ) * (180 / Math.PI);
     
-      // Calculate the coordinates for the arrow points
-      const arrowLength = 10; // Length of the arrow
-    
       // Create a group element for the arrow and apply translation
       const arrowGroup = svg
         .append("g")
-        .attr("transform", `translate(${xScale(currentPoint.label)}, ${yScale(currentPoint.value)})`);
+        .attr("transform", `translate(${xScale(currentPoint.label)}, ${yScale(currentPoint.value) - 10})`);
     
       // Draw the arrow polygon with rotation
       arrowGroup
