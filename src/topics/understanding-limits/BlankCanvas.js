@@ -5,8 +5,8 @@ const BlankCanvas = () => {
   const svgRef = useRef(null);
 
   useEffect(() => {
-    const width = 560;
-    const height = 560;
+    const width = 360;
+    const height = 360;
     const numCells = 20;
 
     const margin = { top: 20, right: 20, bottom: 20, left: 20 };
@@ -30,7 +30,6 @@ const BlankCanvas = () => {
 
     const yAxis = svg.append('g')
       .attr('class', 'tick')
-      .attr('class', d => d === 0 ? 'zero' : null)
       .attr('transform', `translate(${yScale(0)}, 0)`)
       .call(d3.axisLeft(yScale));
 
@@ -49,6 +48,16 @@ const BlankCanvas = () => {
     yAxis.selectAll(".tick line")
       .attr("x1", -5)
       .attr("x2", 5)
+
+    yAxis.selectAll(".tick text")
+      .attr('y', function(d) {
+        if (d === 0) return '9'
+        return d3.select(this).attr('y');
+      })
+      .attr('dy', function(d) {
+        if (d === 0) return '0.71em'
+        return d3.select(this).attr('dy')
+      })
 
 
     svg
