@@ -36,6 +36,16 @@ const Graph = () => {
       },
     ]
 
+    const horizontalGuideline = [
+      { label: 0, value: 9 },
+      { label: 3, value: 9 }
+    ]
+
+    const verticalGuideline = [
+      { label: 3, value: 0 },
+      { label: 3, value: 9 }
+    ]
+
 
     const margin = { top: 20, right: 30, bottom: 40, left: 40 };
     const width = 600 - margin.left - margin.right;
@@ -59,20 +69,28 @@ const Graph = () => {
 
     svg.append('g')
       .attr('transform', `translate(${margin.left}, 0)`)
-      .call(d3.axisLeft(yScale));
+      .call(d3.axisLeft(yScale).tickValues([...yScale.ticks(), 9]));
 
     const line = d3.line()
       .x(d => xScale(d.label))
       .y(d => yScale(d.value));
 
+    svg.selectAll('.guideline')
+      .data([horizontalGuideline, verticalGuideline])
+      .enter().append('path')
+      .attr('class', 'guideline')
+      .attr('fill', 'none')
+      .attr('stroke', 'gray')
+      .attr('stroke-width', 1)
+      .attr('d', d => line(d))
 
     svg.selectAll('.line')
       .data([data, data2, data3.reverse()]) // Pass an array of datasets
       .enter().append('path')
       .attr('class', 'line')
       .attr('fill', 'none')
-      .attr('stroke', (_, i) => i === 0 ? 'blue' : 'green')
-      .attr('stroke-width', (_, i) => i === 0 ? 2 : 4)
+      .attr('stroke', (_, i) => i === 0 ? 'blue' : 'red')
+      .attr('stroke-width', (_, i) => i === 0 ? 2 : 3)
       .attr('d', d => line(d));
 
     svg.selectAll('.point')
@@ -82,72 +100,69 @@ const Graph = () => {
       .data((d, i) => d.map((data) => ({ ...data, index: i })))
       .enter().append('circle')
       .attr('class', 'point')
-      .attr('class', (d) => d.index === 0 ? '' : 'animate')
       .attr('cx', d => xScale(d.label))
       .attr('cy', d => yScale(d.value))
       .attr('r', function (d, i) {
-        if ((d.index === 1 && i === 1) ||
-          (d.index === 2 && i === 0) ||
-          (d.index === 0 && d.label === 3.0)) {
+        if ((d.index === 0 && d.label === 3.0)) {
           return 4;
         }
         return 0;
       })
-      .attr('fill', d => d.index === 0 ? 'blue' : 'green');
+      .attr('fill', d => d.index === 0 ? 'blue' : 'red');
 
-    const animateGreenLines = () => {
-      const greenLines = svg.selectAll('.line')
-        .filter((_, i) => i !== 0); // Exclude the first dataset (blue line)
+    const arrowMarker = svg
+      .append("defs")
+      .append("marker")
+      .attr("id", "arrow")
+      .attr("markerWidth", 0) // Make the arrowhead smaller
+      .attr("markerHeight", 0) // Make the arrowhead smaller
+      .attr("refX", 0) // Position the arrowhead closer to the endpoint
+      .attr("refY", 0)
+      .attr("orient", "auto");
 
-      greenLines
-        .attr('stroke-dasharray', function () {
-          const totalLength = this.getTotalLength();
-          return `${totalLength} ${totalLength}`;
-        })
-        .attr('stroke-dashoffset', function () {
-          const totalLength = this.getTotalLength();
-          return totalLength;
-        })
-        .transition()
-        .duration(500)
-        .ease(d3.easeLinear)
-        .attr('stroke-dashoffset', 0)
-        .on('start', animatePoints);
+    arrowMarker
+      .append("path")
+      .attr("d", "M0,0 L0,6 L2,3 z") // Smaller arrowhead path
+      .style("fill", "#000");
+
+    createArrow(data2[1], { label: 3, value: 9 })
+    createArrow(data3[1], { label: 3, value: 9 })
+
+    function createArrow(currentPoint, targetPoint) {
+      const angle = Math.atan2(
+        yScale(targetPoint.value) - yScale(currentPoint.value),
+        xScale(targetPoint.label) - xScale(currentPoint.label)
+      ) * (180 / Math.PI);
+    
+      // Calculate the coordinates for the arrow points
+      const arrowLength = 10; // Length of the arrow
+    
+      // Create a group element for the arrow and apply translation
+      const arrowGroup = svg
+        .append("g")
+        .attr("transform", `translate(${xScale(currentPoint.label)}, ${yScale(currentPoint.value)})`);
+    
+      // Draw the arrow polygon with rotation
+      arrowGroup
+        .append("polygon")
+        .attr("points", [[2, 0], [-8, -6], [-8, 6]].map(p => p.join(",")).join(" "))
+        .attr("fill", 'red')
+        .attr("transform", `rotate(${angle}, 0, 0)`); // Rotate the arrow based on the calculated angle
+    
     }
 
-    const animatePoints = () => {
-      const points = svg.selectAll('.animate');
-
-      points.transition()
-        .duration(500) // Adjust the animation duration as needed
-        .ease(d3.easeLinear)
-        .tween('position', function (d) {
-          const line = d3.select(this.parentNode)
-            .datum();
-    
-          const xInterpolator = d3.interpolate(line[0].label, line[line.length - 1].label);
-    
-          const point = d3.select(this);
-    
-          return function (t) {
-            const x = xScale(xInterpolator(t));
-            const y = yScale(d3.interpolateNumber(line[0].value, line[line.length - 1].value)(t));
-    
-            // Calculate radius based on t (from 0 to 1) and scale it from 0 to 4
-    
-            point.attr('cx', x).attr('cy', y);
-          };
-        });
-    };
-
-    // Initial animation on mount
-    animateGreenLines();
-
-    // Set up interval for animating green lines every 5 seconds
-    const animationInterval = setInterval(animateGreenLines, 1000);
-
-    // Clean up interval on component unmount
-    return () => clearInterval(animationInterval);
+    svg.selectAll(".text")
+      .data([{ label: 3, value: 9 }])
+      .enter()
+      .append("text")
+      .attr('class', 'text')
+      .attr('x', d => xScale(d.label))
+      .attr('y', d => yScale(d.value))
+      .attr("dy", -15)
+      .attr("dx", -5)
+      .attr("text-anchor", "middle") // Center the label horizontally
+      .text(d => `(${d.label}, ${d.value})`)
+      .attr("fill", "black");
 
   }, []);
 
