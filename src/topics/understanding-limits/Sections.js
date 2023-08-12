@@ -1,6 +1,7 @@
 import Graph from "./Graph"
 import './styles.css'
 import BlankCanvas from "./BlankCanvas"
+import XSquared from "./XSquared"
 
 const Section1 = () => {
   return (
@@ -75,7 +76,7 @@ const Section7 = () => {
         (in this case <span className="c3" dangerouslySetInnerHTML={{__html: ` \\(x^2\\)`}} />) gets closer and closer to <span className="c4">9</span> as the x-value gets closer and closer to <span className="c2">3</span>.
       </div>
       <div>
-        <BlankCanvas />
+        <XSquared />
       </div>
     </>
   )

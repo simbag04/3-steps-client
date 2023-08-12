@@ -137,7 +137,7 @@ const Graph = () => {
       // Create a group element for the arrow and apply translation
       const arrowGroup = svg
         .append("g")
-        .attr("transform", `translate(${xScale(currentPoint.label)}, ${yScale(currentPoint.value) - 10})`);
+        .attr("transform", `translate(${xScale(currentPoint.label)}, ${yScale(currentPoint.value)})`);
     
       // Draw the arrow polygon with rotation
       arrowGroup

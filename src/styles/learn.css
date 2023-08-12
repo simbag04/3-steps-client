@@ -15,5 +15,10 @@
 }
 
 .medium-font {
-  font-size: 20px;;
+  font-size: 20px;
+}
+
+svg {
+  margin: 0;
+  padding: 0;
 }
