@@ -6,6 +6,7 @@ const createBlankCanvas = (svgRef) => {
   const numCells = 20;
   const half = (width / 2) / numCells;
   const color = "#707070"
+  const size = 5;
 
   const svg = d3.select(svgRef.current)
     .attr('width', width)
@@ -84,24 +85,31 @@ const createBlankCanvas = (svgRef) => {
     .attr("y2", d => yScale(d))
     .attr("stroke", "lightgray");
 
+
   // x and y axes
+  const name = "axes-arrow"
+  createArrowMarker(name, svg, size, color);
+
   svg.append("line")
-    .attr("x1", xScale(-1 * numCells / 2))
-    .attr("x2", xScale(numCells / 2))
+    .attr("x1", 0)
+    .attr("x2", width)
     .attr("y1", yScale(0))
     .attr("y2", yScale(0))
     .attr("stroke", color)
-    .attr("stroke-width", 2);
+    .attr("stroke-width", 2)
+    .attr('marker-end', `url(#${name})`)
+    .attr('marker-start', `url(#${name})`);
 
   svg.append("line")
     .attr("x1", xScale(0))
     .attr("x2", xScale(0))
-    .attr("y1", yScale(-1 * numCells / 2))
-    .attr("y2", yScale(numCells / 2))
+    .attr("y1", height)
+    .attr("y2", 0)
     .attr("stroke", color)
-    .attr("stroke-width", 2);
+    .attr("stroke-width", 2)
+    .attr('marker-end', `url(#${name})`)
+    .attr('marker-start', `url(#${name})`);
 
-  createAllTriangles(svg, xScale, yScale, color)
 
   return {
     width: width,
@@ -111,6 +119,20 @@ const createBlankCanvas = (svgRef) => {
   }
 };
 
+function createArrowMarker(name, svg, size, color) {
+  svg.append("defs").append("marker")
+    .attr("id", name)
+    .attr("refX", size)
+    .attr("refY", size / 2)
+    .attr("markerWidth", size)
+    .attr("markerHeight", size)
+    .attr("orient", "auto-start-reverse")
+    .attr('fill', color)
+    .append("path")
+    .attr("d", `M0,0 V${size} Q${size * 2},${size / 2} 0,0`)
+}
+
+/*
 function createAllTriangles(svg, xScale, yScale, color) {
   const top = [
     [xScale(0.2), yScale(10)],
@@ -152,4 +174,6 @@ function createTriangle(svg, points, color) {
     .attr('stroke-width', 1);
 }
 
-export default createBlankCanvas;
+*/
+
+export { createBlankCanvas, createArrowMarker }

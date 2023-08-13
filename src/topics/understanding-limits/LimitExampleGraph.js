@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import createBlankCanvas from "./BlankCanvas";
+import {createBlankCanvas, createArrowMarker} from "./BlankCanvas";
 import * as d3 from 'd3';
 
 const LimitExampleGraph = () => {
@@ -10,7 +10,8 @@ const LimitExampleGraph = () => {
       const { height, width, xScale, yScale } = createBlankCanvas(svgRef);
       const svg = d3.select(svgRef.current)
       let data = [];
-      const f = x => (6 * x ** 5);
+      const color = 'red';
+      const f = x => (x ** 2);
 
       for (let i = -11; i <= 11; i += 0.001) {
         const x = i;
@@ -28,27 +29,17 @@ const LimitExampleGraph = () => {
         .y(d => yScale(d.y))
 
       const markerSize = 5;
-
-
-      svg.append("defs").append("marker")
-        .attr("id", "arrowhead")
-        .attr("refX", markerSize)
-        .attr("refY", markerSize/2)
-        .attr("markerWidth", markerSize)
-        .attr("markerHeight", markerSize)
-        .attr("orient", "auto-start-reverse")
-        .attr('fill', 'blue')
-        .append("path")
-        .attr("d", `M0,0 V${markerSize} Q${markerSize*2},${markerSize/2} 0,0`)
+      const name = 'function-arrow'
+      createArrowMarker(name, svg, markerSize, color)
 
       svg.append('path')
         .datum(data)
         .attr('class', 'line')
         .attr('fill', 'none')
-        .attr('stroke', 'blue')
+        .attr('stroke', color)
         .attr('stroke-width', 2)
-        .attr('marker-end', 'url(#arrowhead)')
-        .attr('marker-start', 'url(#arrowhead)') 
+        .attr('marker-end', `url(#${name})`)
+        .attr('marker-start', `url(#${name})`) 
         .attr('d', line);
 
       svg.selectAll('.point')
@@ -58,8 +49,8 @@ const LimitExampleGraph = () => {
         .attr('cx', d => xScale(d.x))
         .attr('cy', d => yScale(d.y))
         .attr('r', 3)
-        .attr('fill', 'blue')
-        .attr('stroke', 'blue')
+        .attr('fill', color)
+        .attr('stroke', color)
 
     }
   }, [svgRef])
