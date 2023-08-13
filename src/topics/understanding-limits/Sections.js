@@ -73,7 +73,8 @@ const Section7 = () => {
         <span className="c3"> function </span> 
         (in this case <span className="c3" dangerouslySetInnerHTML={{__html: ` \\(x^2\\)`}} />) gets closer and closer to <span className="c4">9</span> as the x-value gets closer and closer to <span className="c2">3</span>.
       </div>
-      <div>
+      <div className='flex vertical center'>
+        <h3>Graph of <span dangerouslySetInnerHTML={{__html: ` \\(x^2\\)`}} /></h3>
         <LimitExampleGraph />
       </div>
     </>

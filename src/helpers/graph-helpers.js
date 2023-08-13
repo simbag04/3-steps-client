@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 
-const createFunctionGraph = (svgRef, f, color) => {
-  const { height, width, xScale, yScale } = createBlankCanvas(svgRef);
+const createFunctionGraph = (svgRef, f, color, height, width, xScale, yScale, classes) => {
   const svg = d3.select(svgRef.current)
 
   let data = [];
@@ -23,11 +22,12 @@ const createFunctionGraph = (svgRef, f, color) => {
 
   const markerSize = 5;
   const name = 'function-arrow'
-  createArrowMarker(name, svg, markerSize, color)
+  createArrowMarker(name, svg, markerSize, color, classes)
 
   svg.append('path')
     .datum(data)
-    .attr('class', 'line')
+    .attr('id', 'function-line')
+    .attr('class', 'stroke ' + classes)
     .attr('fill', 'none')
     .attr('stroke', color)
     .attr('stroke-width', 2)
@@ -159,9 +159,10 @@ const createBlankCanvas = (svgRef) => {
   }
 };
 
-function createArrowMarker(name, svg, size, color) {
+function createArrowMarker(name, svg, size, color, classes) {
   svg.append("defs").append("marker")
     .attr("id", name)
+    .attr('class', 'fill ' + classes)
     .attr("refX", size)
     .attr("refY", size / 2)
     .attr("markerWidth", size)
@@ -172,4 +173,4 @@ function createArrowMarker(name, svg, size, color) {
     .attr("d", `M0,0 V${size} Q${size * 2},${size / 2} 0,0`)
 }
 
-export { createFunctionGraph }
+export { createFunctionGraph, createBlankCanvas, createArrowMarker }
