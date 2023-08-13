@@ -30,23 +30,26 @@ const createBlankCanvas = (svgRef) => {
     .call(d3.axisLeft(yScale));
 
   [xAxis, yAxis].map((axis) => {
-    axis.selectAll(".tick path, .tick line")
+    axis.selectAll(".tick path")
       .attr('stroke', 'none')
+
+    axis.selectAll(".tick line")
+      .attr('stroke', color)
 
     axis.selectAll(".tick text")
       .style('color', 'black')
       .style('padding', '1px')
+
+    return true;
   })
 
   xAxis.selectAll(".tick line")
     .attr("y1", -4)
     .attr("y2", 4)
-    .attr('stroke', color)
 
   yAxis.selectAll(".tick line")
     .attr("x1", -4)
     .attr("x2", 4)
-    .attr('stroke', color)
 
   yAxis.selectAll(".tick text")
     .attr('y', function (d) {
