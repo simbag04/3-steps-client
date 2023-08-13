@@ -1,5 +1,45 @@
 import * as d3 from 'd3';
 
+const createFunctionGraph = (svgRef, f, color) => {
+  const { height, width, xScale, yScale } = createBlankCanvas(svgRef);
+  const svg = d3.select(svgRef.current)
+
+  let data = [];
+
+  for (let i = -11; i <= 11; i += 0.001) {
+    const x = i;
+    const y = f(i)
+    data.push({ x, y });
+  }
+
+  data = data.filter((d) => d.x > xScale.invert(0) &&
+                            d.x < xScale.invert(width) &&
+                            d.y > yScale.invert(height) &&
+                            d.y < yScale.invert(0))
+
+  const line = d3.line()
+    .x(d => xScale(d.x))
+    .y(d => yScale(d.y))
+
+  const markerSize = 5;
+  const name = 'function-arrow'
+  createArrowMarker(name, svg, markerSize, color)
+
+  svg.append('path')
+    .datum(data)
+    .attr('class', 'line')
+    .attr('fill', 'none')
+    .attr('stroke', color)
+    .attr('stroke-width', 2)
+    .attr('marker-end', `url(#${name})`)
+    .attr('marker-start', `url(#${name})`)
+    .attr('d', line);
+
+  return {
+    xScale, yScale
+  }
+}
+
 const createBlankCanvas = (svgRef) => {
   const width = 460;
   const height = 460;
@@ -132,48 +172,4 @@ function createArrowMarker(name, svg, size, color) {
     .attr("d", `M0,0 V${size} Q${size * 2},${size / 2} 0,0`)
 }
 
-/*
-function createAllTriangles(svg, xScale, yScale, color) {
-  const top = [
-    [xScale(0.2), yScale(10)],
-    [xScale(0), yScale(10.5)],
-    [xScale(-0.2), yScale(10)]
-  ]
-
-  const bottom = [
-    [xScale(0.2), yScale(-10)],
-    [xScale(0), yScale(-10.5)],
-    [xScale(-0.2), yScale(-10)]
-  ]
-
-  const right = [
-    [xScale(10.5), yScale(0)],
-    [xScale(10), yScale(0.2)],
-    [xScale(10), yScale(-0.2)]
-  ]
-
-  const left = [
-    [xScale(-10.5), yScale(0)],
-    [xScale(-10), yScale(0.2)],
-    [xScale(-10), yScale(-0.2)]
-  ]
-
-  createTriangle(svg, top, color)
-  createTriangle(svg, bottom, color)
-  createTriangle(svg, right, color)
-  createTriangle(svg, left, color)
-}
-
-function createTriangle(svg, points, color) {
-  const polygonPath = d3.polygonHull(points);
-
-  svg.append('path')
-    .attr('d', `M${polygonPath.join('L')}Z`)
-    .attr('fill', color)
-    .attr('stroke', color)
-    .attr('stroke-width', 1);
-}
-
-*/
-
-export { createBlankCanvas, createArrowMarker }
+export { createFunctionGraph }
