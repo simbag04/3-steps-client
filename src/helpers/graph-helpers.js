@@ -36,7 +36,7 @@ const createFunctionGraph = (svgRef, f, color, height, width, xScale, yScale, cl
     .attr('d', line);
 
   return {
-    xScale, yScale
+    data
   }
 }
 
