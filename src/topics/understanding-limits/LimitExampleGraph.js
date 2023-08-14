@@ -2,20 +2,14 @@ import { useEffect, useRef } from "react"
 import { createFunctionGraph, createBlankCanvas, createArrowMarker } from "../../helpers/graph-helpers";
 import * as d3 from 'd3';
 
-const LimitExampleGraph = () => {
+const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor }) => {
   const svgRef = useRef(null);
 
   useEffect(() => {
     if (svgRef.current) {
-      const f = x => x ** 2
       const { height, width, xScale, yScale } = createBlankCanvas(svgRef);
       const svg = d3.select(svgRef.current)
-      const xval = 2;
       const yval = f(xval);
-
-      const fColor = 'c3';
-      const xColor = 'c2';
-      const yColor = 'c4';
 
       const line = d3.line()
         .x(d => xScale(d.x))
@@ -36,27 +30,33 @@ const LimitExampleGraph = () => {
         .style('stroke-dasharray', 2)
         .attr('d', line)
 
-      // limit arrow lines
+      const { data } = createFunctionGraph(svgRef, f, null, height, width, xScale, yScale, fColor)
+      createAllLimitLines(svg, line, xval, yval, xColor, yColor, fColor, xScale, yScale, data);
 
       // point at (2, 4)
-      svg.selectAll('.point')
-        .data([{ x: xval, y: yval }])
-        .enter()
+      svg
+        .append('circle')
+        .attr('class', 'hole fill stroke ' + fColor)
+        .attr('cx', xScale(xval))
+        .attr('cy', yScale(yval))
+        .attr('r', 3)
+
+      svg
         .append('circle')
         .attr('class', 'fill stroke ' + fColor)
-        .attr('cx', d => xScale(d.x))
-        .attr('cy', d => yScale(d.y))
+        .attr('cx', xScale(xval))
+        .attr('cy', yScale(y))
         .attr('r', 3)
+
+      const xoff = xval < 0 ? -0.2 : 0.2
 
       // text point
       svg.append('text')
-        .attr('x', xScale(xval + 0.2))
+        .attr('x', xScale(xval + xoff))
         .attr('y', yScale(yval))
+        .attr('text-anchor', xval < 0 ? 'end' : 'start')
         .attr('class', 'text')
         .text(`(${xval}, ${yval})`)
-
-      const { data } = createFunctionGraph(svgRef, f, null, height, width, xScale, yScale, fColor)
-      createAllLimitLines(svg, line, xval, yval, xColor, yColor, fColor, xScale, yScale, data);
     }
 
   }, [svgRef])
@@ -66,9 +66,9 @@ const LimitExampleGraph = () => {
   )
 }
 
-function createAllLimitLines(svg, line, xval, yval, 
-                            xColor, yColor, fColor, 
-                            xScale, yScale, data) {
+function createAllLimitLines(svg, line, xval, yval,
+  xColor, yColor, fColor,
+  xScale, yScale, data) {
   const axisOffset = -0.2;
   const farDist = 1;
   const closeDist = 0.2;
@@ -80,12 +80,25 @@ function createAllLimitLines(svg, line, xval, yval,
   createLimitLine(svg, line, xval + farDist,
     xval + closeDist,
     axisOffset, axisOffset, 'x-limits', xColor)
+
+  svg.append('circle')
+    .attr('class', 'fill stroke ' + xColor)
+    .attr('cx', xScale(xval))
+    .attr('cy', yScale(0))
+    .attr('r', 3)
+
   createLimitLine(svg, line, axisOffset,
     axisOffset,
     yval - farDist, yval - closeDist, 'y-limits', yColor)
   createLimitLine(svg, line, axisOffset,
     axisOffset,
     yval + farDist, yval + closeDist, 'y-limits', yColor)
+
+  svg.append('circle')
+    .attr('class', 'fill stroke ' + yColor)
+    .attr('cx', xScale(0))
+    .attr('cy', yScale(yval))
+    .attr('r', 3)
 
   const dataUpToPoint = data.filter((d) => d.x < xval)
 
@@ -100,11 +113,11 @@ function createAllLimitLines(svg, line, xval, yval,
 
   const functionLine = d3.select("#function-line").node()
   const pathLength = d3.select('#point-line').node().getTotalLength();
-  
+
   const farPointOne = functionLine.getPointAtLength(pathLength - farDistLength)
   const closePointOne = functionLine.getPointAtLength(pathLength - closeDistLength)
   const pointsOne = convertScale(farPointOne, closePointOne, xScale, yScale)
-  const offsetsOne = findOffsets(pointsOne, axisOffset);
+  const offsetsOne = findOffsets(pointsOne, axisOffset, xval, yval);
 
   createLimitLine(svg, line,
     pointsOne.farx + offsetsOne.x,
@@ -116,7 +129,7 @@ function createAllLimitLines(svg, line, xval, yval,
   const farPointTwo = functionLine.getPointAtLength(pathLength + farDistLength)
   const closePointTwo = functionLine.getPointAtLength(pathLength + closeDistLength)
   const pointsTwo = convertScale(farPointTwo, closePointTwo, xScale, yScale);
-  const offsetsTwo = findOffsets(pointsTwo, axisOffset);
+  const offsetsTwo = findOffsets(pointsTwo, axisOffset, xval, yval);
 
   createLimitLine(svg, line,
     pointsTwo.farx + offsetsTwo.x,
@@ -126,11 +139,15 @@ function createAllLimitLines(svg, line, xval, yval,
     'f-limits', fColor)
 }
 
-function findOffsets(points, axisOffset) {
-  const slope = (-1 * (points.farx - points.closex)) / (points.fary - points.closey)
+function findOffsets(points, axisOffset, xval, yval) {
+  let slope = (-1 * (points.farx - points.closex)) / (points.fary - points.closey)
   const hyp = findHypotenusefromSlope(1, slope);
-  const x = axisOffset / hyp;
-  const y = (axisOffset / hyp) * slope;
+  let scale = axisOffset / hyp;
+  // if (xval < 0) scale *= -1;
+  if (yval < 0) scale *= -1;
+  if (slope > 0) scale *= -1
+  const x = scale;
+  const y = (scale) * slope;
 
   return { x, y }
 }

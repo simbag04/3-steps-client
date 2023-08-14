@@ -49,3 +49,7 @@
 .text {
   font-size: 12px;
 }
+
+.fill.hole {
+  fill: white;
+}

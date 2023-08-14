@@ -68,6 +68,12 @@ const Section6 = () => {
 */
 
 const Section5 = () => {
+  const f = x => x ** 2;
+  const xval = 2;
+  const fColor = 'c3';
+  const xColor = 'c2';
+  const yColor = 'c4';
+
   return (
     <>
       <div>
@@ -77,7 +83,7 @@ const Section5 = () => {
       </div>
       <div className='flex vertical center'>
         <h3>Graph of <span dangerouslySetInnerHTML={{__html: ` \\(x^2\\)`}} /></h3>
-        <LimitExampleGraph />
+        <LimitExampleGraph f={f} xval={xval} y={f(xval)} fColor={fColor} xColor={xColor} yColor={yColor}/>
       </div>
     </>
   )
