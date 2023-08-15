@@ -18,6 +18,11 @@
   font-size: 20px;
 }
 
+.learn-section {
+  width: 60%;
+  margin: auto;
+}
+
 svg {
   margin: 0;
   padding: 0;

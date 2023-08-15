@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
 import { createFunctionGraph, createBlankCanvas, createArrowMarker } from "../../helpers/graph-helpers";
 import * as d3 from 'd3';
+import { v4 as uuidv4 } from 'uuid';
 
 const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor }) => {
   const svgRef = useRef(null);
@@ -30,8 +31,10 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor }) => {
         .style('stroke-dasharray', 2)
         .attr('d', line)
 
-      const { data } = createFunctionGraph(svgRef, f, null, height, width, xScale, yScale, fColor)
-      createAllLimitLines(svg, line, xval, yval, xColor, yColor, fColor, xScale, yScale, data);
+      const { data, id } = createFunctionGraph(svgRef, f, null, height, width, xScale, yScale, fColor)
+      createAllLimitLines(svg, line, xval, yval, 
+        xColor, yColor, fColor, 
+        xScale, yScale, data, id);
 
       // point at (2, 4)
       svg
@@ -59,7 +62,7 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor }) => {
         .text(`(${xval}, ${yval})`)
     }
 
-  }, [svgRef])
+  }, [svgRef, f, fColor, xColor, xval, y, yColor])
 
   return (
     <svg ref={svgRef} />
@@ -68,7 +71,7 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor }) => {
 
 function createAllLimitLines(svg, line, xval, yval,
   xColor, yColor, fColor,
-  xScale, yScale, data) {
+  xScale, yScale, data, id) {
   const axisOffset = -0.2;
   const farDist = 1;
   const closeDist = 0.2;
@@ -100,19 +103,20 @@ function createAllLimitLines(svg, line, xval, yval,
     .attr('cy', yScale(yval))
     .attr('r', 3)
 
-  const dataUpToPoint = data.filter((d) => d.x < xval)
+  const dataUpToPoint = data.filter((d) => d.x < xval);
 
+  const pointId = uuidv4();
   svg.append('path')
     .datum(dataUpToPoint)
-    .attr('id', 'point-line')
+    .attr('data-uuid', pointId)
     .attr('fill', 'none')
     .attr('d', line);
 
   const farDistLength = xScale(farDist) - xScale(0);
   const closeDistLength = xScale(closeDist) - xScale(0);
 
-  const functionLine = d3.select("#function-line").node()
-  const pathLength = d3.select('#point-line').node().getTotalLength();
+  const functionLine = d3.select(`[data-uuid="${id}"]`).node();
+  const pathLength = d3.select(`[data-uuid="${pointId}"]`).node().getTotalLength();
 
   const farPointOne = functionLine.getPointAtLength(pathLength - farDistLength)
   const closePointOne = functionLine.getPointAtLength(pathLength - closeDistLength)

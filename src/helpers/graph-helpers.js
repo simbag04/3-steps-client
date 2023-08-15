@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { v4 as uuidv4 } from 'uuid';
 
 const createFunctionGraph = (svgRef, f, color, height, width, xScale, yScale, classes) => {
   const svg = d3.select(svgRef.current)
@@ -24,9 +25,10 @@ const createFunctionGraph = (svgRef, f, color, height, width, xScale, yScale, cl
   const name = 'function-arrow'
   createArrowMarker(name, svg, markerSize, color, classes)
 
+  const id = uuidv4();
   svg.append('path')
     .datum(data)
-    .attr('id', 'function-line')
+    .attr('data-uuid', id)
     .attr('class', 'stroke ' + classes)
     .attr('fill', 'none')
     .attr('stroke', color)
@@ -36,6 +38,7 @@ const createFunctionGraph = (svgRef, f, color, height, width, xScale, yScale, cl
     .attr('d', line);
 
   return {
+    id, 
     data
   }
 }

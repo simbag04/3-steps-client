@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Learn from './components/Learn';
 
-export const RenderComponent = () => {
+export const RenderLearnComponent = () => {
   const { name } = useParams();
   const [learnContent, setLearnContent]= useState(null);
   useEffect(() => {

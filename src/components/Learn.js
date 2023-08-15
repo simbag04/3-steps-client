@@ -41,11 +41,11 @@ const Learn = ({ learnContent }) => {
   });
 
   return (
-    <div className='flex vertical center medium-gap medium-font'>
+    <div className='learn-section flex vertical center medium-gap medium-font'>
       {items.map((content, index) => {
         return <div key={index} className="flex vertical center medium-gap">{content}</div>
       })}
-      {remaining ? <button onClick={addItem}>Add</button> : null }
+      {remaining ? <button onClick={addItem}>Next</button> : null }
     </div>
   );
 }
