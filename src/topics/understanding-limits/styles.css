@@ -46,8 +46,12 @@
   fill: var(--color4);
 }
 
+.tick text {
+  font-size: 20px;
+}
+
 .text {
-  font-size: 12px;
+  font-size: 20px;
 }
 
 .fill.hole {

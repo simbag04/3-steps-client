@@ -76,7 +76,7 @@ const Section6 = () => {
 }
 
 const Section7 = () => {
-  const f = x => x ** 3;
+  const f = x => x ** 2;
   const xval = 2;
   const fColor = 'c3';
   const xColor = 'c2';

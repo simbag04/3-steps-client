@@ -43,9 +43,7 @@ const createFunctionGraph = (svgRef, f, color, height, width, xScale, yScale, cl
   }
 }
 
-const createBlankCanvas = (svgRef) => {
-  const width = 460;
-  const height = 460;
+const createBlankCanvas = (width, height, svgRef, textSize) => {
   const numCells = 20;
   const half = (width / 2) / numCells;
   const color = "#707070"
@@ -82,7 +80,7 @@ const createBlankCanvas = (svgRef) => {
 
     axis.selectAll(".tick text")
       .style('color', 'black')
-      .style('padding', '1px')
+      .style('font-size', textSize)
 
     return true;
   })
