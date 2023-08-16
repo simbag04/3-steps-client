@@ -1,6 +1,8 @@
 import './styles.css'
 import LimitExampleGraph from "./LimitExampleGraph"
 import Latex from '../../helpers/Latex'
+import * as math from 'mathjs'
+
 
 const Section1 = () => {
   return (
@@ -46,7 +48,9 @@ const Section4 = () => {
 
 
 const Section5 = () => {
-  const f = x => x ** 2;
+  const expression = 'x^2';
+  const node = math.parse(expression);
+  const f = x => node.evaluate({x});
   const xval = 2;
   const fColor = 'c3';
   const xColor = 'c2';
@@ -57,10 +61,10 @@ const Section5 = () => {
       <div>
         Conceptually, this means that the value of the 
         <span className="c3"> function </span> 
-        (in this case <span className="c3" dangerouslySetInnerHTML={{__html: ` \\(x^2\\)`}} />) gets closer and closer to <span className="c4">4</span> as the x-value gets closer and closer to <span className="c2">2</span>.
+        (in this case <Latex classes={'c3'} expression={`\\(${node.toTex()}\\)`}/>) gets closer and closer to <span className="c4">4</span> as the x-value gets closer and closer to <span className="c2">2</span>.
       </div>
       <div className='flex vertical center'>
-        <h3>Graph of <span dangerouslySetInnerHTML={{__html: ` \\(x^2\\)`}} /></h3>
+        <h3>Graph of <Latex expression={`\\(${node.toTex()}\\)`} /></h3>
         <LimitExampleGraph f={f} xval={xval} y={f(xval)} fColor={fColor} xColor={xColor} yColor={yColor}/>
       </div>
     </>
@@ -76,7 +80,9 @@ const Section6 = () => {
 }
 
 const Section7 = () => {
-  const f = x => x ** 2;
+  const expression = 'x^2';
+  const node = math.parse(expression);
+  const f = x => node.evaluate({x});
   const xval = 2;
   const fColor = 'c3';
   const xColor = 'c2';
