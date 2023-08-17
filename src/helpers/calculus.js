@@ -230,13 +230,9 @@ function inorder(root) {
 
 function inorderHelper(root, string) {
   if (root !== null) {
-    if (root.data === '*') string += '(';
     string = inorderHelper(root.left, string);
-    if (root.data === '*') string += ')';
-    if (root.data != '*') string += root.data;
-    if (root.data === '*') string += '(';
+    string += root.data;
     string = inorderHelper(root.right, string);
-    if (root.data === '*') string += ')';
   }
   return string;
 
