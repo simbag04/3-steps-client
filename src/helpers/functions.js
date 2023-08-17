@@ -1,5 +1,5 @@
-import * as math from 'mathjs'
-import { build, inorder } from './calculus';
+// import * as math from 'mathjs'
+import { build, inorder,derivative } from './calculus';
 
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -24,16 +24,22 @@ function generateRandomPolynomial(degree) {
   terms = terms.filter(t => t !== "");
   
   const expression = terms.reverse().join(' + ').replace(/\s+/g, '');
-  const node = math.parse(expression);
+  // const node = math.parse(expression);
 
-  let n = build(`(${expression})`);
+  const vars = ['x'];
+  let n = build(`(${expression})`, ['x']);
   console.log(n);
   console.log(inorder(n));
+  const deriv = derivative(n, 'x', vars);
+  console.log(inorder(deriv))
 
+  /*
   const simplified = math.simplifyCore(node);
   let derivative = math.derivative(simplified, 'x');
   derivative = math.simplify(`expand(${derivative.toString()})`)
+  
   return { simplified, derivative };
+  */
 
 }
 
