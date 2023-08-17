@@ -1,5 +1,5 @@
 import * as math from 'mathjs'
-import { build, inorder, derivative, simplify } from './calculus';
+import { build, derivative, simplify } from './calculus';
 import { extractCoeffs } from './polynomial';
 
 function getRandomNumber(min, max) {
@@ -25,19 +25,39 @@ function generateRandomPolynomial(degree) {
   terms = terms.filter(t => t !== "");
   
   const expression = terms.reverse().join(' + ').replace(/\s+/g, '');
+  const node = math.parse(expression);
 
   const vars = ['x'];
   let n = build(`(${expression})`, ['x']);
-
+  
   // find zeros of the derivative for local mins/maxs
   const deriv = derivative(n, 'x', vars);
   const simplified = simplify(deriv, vars);
-  let { exp, coeffs } = extractCoeffs(simplified);
-  coeffs = coeffs.reverse();
-  const roots = math.polynomialRoot(coeffs[0], coeffs[1], coeffs[2], coeffs[3]);
-  console.log(roots)
-  const mathexp = math.parse(exp);
 
+  // extract and format coefficients
+  let { coeffs } = extractCoeffs(simplified);
+  if (coeffs.length === 1) return node;
+  coeffs = coeffs.reverse();
+  for (let i = coeffs.length; i < 4; i++) coeffs.push(0);
+  
+  // find real roots
+  const roots = math.polynomialRoot(...coeffs);
+  const realRoots = roots.filter((r) => math.typeOf(r) !== 'Complex')
+
+  // find min/max value at local mins/maxs of function
+  let maxabs = 9;
+  for (let i = 0; i < realRoots.length; i++) {
+    maxabs = Math.max(Math.abs(node.evaluate({x: realRoots[i]})), maxabs);
+  }
+
+  // find scale factor for function and modify
+  const scale = Math.ceil(maxabs / 9);
+  const scaledNode = math.parse(`(1/${scale})(${expression})`);
+  return scaledNode;
+
+  //const f = x => scaledNode.evaluate({x});
+
+  //return f;
 
 }
 

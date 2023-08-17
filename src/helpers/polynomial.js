@@ -1,4 +1,4 @@
-import { build, inorder } from "./calculus";
+import { inorder } from "./calculus";
 
 class PolynomialTerm {
   constructor(node) {
