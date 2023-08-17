@@ -13,12 +13,19 @@ function newNode(c, vars) {
   } else {
     n.variableNode = false;
   }
+
   if (c.length === 2) {
     n.constantNode = true;
   } else if (/[-+*/^]/.test(c) || vars.includes(c)) {
     n.constantNode = false;
   } else {
     n.constantNode = true;
+  }
+
+  if (c.length === 2 || /[0-9]/.test(c)) {
+    n.numberNode = true;
+  } else {
+    n.numberNode = false;
   }
   return n;
 }
@@ -101,6 +108,77 @@ function build(s, vars) {
   return t;
 }
 
+function simplify(root, rootVars) {
+  if (root === null) return root;
+  root.left = simplify(root.left, rootVars);
+  root.right = simplify(root.right, rootVars);
+
+  if (root.data === '+') {
+    if (root.right.data === '0') return root.left;
+    if (root.left.data === '0') return root.right;
+    root = simplifyAddMultiply(root, rootVars, '+')
+
+  } else if (root.data === '-') {
+    if (root.left.numberNode && root.right.numberNode) {
+      return newNode(String(Number(root.left.data) - Number(root.right.data)), rootVars);
+    }
+
+  } else if (root.data === '*') {
+    if (root.right.data === '1') return root.left;
+    if (root.left.data === '1') return root.right;
+    if (root.right.data === '0') return root.right;
+    if (root.left.data === '0') return root.left;
+    root = simplifyAddMultiply(root, rootVars, '*');
+
+  } else if (root.data === '^') {
+    if (root.right.data === '1'){
+      return root.left;
+    } 
+
+  }
+  return root;
+
+}
+
+function add(x, y) {
+  return String(Number(x) + Number(y));
+}
+
+function multiply(x, y) {
+  return String(Number(x) * Number(y));
+}
+
+function simplifyAddMultiply(root, rootVars, operator) {
+  const f = operator === '+' ? add : multiply;
+  if (root.left.numberNode && root.right.numberNode) {
+    return newNode(f(root.left.data, root.right.data), rootVars);
+  } else if (root.left.numberNode) {
+    if (root.right.data === operator) {
+      if (root.right.left.numberNode) {
+        let n = newNode(f(root.left.data, root.right.left.data), rootVars);
+        root.left = n;
+        root.right = root.right.right;
+      } else if (root.right.right.numberNode) {
+        let n = newNode(f(root.left.data, root.right.right.data), rootVars);
+        root.left = n;
+        root.right = root.right.left;
+      }
+    }
+  } else if (root.right.numberNode) {
+    if (root.left.data === operator) {
+      if (root.left.left.numberNode) {
+        let n = newNode(f(root.right.data, root.left.left.data), rootVars);
+        root.right = n;
+        root.left = root.left.right;
+      } else if (root.left.right.numberNode) {
+        let n = newNode(f(root.right.data, root.left.right.data), rootVars);
+        root.right = n;
+        root.left = root.left.left;
+      }
+    }
+  }
+  return root;
+}
 
 function derivative(root, variable, rootVars) {
   if (root === null) return root;
@@ -108,6 +186,7 @@ function derivative(root, variable, rootVars) {
     root.left = derivative(root.left, variable, rootVars);
     root.right = derivative(root.right, variable, rootVars);
     return root;
+
   } else if (root.data === '*') {
     if (root.left.constantNode) {
       root.right = derivative(root.right, variable, rootVars);
@@ -126,6 +205,7 @@ function derivative(root, variable, rootVars) {
       curr.right.right = derivative(root.left, variable, rootVars);
       return curr;
     }
+
   } else if (root.data === '^') {
     let curr = newNode('*', rootVars);
     curr.left = root.right;
@@ -135,28 +215,31 @@ function derivative(root, variable, rootVars) {
     curr.right.right.left = root.right;
     curr.right.right.right = newNode('1', rootVars);
     return curr;
+
   } else if (root.data === variable) {
-    root.data = 1;
-    return root;
+    return newNode(1, rootVars);
+
   } else {
-    root.data = 0;
-    return root;
+    return newNode(0, rootVars)
   }
 }
 
 function inorder(root) {
   return inorderHelper(root, "");
 }
+
 function inorderHelper(root, string) {
   if (root !== null) {
+    if (root.data === '*') string += '(';
     string = inorderHelper(root.left, string);
-    string += root.data;
-    if (root.left !== null && root.right !== null) string += "(";
+    if (root.data === '*') string += ')';
+    if (root.data != '*') string += root.data;
+    if (root.data === '*') string += '(';
     string = inorderHelper(root.right, string);
-    if (root.left !== null && root.right !== null) string += ")";
+    if (root.data === '*') string += ')';
   }
   return string;
 
 }
 
-export { build, inorder, derivative }
+export { build, inorder, derivative, simplify }
