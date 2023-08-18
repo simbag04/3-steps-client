@@ -1,9 +1,7 @@
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 
-const createFunctionGraph = (svgRef, f, color, height, width, xScale, yScale, classes) => {
-  const svg = d3.select(svgRef.current)
-
+const generateFunctionData = (f) => {
   let data = [];
 
   for (let i = -11; i <= 11; i += 0.001) {
@@ -12,10 +10,18 @@ const createFunctionGraph = (svgRef, f, color, height, width, xScale, yScale, cl
     data.push({ x, y });
   }
 
+  return data;
+}
+
+const createFunctionGraph = (svgRef, f, width, height, color, xScale, yScale, classes) => {
+  const svg = d3.select(svgRef.current)
+
+  let data = generateFunctionData(f);
+
   data = data.filter((d) => d.x > xScale.invert(0) &&
-                            d.x < xScale.invert(width) &&
-                            d.y > yScale.invert(height) &&
-                            d.y < yScale.invert(0))
+    d.x < xScale.invert(width) &&
+    d.y > yScale.invert(height) &&
+    d.y < yScale.invert(0))
 
   const line = d3.line()
     .x(d => xScale(d.x))
@@ -37,10 +43,7 @@ const createFunctionGraph = (svgRef, f, color, height, width, xScale, yScale, cl
     .attr('marker-start', `url(#${name})`)
     .attr('d', line);
 
-  return {
-    id, 
-    data
-  }
+  return { data, id };
 }
 
 const createBlankCanvas = (width, height, svgRef, textSize) => {
@@ -69,7 +72,7 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
   const yAxis = svg.append('g')
     .attr('class', 'tick')
     .attr('transform', `translate(${yScale(0)}, 0)`)
-    .call(d3.axisLeft(yScale));
+    .call(d3.axisLeft(yScale).tickFormat(d => d === 0 ? "" : d));
 
   [xAxis, yAxis].map((axis) => {
     axis.selectAll(".tick path")
@@ -80,10 +83,14 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
 
     axis.selectAll(".tick text")
       .style('color', 'black')
-      .style('font-size', textSize)
+      .style('font-size', textSize / 2)
+      .attr('dx', 4)
+      .attr('dy', -2)
+      .attr('font-weight', 'bold')
 
     return true;
   })
+
 
   xAxis.selectAll(".tick line")
     .attr("y1", -4)
@@ -93,6 +100,7 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
     .attr("x1", -4)
     .attr("x2", 4)
 
+    /*
   yAxis.selectAll(".tick text")
     .attr('y', function (d) {
       if (d === 0) return '9'
@@ -102,7 +110,7 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
       if (d === 0) return '0.71em'
       return d3.select(this).attr('dy')
     })
-
+*/
 
   svg
     .selectAll(".x-grid-line")
@@ -174,4 +182,4 @@ function createArrowMarker(name, svg, size, color, classes) {
     .attr("d", `M0,0 V${size} Q${size * 2},${size / 2} 0,0`)
 }
 
-export { createFunctionGraph, createBlankCanvas, createArrowMarker }
+export { createFunctionGraph, createBlankCanvas, createArrowMarker, generateFunctionData }

@@ -4,7 +4,9 @@
   --color3: blue;
   --color4: purple;
 }
-
+.stroke {
+  stroke: black;
+}
 .c1 {
   color: var(--color1);
 }

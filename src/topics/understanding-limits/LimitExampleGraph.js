@@ -10,8 +10,9 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor }) => {
     if (svgRef.current) {
       const textSize = 12;
       const graphSize = 300;
-      const { height, width, xScale, yScale } = 
-            createBlankCanvas(graphSize, graphSize, svgRef, textSize);
+      const { height, width, xScale, yScale } =
+        createBlankCanvas(graphSize, graphSize, svgRef, textSize);
+
       const svg = d3.select(svgRef.current)
       const yval = f(xval);
 
@@ -34,10 +35,10 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor }) => {
         .style('stroke-dasharray', 2)
         .attr('d', line)
 
-      const { data, id } = createFunctionGraph(svgRef, f, null, height, width, xScale, yScale, fColor)
-      createAllLimitLines(svg, line, xval, yval, 
-        xColor, yColor, fColor, 
-        xScale, yScale, data, id);
+      const { data, id } = createFunctionGraph(svgRef, f, width, height, null, xScale, yScale, fColor)
+      createAllLimitLines(svg, line, xval, yval,
+        xColor, yColor, fColor,
+        xScale, yScale, data, id, textSize);
 
       svg
         .append('circle')
@@ -52,17 +53,6 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor }) => {
         .attr('cx', xScale(xval))
         .attr('cy', yScale(y))
         .attr('r', 3)
-
-      const xoff = xval < 0 ? -0.2 : 0.2
-
-      // text point
-      svg.append('text')
-        .attr('x', xScale(xval + xoff))
-        .attr('y', yScale(yval))
-        .attr('text-anchor', xval < 0 ? 'end' : 'start')
-        .attr('class', 'text')
-        .style('font-size', textSize)
-        .text(`(${xval}, ${yval})`)
     }
 
   }, [svgRef, f, fColor, xColor, xval, y, yColor])
@@ -74,8 +64,8 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor }) => {
 
 function createAllLimitLines(svg, line, xval, yval,
   xColor, yColor, fColor,
-  xScale, yScale, data, id) {
-  const axisOffset = -0.3;
+  xScale, yScale, data, id, textSize) {
+  const axisOffset = 0.3;
   const farDist = 1;
   const closeDist = 0.3;
 
@@ -144,13 +134,56 @@ function createAllLimitLines(svg, line, xval, yval,
     pointsTwo.fary + offsetsTwo.y,
     pointsTwo.closey + offsetsTwo.y,
     'f-limits', fColor)
+
+  
+  // get offset values
+  const pointsText = convertScale(farPointOne, farPointTwo, xScale, yScale);
+  const offsetsText = findOffsets(pointsText, 4 * axisOffset, yval);
+
+  // adjust offset values
+  offsetsText.y = offsetsText.y === Infinity ? 0.7 : offsetsText.y;
+  if (offsetsText.y <= 0) {
+    offsetsText.y = Math.min(-0.7, offsetsText.y);
+  } else {
+    offsetsText.y = Math.max(0.7, offsetsText.y);
+  }
+
+  if (offsetsText.x <= 0) {
+    offsetsText.x = Math.min(-1.2, offsetsText.x);
+  } else {
+    offsetsText.x = Math.max(1.2, offsetsText.x);
+  }
+  
+  if ((xval <= 3 && xval >= 0) && offsetsText.x < 0) {
+    offsetsText.x = (offsetsText.x * -1);
+    offsetsText.y = offsetsText.y * -1;
+  }
+
+  if (xval >= -3 && xval < 0 && offsetsText.x > 0) {
+    offsetsText.x = (offsetsText.x * -1);
+    offsetsText.y = offsetsText.y * -1;
+  }
+
+  // add text
+  svg.append('text')
+    .attr('x', xScale(xval + (offsetsText.x)))
+    .attr('y', yScale(yval + offsetsText.y))
+    .attr('text-anchor', 'middle')
+    .attr('alignment-baseline', 'middle')
+    .attr('class', 'text')
+    .style('font-size', textSize)
+    .text(`(${xval}, ${Math.round(yval)})`)
+}
+
+/* find perendicular slope from points */
+function findSlope(points) {
+  return (-1 * (points.farx - points.closex)) / (points.fary - points.closey);
 }
 
 function findOffsets(points, axisOffset, yval) {
-  let slope = (-1 * (points.farx - points.closex)) / (points.fary - points.closey)
+  let slope = findSlope(points)
   const hyp = findHypotenusefromSlope(1, slope);
-  let scale = axisOffset / hyp;
-  // if (xval < 0) scale *= -1;
+  let scale = -1 * axisOffset / hyp;
   if (yval < 0) scale *= -1;
   if (slope > 0) scale *= -1
   const x = scale;

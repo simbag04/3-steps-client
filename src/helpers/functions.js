@@ -1,30 +1,29 @@
 import * as math from 'mathjs'
 import { build, derivative, simplify } from './calculus';
 import { extractCoeffs } from './polynomial';
+import { generateFunctionData } from './graph-helpers';
 
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function generateRandomPolynomial(degree) {
-  const coefficients = [];
-  for (let i = 0; i <= degree; i++) {
-    coefficients.push(getRandomNumber(-5, 5));
-  }
-
-  let terms = coefficients.map((coef, exp) => {
-    if (exp === 0) {
-      return coef === 0 ? "" : `(${coef})`;
-    } else if (exp === 1) {
-      return coef === 0 ? "" : `(${coef}*x)`;
-    } else {
-      return coef === 0 ? "" : `(${coef}*(x^${exp}))`;
+function getRandomWithExclusions(min, max, exclusions) {
+  const validValues = [];
+  for (let i = min; i <= max; i++) {
+    if (!exclusions.includes(i)) {
+      validValues.push(i);
     }
-  });
-
-  terms = terms.filter(t => t !== "");
+  }
   
-  const expression = terms.reverse().join(' + ').replace(/\s+/g, '');
+  if (validValues.length === 0) {
+    return max;
+  }
+  
+  const randomIndex = getRandomNumber(0, validValues.length - 1);
+  return validValues[randomIndex];
+}
+
+function compressPolynomial(expression) {
   const node = math.parse(expression);
 
   const vars = ['x'];
@@ -52,13 +51,57 @@ function generateRandomPolynomial(degree) {
 
   // find scale factor for function and modify
   const scale = Math.ceil(maxabs / 9);
-  const scaledNode = math.parse(`(1/${scale})(${expression})`);
+  const scaledNode = math.parse(`(1/${scale * 50})(${expression})`);
   return scaledNode;
+}
 
-  //const f = x => scaledNode.evaluate({x});
+function modifyForWholeNumber(node) {
+  console.log(node.toString())
+  const f = (x) => node.evaluate({x});
+  let data = generateFunctionData(f);
 
-  //return f;
+  // filter out values where y is > 8 or < -8
+  data = data.filter(d => Math.abs(d.y) < 7 && Math.abs(d.x) < 8);
 
+  const minx = Math.ceil(data[0].x);
+  const maxx = Math.floor(data[data.length - 1].x);
+
+  const x = getRandomWithExclusions(minx, maxx, [-1, 0, 1]);
+  const y = f(x);
+
+  let move = (Math.ceil(y) === 0 ? Math.floor(y) : Math.ceil(y)) - y;
+  if (Math.round(y) < 0) {
+    move = Math.min(-2, Math.round(y)) - y;
+  } else {
+    move = Math.max(2, Math.round(y)) - y;
+  }
+
+  let expression = `(${node.toString()} + ${move})`
+  const modifiedNode = math.parse(expression);
+  return {node: modifiedNode, x};
+}
+
+function generateRandomPolynomial(degree) {
+  const coefficients = [];
+  for (let i = 0; i <= degree; i++) {
+    coefficients.push(getRandomNumber(-5, 5));
+  }
+
+  let terms = coefficients.map((coef, exp) => {
+    if (exp === 0) {
+      return coef === 0 ? "" : `(${coef})`;
+    } else if (exp === 1) {
+      return coef === 0 ? "" : `(${coef}*x)`;
+    } else {
+      return coef === 0 ? "" : `(${coef}*(x^${exp}))`;
+    }
+  });
+
+  terms = terms.filter(t => t !== "");
+  
+  const expression = terms.reverse().join(' + ').replace(/\s+/g, '');
+  const scaledNode = compressPolynomial(expression);
+  return modifyForWholeNumber(scaledNode);
 }
 
 export { generateRandomPolynomial, getRandomNumber }
