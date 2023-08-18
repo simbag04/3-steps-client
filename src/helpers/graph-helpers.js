@@ -52,7 +52,10 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
   const color = "#707070"
   const size = 5;
 
-  const svg = d3.select(svgRef.current)
+  const svg = d3.select(svgRef.current);
+  svg.selectAll("*").remove();
+
+  svg
     .attr('width', width)
     .attr('height', height)
 
