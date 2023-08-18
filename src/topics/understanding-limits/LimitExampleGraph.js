@@ -141,7 +141,9 @@ function createAllLimitLines(svg, line, xval, yval,
   const offsetsText = findOffsets(pointsText, 4 * axisOffset, yval);
 
   // adjust offset values
-  offsetsText.y = offsetsText.y === Infinity ? 0.7 : offsetsText.y;
+  console.log(offsetsText.y)
+  offsetsText.y = isNaN(offsetsText.y) ? 0.7 : offsetsText.y;
+  console.log(offsetsText)
   if (offsetsText.y <= 0) {
     offsetsText.y = Math.min(-0.7, offsetsText.y);
   } else {

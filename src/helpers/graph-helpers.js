@@ -83,14 +83,11 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
 
     axis.selectAll(".tick text")
       .style('color', 'black')
-      .style('font-size', textSize / 2)
-      .attr('dx', 4)
-      .attr('dy', -2)
+      .style('font-size', textSize - 4)
       .attr('font-weight', 'bold')
 
     return true;
   })
-
 
   xAxis.selectAll(".tick line")
     .attr("y1", -4)
@@ -100,17 +97,17 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
     .attr("x1", -4)
     .attr("x2", 4)
 
-    /*
+  xAxis.selectAll(".tick text")
+    .attr('dx', d => d < 0 ? 5.5 : -5.5)
+    .attr('dy', -2)
+    .attr('alignment-baseline', 'middle')
+    .attr('text-anchor', 'middle');
+
   yAxis.selectAll(".tick text")
-    .attr('y', function (d) {
-      if (d === 0) return '9'
-      return d3.select(this).attr('y');
-    })
-    .attr('dy', function (d) {
-      if (d === 0) return '0.71em'
-      return d3.select(this).attr('dy')
-    })
-*/
+    .attr('dy', d => d < 0 ? -5.5 : 5.5)
+    .attr('dx', 2)
+    .attr('alignment-baseline', 'middle')
+    .attr('text-anchor', 'middle');
 
   svg
     .selectAll(".x-grid-line")
