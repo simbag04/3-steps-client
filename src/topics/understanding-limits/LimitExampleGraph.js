@@ -3,13 +3,13 @@ import { createFunctionGraph, createBlankCanvas, createArrowMarker } from "../..
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 
-const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor }) => {
+const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor, size }) => {
   const svgRef = useRef(null);
 
   useEffect(() => {
     if (svgRef.current) {
       const textSize = 12;
-      const graphSize = 300;
+      const graphSize = size;
       const { height, width, xScale, yScale } =
         createBlankCanvas(graphSize, graphSize, svgRef, textSize);
 
@@ -116,6 +116,8 @@ function createAllLimitLines(svg, line, xval, yval,
   const pointsOne = convertScale(farPointOne, closePointOne, xScale, yScale)
   const offsetsOne = findOffsets(pointsOne, axisOffset, yval);
 
+  if (isNaN(offsetsOne.y)) offsetsOne.y = axisOffset;
+
   createLimitLine(svg, line,
     pointsOne.farx + offsetsOne.x,
     pointsOne.closex + offsetsOne.x,
@@ -128,6 +130,8 @@ function createAllLimitLines(svg, line, xval, yval,
   const pointsTwo = convertScale(farPointTwo, closePointTwo, xScale, yScale);
   const offsetsTwo = findOffsets(pointsTwo, axisOffset, yval);
 
+  if (isNaN(offsetsTwo.y)) offsetsTwo.y = axisOffset;
+
   createLimitLine(svg, line,
     pointsTwo.farx + offsetsTwo.x,
     pointsTwo.closex + offsetsTwo.x,
@@ -138,14 +142,14 @@ function createAllLimitLines(svg, line, xval, yval,
   
   // get offset values
   const pointsText = convertScale(farPointOne, farPointTwo, xScale, yScale);
-  const offsetsText = findOffsets(pointsText, 4 * axisOffset, yval);
+  const offsetsText = findOffsets(pointsText, 3 * axisOffset, yval);
 
   // adjust offset values
   offsetsText.y = isNaN(offsetsText.y) ? 0.7 : offsetsText.y;
   if (offsetsText.y <= 0) {
-    offsetsText.y = Math.min(-0.7, offsetsText.y);
+    offsetsText.y = Math.min(-0.5, offsetsText.y);
   } else {
-    offsetsText.y = Math.max(0.7, offsetsText.y);
+    offsetsText.y = Math.max(0.5, offsetsText.y);
   }
 
   if (offsetsText.x <= 0) {

@@ -65,7 +65,7 @@ const Section5 = () => {
       </div>
       <div className='flex vertical center'>
         <h3>Graph of <Latex expression={`\\(${node.toTex()}\\)`} /></h3>
-        <LimitExampleGraph f={f} xval={xval} y={f(xval)} fColor={fColor} xColor={xColor} yColor={yColor}/>
+        <LimitExampleGraph f={f} xval={xval} y={f(xval)} fColor={fColor} xColor={xColor} yColor={yColor} size={300}/>
       </div>
     </>
   )
@@ -97,7 +97,7 @@ const Section7 = () => {
       } /></div>
       <div className='flex vertical center'>
         <h3>Graph of <Latex expression={`\\(g(x)\\)`} /></h3>
-        <LimitExampleGraph f={f} xval={xval} y={6} fColor={fColor} xColor={xColor} yColor={yColor}/>
+        <LimitExampleGraph f={f} xval={xval} y={6} fColor={fColor} xColor={xColor} yColor={yColor} size={300}/>
       </div>
     </>
   )

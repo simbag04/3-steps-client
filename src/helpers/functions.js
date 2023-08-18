@@ -56,7 +56,6 @@ function compressPolynomial(expression) {
 }
 
 function modifyForWholeNumber(node) {
-  console.log(node.toString())
   const f = (x) => node.evaluate({x});
   let data = generateFunctionData(f);
 

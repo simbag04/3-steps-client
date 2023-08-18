@@ -21,7 +21,7 @@ const Practice = () => {
   return (
     <div>
       {f && <LimitExampleGraph f={f} xval={xval} y={f(xval)}
-        fColor={""} xColor={""} yColor={""} />}
+        fColor={""} xColor={""} yColor={""} size={400}/>}
       <button onClick={generateGraphVars}>New Question</button>
     </div>
   )

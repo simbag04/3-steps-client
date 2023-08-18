@@ -59,6 +59,7 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
     .attr('width', width)
     .attr('height', height)
 
+  // scales
   const xScale = d3.scaleLinear()
     .domain([-1 * numCells / 2, numCells / 2])
     .range([half, width - half]);
@@ -67,51 +68,7 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
     .domain([-1 * numCells / 2, numCells / 2])
     .range([-1 * half + height, half]);
 
-  const xAxis = svg.append('g')
-    .attr('class', 'tick')
-    .attr('transform', `translate(0, ${xScale(0)})`)
-    .call(d3.axisBottom(xScale).tickFormat(d => d === 0 ? "" : d));
-
-  const yAxis = svg.append('g')
-    .attr('class', 'tick')
-    .attr('transform', `translate(${yScale(0)}, 0)`)
-    .call(d3.axisLeft(yScale).tickFormat(d => d === 0 ? "" : d));
-
-  [xAxis, yAxis].map((axis) => {
-    axis.selectAll(".tick path")
-      .attr('stroke', 'none')
-
-    axis.selectAll(".tick line")
-      .attr('stroke', color)
-
-    axis.selectAll(".tick text")
-      .style('color', 'black')
-      .style('font-size', textSize - 4)
-      .attr('font-weight', 'bold')
-
-    return true;
-  })
-
-  xAxis.selectAll(".tick line")
-    .attr("y1", -4)
-    .attr("y2", 4)
-
-  yAxis.selectAll(".tick line")
-    .attr("x1", -4)
-    .attr("x2", 4)
-
-  xAxis.selectAll(".tick text")
-    .attr('dx', d => d < 0 ? 5.5 : -5.5)
-    .attr('dy', -2)
-    .attr('alignment-baseline', 'middle')
-    .attr('text-anchor', 'middle');
-
-  yAxis.selectAll(".tick text")
-    .attr('dy', d => d < 0 ? -5.5 : 5.5)
-    .attr('dx', 2)
-    .attr('alignment-baseline', 'middle')
-    .attr('text-anchor', 'middle');
-
+  // build grid lines
   svg
     .selectAll(".x-grid-line")
     .data(d3.range(-1 * numCells / 2, numCells / 2 + 1))
@@ -134,6 +91,54 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
     .attr("y2", d => yScale(d))
     .attr("stroke", "lightgray");
 
+  // build tick marks on axes
+  const xAxis = svg.append('g')
+    .attr('class', 'tick')
+    .attr('transform', `translate(0, ${xScale(0)})`)
+    .call(d3.axisBottom(xScale).tickFormat(d => d === 0 ? "" : d));
+
+  const yAxis = svg.append('g')
+    .attr('class', 'tick')
+    .attr('transform', `translate(${yScale(0)}, 0)`)
+    .call(d3.axisLeft(yScale).tickFormat(d => d === 0 ? "" : d));
+
+  [xAxis, yAxis].map((axis) => {
+    axis.selectAll(".tick path")
+      .attr('stroke', 'none')
+
+    axis.selectAll(".tick line")
+      .attr('stroke', color)
+      .attr('stroke-width', 1)
+
+    axis.selectAll(".tick text")
+      .style('color', 'black')
+      .style('font-size', textSize - 4)
+      .attr('font-weight', 'bold')
+
+    return true;
+  })
+
+  // build tick lines
+  xAxis.selectAll(".tick line")
+    .attr("y1", -4)
+    .attr("y2", 4)
+
+  yAxis.selectAll(".tick line")
+    .attr("x1", -4)
+    .attr("x2", 4)
+
+  // format tick text
+  xAxis.selectAll(".tick text")
+    .attr('dx', d => d < 0 ? 5.5 : -5.5)
+    .attr('dy', -2)
+    .attr('alignment-baseline', 'middle')
+    .attr('text-anchor', 'middle');
+
+  yAxis.selectAll(".tick text")
+    .attr('dy', d => d < 0 ? -5.5 : 5.5)
+    .attr('dx', 2)
+    .attr('alignment-baseline', 'middle')
+    .attr('text-anchor', 'middle');
 
   // x and y axes
   const name = "axes-arrow"
@@ -158,7 +163,6 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
     .attr("stroke-width", 2)
     .attr('marker-end', `url(#${name})`)
     .attr('marker-start', `url(#${name})`);
-
 
   return {
     width: width,
