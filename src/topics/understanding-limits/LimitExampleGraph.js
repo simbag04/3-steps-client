@@ -55,7 +55,7 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor, size }) => {
         .attr('r', 3)
     }
 
-  }, [svgRef, f, fColor, xColor, xval, y, yColor])
+  }, [svgRef, f, fColor, xColor, xval, y, yColor, size])
 
   return (
     <svg ref={svgRef} />
