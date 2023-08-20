@@ -47,12 +47,15 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor, size }) => {
         .attr('cy', yScale(yval))
         .attr('r', 3)
 
-      svg
-        .append('circle')
-        .attr('class', 'fill stroke ' + fColor)
-        .attr('cx', xScale(xval))
-        .attr('cy', yScale(y))
-        .attr('r', 3)
+      if (y !== null) {
+        svg
+          .append('circle')
+          .attr('class', 'fill stroke ' + fColor)
+          .attr('cx', xScale(xval))
+          .attr('cy', yScale(y))
+          .attr('r', 3)
+      }
+
     }
 
   }, [svgRef, f, fColor, xColor, xval, y, yColor, size])
@@ -81,7 +84,7 @@ function createAllLimitLines(svg, line, xval, yval,
     .attr('class', 'fill stroke ' + xColor)
     .attr('cx', xScale(xval))
     .attr('cy', yScale(0))
-    .attr('r', 3)
+    .attr('r', 1)
 
   createLimitLine(svg, line, axisOffset,
     axisOffset,
@@ -94,7 +97,7 @@ function createAllLimitLines(svg, line, xval, yval,
     .attr('class', 'fill stroke ' + yColor)
     .attr('cx', xScale(0))
     .attr('cy', yScale(yval))
-    .attr('r', 3)
+    .attr('r', 1)
 
   const dataUpToPoint = data.filter((d) => d.x < xval);
 
@@ -139,7 +142,7 @@ function createAllLimitLines(svg, line, xval, yval,
     pointsTwo.closey + offsetsTwo.y,
     'f-limits', fColor)
 
-  
+
   // get offset values
   const pointsText = convertScale(farPointOne, farPointTwo, xScale, yScale);
   const offsetsText = findOffsets(pointsText, 3 * axisOffset, yval);
@@ -157,7 +160,7 @@ function createAllLimitLines(svg, line, xval, yval,
   } else {
     offsetsText.x = Math.max(1.2, offsetsText.x);
   }
-  
+
   if ((xval <= 3 && xval >= 0) && offsetsText.x < 0) {
     offsetsText.x = (offsetsText.x * -1);
     offsetsText.y = offsetsText.y * -1;
