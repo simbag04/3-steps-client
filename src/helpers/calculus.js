@@ -181,7 +181,7 @@ function simplifyAddMultiply(root, rootVars, operator) {
 }
 
 function derivative(root, variable, rootVars) {
-  if (root === null) return root;
+  if (!root) return root;
   if (root.data === '+' || root.data === '-') {
     root.left = derivative(root.left, variable, rootVars);
     root.right = derivative(root.right, variable, rootVars);

@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useLayoutEffect } from "react"
+import React, { useEffect, useState, useLayoutEffect, useMemo, useCallback } from "react"
 import { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, shuffleArray } from "../../helpers/functions"
 import LimitExampleGraph from "./LimitExampleGraph";
 import './styles.css'
 import Latex from "../../helpers/Latex";
 
-const Practice = () => {
-  const colors = ['red', 'green', 'blue', 'orange', 'purple']
+const Question = ( { goToNext, checkAnswer, inputChangeHandler, nextQuestion }) => {
+  const colors = useMemo(() => ['red', 'green', 'blue', 'orange', 'purple'], []);
   const [f, setF] = useState();
   const [xval, setXval] = useState(null);
   const [yval, setYval] = useState(null);
@@ -13,8 +13,20 @@ const Practice = () => {
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
+  const checkButtonHandler = () => {
+    let res = undefined;
+    if (!selectedOption) {
+      res = undefined;
+    } else if (selectedOption.correct) {
+      res = true;
+    } else {
+      res = false;
+    }
+    checkAnswer(res);
+  }
+
   // function to generate random graph
-  const generateGraphVars = () => {
+  const generateGraphVars = useCallback(() => {
     const { node, x } = generateRandomPolynomial(getRandomNumber(1, 4))
     const expression = (x) => node.evaluate({ x });
     const realY = Math.round(expression(x));
@@ -62,12 +74,13 @@ const Practice = () => {
 
     setOptions(newOptions);
     setShouldChangeColor(true);
-  }
+    nextQuestion();
+  }, [nextQuestion]);
 
   // generates graph on render
   useEffect(() => {
     generateGraphVars();
-  }, []);
+  }, [generateGraphVars]);
 
 
   // Changes function graph colors
@@ -106,10 +119,11 @@ const Practice = () => {
         setShouldChangeColor(false);
       });
     }
-  }, [shouldChangeColor]);
+  }, [shouldChangeColor, colors]);
 
   return (
     <div className="flex vertical center">
+      <h2>Which limit best represents the following graph?</h2>
       {f &&
         <div className="flex vertical center">
           <h3>Graph of <Latex expression={`\\( g(x) \\)`}></Latex></h3>
@@ -123,16 +137,21 @@ const Practice = () => {
               type="radio"
               name="selectedOption"
               value={option}
-              onChange={() => setSelectedOption(option)}
+              onChange={() => {
+                setSelectedOption(option)
+                inputChangeHandler();
+              }}
               checked={selectedOption === option}
             />
             <Latex expression={`\\( ${option.text} \\)`}></Latex>
           </label>
         ))}
       </div>
-      <button onClick={generateGraphVars}>New Question</button>
+      {!goToNext && <button onClick={checkButtonHandler}>Check</button>}
+      {goToNext && <button onClick={generateGraphVars}>Next</button>}
+      
     </div>
   )
 }
 
-export default Practice
+export default Question
