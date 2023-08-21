@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 const generateFunctionData = (f) => {
   let data = [];
 
-  for (let i = -11; i <= 11; i += 0.001) {
+  for (let i = -11; i <= 11; i += 0.01) {
     const x = i;
     const y = f(i)
     data.push({ x, y });

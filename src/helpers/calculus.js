@@ -109,7 +109,7 @@ function build(s, vars) {
 }
 
 function simplify(root, rootVars) {
-  if (root === null) return root;
+  if (!root) return root;
   root.left = simplify(root.left, rootVars);
   root.right = simplify(root.right, rootVars);
 

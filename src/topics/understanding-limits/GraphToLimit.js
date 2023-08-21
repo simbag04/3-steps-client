@@ -4,12 +4,10 @@ import LimitExampleGraph from "./LimitExampleGraph";
 import './styles.css'
 import Latex from "../../helpers/Latex";
 
-export const GraphToLimit = ({ inputChangeHandler, nextQuestion, selectedOption, setSelectedOption, regenerate }) => {
-  const colors = useMemo(() => ['red', 'green', 'blue', 'orange', 'purple'], []);
+export const GraphToLimit = ({ inputChangeHandler, nextQuestion, selectedOption, setSelectedOption, regenerate, setShouldChangeColor }) => {
   const [f, setF] = useState();
   const [xval, setXval] = useState(null);
   const [yval, setYval] = useState(null);
-  const [shouldChangeColor, setShouldChangeColor] = useState(false);
   const [options, setOptions] = useState([]);
 
   // function to generate random graph variables
@@ -72,43 +70,6 @@ export const GraphToLimit = ({ inputChangeHandler, nextQuestion, selectedOption,
     generateGraphVars();
   }, [generateGraphVars]);
 
-  // Changes function graph colors after it has rendered
-  useLayoutEffect(() => {
-    if (shouldChangeColor) {
-      requestAnimationFrame(() => {
-        const color = colors[getRandomNumber(0, colors.length - 1)];
-        const functionStroke = document.querySelectorAll(".stroke.f");
-        const functionFill = document.querySelectorAll(".fill.f");
-
-        const allStroke = document.querySelectorAll(".stroke.x, .stroke.y");
-        const allFill = document.querySelectorAll(".fill.x, .fill.y")
-
-        const holeFill = document.querySelector(".hole.fill");
-
-        functionStroke.forEach((el) => {
-          el.style.stroke = color;
-        });
-
-        functionFill.forEach((el) => {
-          el.style.fill = color;
-        })
-
-        allStroke.forEach((el) => {
-          el.style.stroke = 'black';
-        });
-
-        allFill.forEach((el) => {
-          el.style.fill = 'black';
-        });
-
-        if (holeFill !== null) {
-          holeFill.style.fill = 'white';
-        }
-
-        setShouldChangeColor(false);
-      });
-    }
-  }, [shouldChangeColor, colors]);
 
   return (
     <div className="flex vertical center">
