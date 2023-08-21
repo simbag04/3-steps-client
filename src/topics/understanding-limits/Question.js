@@ -1,19 +1,33 @@
-import React, { useState, useMemo, useLayoutEffect } from "react"
-import { getRandomNumber } from "../../helpers/functions"
-import { GraphToLimit } from "./GraphToLimit";
-import { LimitToGraph } from "./LimitToGraph";
+import React, { useState, useMemo, useLayoutEffect, useEffect, useCallback } from "react"
+import { getRandomNumber, shuffleArray } from "../../helpers/functions"
+import { graphToLimit, limitToGraph } from "./generate-question";
 
 const Question = ({ goToNext, checkAnswer, inputChangeHandler, nextQuestion }) => {
   const colors = useMemo(() => ['red', 'green', 'blue', 'orange', 'purple'], []);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [rand, setRand] = useState(0)
-  const [regenerate, setRegenerate] = useState(false);
   const [shouldChangeColor, setShouldChangeColor] = useState(false);
 
-  const nextButtonHandler = () => {
-    setRand(getRandomNumber(0, 1));
-    setRegenerate((regenerate) => !regenerate);
-  }
+  // question stuff
+  const [title, setTitle] = useState(null);
+  const [question, setQuestion] = useState(null);
+  const [options, setOptions] = useState(null);
+
+  const nextButtonHandler = useCallback(() => {
+    const rand = getRandomNumber(0, 1);
+    let q = null;
+    if (rand === 0) {
+      q = graphToLimit();
+    } else {
+      q = limitToGraph();
+    }
+
+    q.options = shuffleArray(q.options);
+    setTitle(q.title)
+    setQuestion(q.question);
+    setOptions(q.options);
+    setShouldChangeColor(true);
+    nextQuestion();
+  }, [nextQuestion])
 
   const checkButtonHandler = () => {
     let res = undefined;
@@ -26,6 +40,10 @@ const Question = ({ goToNext, checkAnswer, inputChangeHandler, nextQuestion }) =
     }
     checkAnswer(res);
   }
+
+  useEffect(() => {
+    nextButtonHandler()
+  }, [nextButtonHandler])
 
   // Changes function graph colors after it has rendered
   useLayoutEffect(() => {
@@ -67,25 +85,25 @@ const Question = ({ goToNext, checkAnswer, inputChangeHandler, nextQuestion }) =
 
   return (
     <div className="flex vertical center">
-      {rand === 0 ?
-        <GraphToLimit
-          inputChangeHandler={inputChangeHandler}
-          nextQuestion={nextQuestion}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-          regenerate={regenerate}
-          setShouldChangeColor={setShouldChangeColor}></GraphToLimit>
-        :
-        <LimitToGraph inputChangeHandler={inputChangeHandler}
-          nextQuestion={nextQuestion}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-          regenerate={regenerate}
-          setShouldChangeColor={setShouldChangeColor}></LimitToGraph>
-      }
+      {title}
+      {question}
+      {options && options.map((option, index) => (
+        <label key={index}>
+          <input
+            type="radio"
+            name="selectedOption"
+            value={option}
+            onChange={() => {
+              setSelectedOption(option)
+              inputChangeHandler();
+            }}
+            checked={selectedOption === option}
+          />
+          {option.component}
+        </label>
+      ))}
       {!goToNext && <button onClick={checkButtonHandler}>Check</button>}
       {goToNext && <button onClick={nextButtonHandler}>Next</button>}
-
     </div>
   )
 }
