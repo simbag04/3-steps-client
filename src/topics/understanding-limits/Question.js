@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { getRandomNumber } from "../../helpers/functions"
 import { GraphToLimit } from "./GraphToLimit";
+import { LimitToGraph } from "./LimitToGraph";
 
 const Question = ( { goToNext, checkAnswer, inputChangeHandler, nextQuestion }) => {
 
@@ -27,6 +28,16 @@ const Question = ( { goToNext, checkAnswer, inputChangeHandler, nextQuestion }) 
 
   return (
     <div className="flex vertical center">
+      <LimitToGraph></LimitToGraph>
+
+      {!goToNext && <button onClick={checkButtonHandler}>Check</button>}
+      {goToNext && <button onClick={nextButtonHandler}>Next</button>}
+      
+    </div>
+  )
+}
+
+/*
       {rand === 0 ? 
       <GraphToLimit 
         inputChangeHandler={inputChangeHandler} 
@@ -34,12 +45,7 @@ const Question = ( { goToNext, checkAnswer, inputChangeHandler, nextQuestion }) 
         selectedOption={selectedOption}
         setSelectedOption={setSelectedOption}
         regenerate={regenerate}></GraphToLimit>
-        : <div>Hello</div> }
-      {!goToNext && <button onClick={checkButtonHandler}>Check</button>}
-      {goToNext && <button onClick={nextButtonHandler}>Next</button>}
-      
-    </div>
-  )
-}
+        : <div>Hello</div> } 
+*/
 
 export default Question

@@ -24,21 +24,21 @@ function getRandomWithExclusions(min, max, exclusions) {
       validValues.push(i);
     }
   }
-  
+
   if (validValues.length === 0) {
     return max;
   }
-  
+
   const randomIndex = getRandomNumber(0, validValues.length - 1);
   return validValues[randomIndex];
 }
 
-function compressPolynomial(expression) {
+function compressPolynomial(expression, max, values, constant) {
   const node = math.parse(expression);
 
   const vars = ['x'];
   let n = build(`(${expression})`, ['x']);
-  
+
   // find zeros of the derivative for local mins/maxs
   const deriv = derivative(n, 'x', vars);
   const simplified = simplify(deriv, vars);
@@ -48,25 +48,25 @@ function compressPolynomial(expression) {
   if (coeffs.length === 1) return node;
   coeffs = coeffs.reverse();
   for (let i = coeffs.length; i < 4; i++) coeffs.push(0);
-  
+
   // find real roots
   const roots = math.polynomialRoot(...coeffs);
   const realRoots = roots.filter((r) => math.typeOf(r) !== 'Complex')
 
   // find min/max value at local mins/maxs of function
-  let maxabs = 9;
+  let maxabs = Math.max(max, ...values);
   for (let i = 0; i < realRoots.length; i++) {
-    maxabs = Math.max(Math.abs(node.evaluate({x: realRoots[i]})), maxabs);
+    maxabs = Math.max(Math.abs(node.evaluate({ x: realRoots[i] })), maxabs);
   }
 
   // find scale factor for function and modify
-  const scale = Math.ceil(maxabs / 9);
-  const scaledNode = math.parse(`(1/${scale * 50})(${expression})`);
+  const scale = Math.ceil(maxabs / max);
+  const scaledNode = math.parse(`(1/${scale * constant})(${expression})`);
   return scaledNode;
 }
 
 function modifyForWholeNumber(node) {
-  const f = (x) => node.evaluate({x});
+  const f = (x) => node.evaluate({ x });
   let data = generateFunctionData(f);
 
   // filter out values where y is > 8 or < -8
@@ -87,10 +87,16 @@ function modifyForWholeNumber(node) {
 
   let expression = `(${node.toString()} + ${move})`
   const modifiedNode = math.parse(expression);
-  return {node: modifiedNode, x};
+  return { node: modifiedNode, x };
 }
 
 function generateRandomPolynomial(degree) {
+  const expression = getPolynomialFunction(degree);
+  const scaledNode = compressPolynomial(expression, 9, [], 50);
+  return modifyForWholeNumber(scaledNode);
+}
+
+function getPolynomialFunction(degree) {
   const coefficients = [];
   for (let i = 0; i <= degree; i++) {
     coefficients.push(getRandomNumber(-5, 5));
@@ -107,10 +113,36 @@ function generateRandomPolynomial(degree) {
   });
 
   terms = terms.filter(t => t !== "");
-  
+
   const expression = terms.reverse().join(' + ').replace(/\s+/g, '');
-  const scaledNode = compressPolynomial(expression);
-  return modifyForWholeNumber(scaledNode);
+  return expression;
 }
 
-export { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, shuffleArray }
+/* 
+Generates a random polynomial that passes through a point and fits ont 10 by 10 graph
+Arguments: 
+ - degree: degree of polynomial to generate
+ - x: x value of point
+ - y: y value of point
+Returns:
+ - expression node
+*/
+function generateRandomPolynomialWithPoint(degree, x, y) {
+  let expression = getPolynomialFunction(degree);
+  let node = math.parse(expression);
+  let max = 9;
+  node = compressPolynomial(node.toString(), max, [], 50);
+  let yval = node.evaluate({ x });
+  let move = y - yval;
+
+  while (Math.abs(move) > 10 - max) {
+    max--;
+    node = compressPolynomial(node.toString(), max, [Math.abs(yval)], 1);
+    yval = node.evaluate({ x });
+    move = y - yval;
+  }
+  expression = `(${node.toString()} + ${move})`
+  const modifiedNode = math.parse(expression);
+  return modifiedNode;
+}
+export { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, shuffleArray, generateRandomPolynomialWithPoint }
