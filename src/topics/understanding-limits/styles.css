@@ -3,6 +3,18 @@
   --color2: green;
   --color3: blue;
   --color4: purple;
+  --random-color: blue;
+}
+.stroke {
+  stroke: black;
+}
+
+.stroke.f {
+  stroke: var(--random-color);
+}
+
+.fill.f {
+  fill: var(--random-color);
 }
 
 .katex {
@@ -31,7 +43,6 @@
 .c3 {
   color: var(--color3);
 }
-
 
 .stroke.c3 {
   stroke: var(--color3);
