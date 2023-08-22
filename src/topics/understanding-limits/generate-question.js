@@ -22,14 +22,14 @@ function graphToLimit() {
 
   // question content
   const question = <div>
-    <h3>Graph of <Latex expression={`\\( g(x) \\)`}></Latex></h3>
+    <h3>Graph of <Latex expression={` g(x) `} inline={true}></Latex></h3>
     <LimitExampleGraph f={f} xval={x} y={y}
       fColor={"f"} xColor={"x"} yColor={"y"} size={400} />
   </div>
 
   // generate options
   const o1 = {
-    component: <Latex expression={`\\( {\\lim}_{{x \\to ${x}}}{g(x)} = ${realY} \\)`} />,
+    component: <Latex expression={` {\\lim}_{{x \\to ${x}}}{g(x)} = ${realY} `} inline={true}/>,
     correct: true
   }
 
@@ -48,7 +48,7 @@ function graphToLimit() {
     const rand = getRandomWithExclusions(-7, 7, [realY])
     ex = `{\\lim}_{{x \\to ${x}}}{g(x)} = ${rand}`;
   }
-  o2.component = <Latex expression={`\\( ${ex} \\)`} />
+  o2.component = <Latex expression={` ${ex} `} inline={true}/>
 
   const options = [o1, o2];
 
@@ -76,12 +76,12 @@ function limitToGraph() {
   }
 
   const question = 
-    <Latex expression={`\\( {\\lim}_{{x \\to ${x1}}}{g(x)} = ${realY1} \\)`} />
+    <Latex expression={` {\\lim}_{{x \\to ${x1}}}{g(x)} = ${realY1} `} inline={true} />
 
   // generate options
   const o1 = {
     component: <div>
-      <h3>Graph of <Latex expression={`\\( g(x) \\)`} /></h3>
+      <h3>Graph of <Latex expression={` g(x) `} inline={true}/></h3>
       <LimitExampleGraph f={f1} xval={x1} y={y1} fColor={"f"} xColor={"x"} yColor={"y"} size={300} />
     </div>,
     correct: true
@@ -104,7 +104,7 @@ function limitToGraph() {
 
   const o2 = {
     component: <div>
-      <h3>Graph of <Latex expression={`\\( g(x) \\)`} /></h3>
+      <h3>Graph of <Latex expression={` g(x) `} inline={true}/></h3>
       <LimitExampleGraph f={f2} xval={x2} y={y2} fColor={"f"} xColor={"x"} yColor={"y"} size={300} />
     </div>,
     correct: false

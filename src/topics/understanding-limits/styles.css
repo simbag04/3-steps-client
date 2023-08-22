@@ -5,6 +5,13 @@
   --color4: purple;
 }
 
+.katex {
+  font-size: 1em !important;
+}
+
+.katex .c1 {
+  color: var(--color1);
+}
 .c1 {
   color: var(--color1);
 }

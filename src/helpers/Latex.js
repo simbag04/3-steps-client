@@ -1,26 +1,16 @@
 import { useEffect } from "react";
+import 'katex/dist/katex.min.css';  // Import KaTeX styles
+import '../topics/understanding-limits/styles.css'
+import { BlockMath, InlineMath } from 'react-katex';
 
-const Latex = ({classes, expression}) => {
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.async = true;
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML';
-
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
-    }
-  });
-
-  return <span className={classes} dangerouslySetInnerHTML={{__html: `${expression}`}} />
+const Latex = ({classes, expression, inline}) => {
+  return (
+    <span className={classes}>
+      {inline ? 
+      <InlineMath math={expression} /> :
+      <BlockMath math={expression} /> }
+    </span>
+  )
 }
 
 export default Latex
