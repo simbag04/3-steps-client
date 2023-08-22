@@ -1,3 +1,12 @@
+/**
+ * Question component
+ * Generates question for this topic
+ * Parameters
+ *  - goToNext: parent state that manages if ready to move to next question
+ *  - checkAnswer: parent function that handles logic of wat to do upon response
+ *  - inputChangeHandler: parent function that handles input changes
+ *  - nextQuestion: parent function that handles moving on to nextQuestion
+ */
 import React, { useState, useMemo, useEffect, useCallback } from "react"
 import { getRandomNumber, shuffleArray } from "../../helpers/functions"
 import { graphToLimit, limitToGraph } from "./generate-question";
@@ -12,7 +21,11 @@ const Question = ({ goToNext, checkAnswer, inputChangeHandler, nextQuestion }) =
   const [question, setQuestion] = useState(null);
   const [options, setOptions] = useState(null);
 
+  /**
+   * generates a new question
+   */
   const nextButtonHandler = useCallback(() => {
+    // determine type of question to generate
     const rand = getRandomNumber(0, 1);
     let q = null;
     if (rand === 0) {
@@ -21,6 +34,7 @@ const Question = ({ goToNext, checkAnswer, inputChangeHandler, nextQuestion }) =
       q = limitToGraph();
     }
 
+    // shuffle options and set state appropriately
     q.options = shuffleArray(q.options);
     setTitle(q.title)
     setQuestion(q.question);
@@ -30,9 +44,13 @@ const Question = ({ goToNext, checkAnswer, inputChangeHandler, nextQuestion }) =
     document.documentElement.style.setProperty('--random-color',
       colors[getRandomNumber(0, colors.length - 1)])
       
+    // setup for next question
     nextQuestion();
   }, [nextQuestion, colors])
 
+  /**
+   * checks the answer option selected and uses parent checkAnswer to appropriately display content
+   */
   const checkButtonHandler = () => {
     let res = undefined;
     if (!selectedOption) {

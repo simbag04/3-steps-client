@@ -1,3 +1,11 @@
+/**
+ * Learn component
+ * This component handles the "learn" content for each topic
+ * Parameters:
+ *  - learnContent: an array of components, where each component represents one "section" of content
+ * This component allows 1 by 1 rendering of sections to help users process information in small chunks
+ */
+
 import { useEffect, useState } from "react";
 import '../styles/learn.css'
 
@@ -20,25 +28,6 @@ const Learn = ({ learnContent }) => {
       setStep(1);
     }
   }, [learnContent])
-
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.async = true;
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML';
-
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
-    }
-  });
 
   return (
     <div className='learn-section flex vertical center medium-gap medium-font'>

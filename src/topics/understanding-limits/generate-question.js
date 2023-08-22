@@ -2,6 +2,10 @@ import { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, gen
 import Latex from "../../helpers/Latex";
 import LimitExampleGraph from "./LimitExampleGraph";
 
+/**
+ * generates random question that asks users to select the limit that best matches the graph
+ * @returns title, question, options for question type
+ */
 function graphToLimit() {
   // title for question
   const title = <h2>Which limit best represents the graph?</h2>
@@ -55,6 +59,10 @@ function graphToLimit() {
   return { title, question, options }
 }
 
+/**
+ * generates random question that asks users to select the graph that best matches the limit
+ * @returns title, question, options for question type
+ */
 function limitToGraph() {
   // title for question
   const title = <h2>Which graph best represents the limit?</h2>

@@ -1,3 +1,9 @@
+/**
+ * Home page for App
+ * Contains links to topic pages
+ * I split links into learn/practice so it was easier to render different content
+ */
+
 import { Link } from "react-router-dom"
 
 export const Home = () => {

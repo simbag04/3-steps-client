@@ -3,6 +3,11 @@ import { build, derivative, simplify } from './calculus';
 import { extractCoeffs } from './polynomial';
 import { generateFunctionData } from './graph-helpers';
 
+/**
+ * Shuffles an array
+ * @param {array} array array to be shuffled
+ * @returns shuffled array
+ */
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1)); // Generate a random index from 0 to i
@@ -13,10 +18,24 @@ function shuffleArray(array) {
   return array;
 }
 
+/**
+ * generates a random number
+ * @param {number} min minimum value of random number
+ * @param {number} max maximum value of random number
+ * @returns random number in the range [min, max]
+ */
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
+/**
+ * generates a random number with exclusions
+ * @param {number} min minimum value of random number
+ * @param {number} max maximum value of random number
+ * @param {array} exclusions numbers to be excluded from generation
+ * @returns random number in the range [min, max] excluding exclusions
+ */
 function getRandomWithExclusions(min, max, exclusions) {
   const validValues = [];
   for (let i = min; i <= max; i++) {
@@ -33,6 +52,14 @@ function getRandomWithExclusions(min, max, exclusions) {
   return validValues[randomIndex];
 }
 
+/**
+ * Compresses polynomial so it fits on 10 by 10 graph
+ * @param {string} expression polynomial to compress
+ * @param {number} max max (and min) value of local min/max
+ * @param {array} values other values that should be within [-max, max]
+ * @param {number} constant number to further compress polynomial by
+ * @returns math.js node representing scaled polynomial
+ */
 function compressPolynomial(expression, max, values, constant) {
   const node = math.parse(expression);
 
@@ -65,6 +92,11 @@ function compressPolynomial(expression, max, values, constant) {
   return scaledNode;
 }
 
+/**
+ * modifies expression to have whole number at a point
+ * @param {node} node math.js node with current function
+ * @returns modified node, x: modified math.js node that has a whole number value at x
+ */
 function modifyForWholeNumber(node) {
   const f = (x) => node.evaluate({ x });
   let data = generateFunctionData(f);
@@ -90,12 +122,22 @@ function modifyForWholeNumber(node) {
   return { node: modifiedNode, x };
 }
 
+/**
+ * Generates ready to graph random polynomial function
+ * @param {number} degree degree of polynomial to be generated
+ * @returns ready to graph polynomial function
+ */
 function generateRandomPolynomial(degree) {
   const expression = getPolynomialFunction(degree);
   const scaledNode = compressPolynomial(expression, 9, [], 50);
   return modifyForWholeNumber(scaledNode);
 }
 
+/**
+ * generates random polynomial function with random whole number coefficients 
+ * @param {number} degree degree of polynomial to generate
+ * @returns random polynomial function with random coefficients
+ */
 function getPolynomialFunction(degree) {
   const coefficients = [];
   for (let i = 0; i <= degree; i++) {
@@ -118,15 +160,13 @@ function getPolynomialFunction(degree) {
   return expression;
 }
 
-/* 
-Generates a random polynomial that passes through a point and fits ont 10 by 10 graph
-Arguments: 
- - degree: degree of polynomial to generate
- - x: x value of point
- - y: y value of point
-Returns:
- - expression node
-*/
+/**
+ * Generates a random polynomial that passes through a point and fits on 10 by 10 graph
+ * @param {number} degree degree of polynomial to generate
+ * @param {number} x x value of point
+ * @param {number} y y value of point
+ * @returns math.js node representing polynomial expression
+ */
 function generateRandomPolynomialWithPoint(degree, x, y) {
   let expression = getPolynomialFunction(degree);
   let node = math.parse(expression);

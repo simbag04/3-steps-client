@@ -3,7 +3,10 @@ import LimitExampleGraph from "./LimitExampleGraph"
 import Latex from '../../helpers/Latex'
 import * as math from 'mathjs'
 
-
+/**
+ * All content for this topic's learn section
+ * all these components represent content for the sections
+ */
 const Section1 = () => {
   return (
     <div>

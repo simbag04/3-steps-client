@@ -1,5 +1,8 @@
 import { inorder } from "./calculus";
 
+/**
+ * Polynomial Term class which represents a polynomial term
+ */
 class PolynomialTerm {
   constructor(node) {
     this.coefficient = null;
@@ -9,6 +12,11 @@ class PolynomialTerm {
   }
 }
 
+/**
+ * parses expression tree node into a polynomial term object
+ * @param {node} node custom expression tree node to be parsed into a polynomial node
+ * @returns PolynomialTerm object
+ */
 function newPolynomialTerm(node) {
   const term = new PolynomialTerm(node);
   if (node.constantNode) {
@@ -43,7 +51,11 @@ function newPolynomialTerm(node) {
   return term;
 }
 
-
+/**
+ * extracts coefficients of polynomial from custom expression tree root
+ * @param {node} root custom expression tree root node of polynomial function
+ * @returns exp: string of simplified polynomial, coeffs: array of coefficients of polynomial
+ */
 function extractCoeffs(root) {
   // extract terms
   const terms = [];
@@ -68,6 +80,11 @@ function extractCoeffs(root) {
   }
 }
 
+/**
+ * extracts terms from root node into an array
+ * @param {node} root root node from which terms are to be extracted
+ * @param {Array} terms list of terms that have currently been extracted from root
+ */
 function extractTerms(root, terms) {
   if (root.data !== '+') {
     terms.push(newPolynomialTerm(root));

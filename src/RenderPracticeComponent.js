@@ -1,3 +1,7 @@
+/**
+ * Component that renders practice component with appropriate topic name
+ */
+
 import { useParams } from 'react-router-dom';
 import { Practice } from "./components/Practice";
 

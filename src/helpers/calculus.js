@@ -1,3 +1,6 @@
+/**
+ * Node class that represents a node in an expression tree
+ */
 class Node {
   constructor(data) {
     this.data = data;
@@ -6,6 +9,12 @@ class Node {
   }
 }
 
+/**
+ * Constructs a new node and sets values appropriately (ex. constantNode, variableNode)
+ * @param {char} c character that node should have
+ * @param {array} vars array of characters that count as variables in tree
+ * @returns a new node in the expression tree with values appropriately set
+ */
 function newNode(c, vars) {
   let n = new Node(c);
   if (vars.includes(c)) {
@@ -30,6 +39,12 @@ function newNode(c, vars) {
   return n;
 }
 
+/**
+ * Builds expression tree from string
+ * @param {string} s string from which to build expression tree
+ * @param {array} vars array of characters that count as variables
+ * @returns root node of expression tree
+ */
 function build(s, vars) {
   let stN = [];
   let stC = [];
@@ -108,6 +123,12 @@ function build(s, vars) {
   return t;
 }
 
+/**
+ * Basic simplification in expression tree
+ * @param {Node} root root node of expression tree to simplify
+ * @param {array} rootVars characters that count as variables
+ * @returns root node of simplified expression tree
+ */
 function simplify(root, rootVars) {
   if (!root) return root;
   root.left = simplify(root.left, rootVars);
@@ -140,14 +161,33 @@ function simplify(root, rootVars) {
 
 }
 
+/**
+ * Adds 2 strings and returns
+ * @param {string} x first num to add
+ * @param {string} y second num to add
+ * @returns sum of numbers as string
+ */
 function add(x, y) {
   return String(Number(x) + Number(y));
 }
 
+/**
+ * Multiplies 2 strings and returns
+ * @param {string} x first num to multiply
+ * @param {string} y second num to multiply
+ * @returns product of numbers as string
+ */
 function multiply(x, y) {
   return String(Number(x) * Number(y));
 }
 
+/**
+ * simplifies associative addition/multiplication
+ * @param {Node} root root node of expression to simplify
+ * @param {array} rootVars characters that count as variables
+ * @param {char} operator operation currently being simplified
+ * @returns root node of simplified expression tree
+ */
 function simplifyAddMultiply(root, rootVars, operator) {
   const f = operator === '+' ? add : multiply;
   if (root.left.numberNode && root.right.numberNode) {
@@ -180,6 +220,13 @@ function simplifyAddMultiply(root, rootVars, operator) {
   return root;
 }
 
+/**
+ * takes derivative of expression
+ * @param {Node} root root node of expression to derive
+ * @param {char} variable variable with respect to which derivative should be taken
+ * @param {array} rootVars characters that count as variables
+ * @returns root node of expression tree of derivative
+ */
 function derivative(root, variable, rootVars) {
   if (!root) return root;
   if (root.data === '+' || root.data === '-') {
@@ -224,10 +271,21 @@ function derivative(root, variable, rootVars) {
   }
 }
 
+/**
+ * toString() method
+ * @param {Node} root root node for which to print traversal
+ * @returns string storing inorder traversal of tree
+ */
 function inorder(root) {
   return inorderHelper(root, "");
 }
 
+/**
+ * helper to generate inorder traversal string
+ * @param {Node} root root node that is being traversed
+ * @param {string} string string of the traversal so far
+ * @returns string which is traversal of root
+ */
 function inorderHelper(root, string) {
   if (root !== null) {
     string = inorderHelper(root.left, string);

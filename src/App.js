@@ -1,3 +1,9 @@
+/**
+ * Main App Component
+ * Handles routing
+ * seperated learn/pratice to make component rendering easier
+ */
+
 import { HashRouter, Routes, Route } from "react-router-dom"
 import { Home } from "./components/Home";
 import { RenderLearnComponent } from "./RenderLearnComponent";

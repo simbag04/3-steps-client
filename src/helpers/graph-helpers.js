@@ -1,6 +1,11 @@
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 
+/**
+ * generates graphing data for mathematical function
+ * @param {function} f function for which to generate data
+ * @returns array of data with generated values
+ */
 const generateFunctionData = (f) => {
   let data = [];
 
@@ -13,6 +18,18 @@ const generateFunctionData = (f) => {
   return data;
 }
 
+/**
+ * appends graph of a mathematical function on an svg
+ * @param {Ref} svgRef reference to svg on which to draw function graph
+ * @param {function} f function to graph 
+ * @param {number} width width of graph
+ * @param {number} height height of graph
+ * @param {color} color color of graph
+ * @param {scale} xScale xscale of graph
+ * @param {scale} yScale yscale of graph
+ * @param {string} classes custom string of classes to include in function path/arrows
+ * @returns data that was used to graph function, id of svg path of function
+ */
 const createFunctionGraph = (svgRef, f, width, height, color, xScale, yScale, classes) => {
   const svg = d3.select(svgRef.current)
 
@@ -46,6 +63,14 @@ const createFunctionGraph = (svgRef, f, width, height, color, xScale, yScale, cl
   return { data, id };
 }
 
+/**
+ * creates -10 by 10 blank canvas on top of which graphs can be drawn 
+ * @param {number} width width of graph
+ * @param {number} height height of graph
+ * @param {Ref} svgRef reference to svg where graph should be drawn
+ * @param {number} textSize size of text of graph labels
+ * @returns width, height, xscale, and yscale of graph
+ */
 const createBlankCanvas = (width, height, svgRef, textSize) => {
   const numCells = 20;
   const half = (width / 2) / numCells;
@@ -172,6 +197,14 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
   }
 };
 
+/**
+ * generates custom arrow marker to be used in graphs of functions
+ * @param {string} name identifier name of arrow marker being generated
+ * @param {svg} svg svg where marker should be appended
+ * @param {number} size size of marker
+ * @param {string} color color of marker
+ * @param {string} classes custom classes to be added to marker
+ */
 function createArrowMarker(name, svg, size, color, classes) {
   svg.append("defs").append("marker")
     .attr("id", name)
