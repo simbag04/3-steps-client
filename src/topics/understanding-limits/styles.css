@@ -75,3 +75,32 @@
 .fill.hole {
   fill: white;
 }
+
+.tick-text text {
+  paint-order: stroke;
+  stroke: white;
+  stroke-width: 1px;
+  fill: black;
+}
+
+/* Hide the default radio buttons */
+input[type="radio"] {
+  display: none;
+}
+
+/* Create custom-styled radio buttons */
+input[type="radio"] + label {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Style the selected radio button label */
+input[type="radio"]:checked + label {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+

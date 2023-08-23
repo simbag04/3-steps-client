@@ -60,6 +60,8 @@ const createFunctionGraph = (svgRef, f, width, height, color, xScale, yScale, cl
     .attr('marker-start', `url(#${name})`)
     .attr('d', line);
 
+  svg.select(".tick-text").raise();
+  
   return { data, id };
 }
 
@@ -117,55 +119,55 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
     .attr("stroke", "lightgray");
 
   // build tick marks on axes
-  const xAxis = svg.append('g')
-    .attr('class', 'tick')
-    .attr('transform', `translate(0, ${xScale(0)})`)
-    .call(d3.axisBottom(xScale).tickFormat(d => d === 0 ? "" : d));
+  const tickMarks = svg.append('g')
+    .attr('class', 'tick-marks');
 
-  const yAxis = svg.append('g')
-    .attr('class', 'tick')
-    .attr('transform', `translate(${yScale(0)}, 0)`)
-    .call(d3.axisLeft(yScale).tickFormat(d => d === 0 ? "" : d));
+  const tickText = svg.append('g')
+    .attr('class', 'tick-text')
 
-  [xAxis, yAxis].map((axis) => {
-    axis.selectAll(".tick path")
-      .attr('stroke', 'none')
+  // add marks and text to xaxis
+  xScale.ticks().forEach(tick => {
+    tickMarks.append("line")
+      .attr("x1", xScale(tick))
+      .attr("x2", xScale(tick))
+      .attr("y1", yScale(0) - 4)
+      .attr("y2", yScale(0) + 4)
+      .attr("stroke", tick === 0 ? "none" : color)
+      .attr("stroke-width", 1)
 
-    axis.selectAll(".tick line")
-      .attr('stroke', color)
-      .attr('stroke-width', 1)
-
-    axis.selectAll(".tick text")
+    tickText.append("text")
+      .attr("x", xScale(tick) + (tick < 0 ? 1.5 : -1.5))
+      .attr("y", yScale(0) + 3)
+      .attr('alignment-baseline', 'hanging')
+      .attr('text-anchor', tick < 0 ? 'start' : 'end')
       .style('color', 'black')
-      .style('font-size', textSize - 4)
+      .style('font-size', tick === 0 ? 0 : textSize - 4)
       .attr('font-weight', 'bold')
-
-    return true;
+      .text(tick)
   })
 
-  // build tick lines
-  xAxis.selectAll(".tick line")
-    .attr("y1", -4)
-    .attr("y2", 4)
+  // add marks and text to y axis
+  yScale.ticks().forEach(tick => {
+    tickMarks.append("line")
+      .attr("x1", xScale(0) - 4)
+      .attr("x2", xScale(0) + 4)
+      .attr("y1", yScale(tick))
+      .attr("y2", yScale(tick))
+      .attr("stroke", tick === 0 ? "none" : color)
+      .attr("stroke-width", 1)
 
-  yAxis.selectAll(".tick line")
-    .attr("x1", -4)
-    .attr("x2", 4)
+    tickText.append("text")
+      .attr("x", xScale(0) - 3)
+      .attr("y", yScale(tick) + (tick < 0 ? -1.5 : 1.5))
+      .attr('alignment-baseline', tick < 0 ? 'baseline' : 'hanging')
+      .attr('text-anchor', 'end')
+      .style('color', 'black')
+      .style('font-size', tick === 0 ? 0 : textSize - 4)
+      .attr('font-weight', 'bold')
+      .text(tick)
+  })
 
-  // format tick text
-  xAxis.selectAll(".tick text")
-    .attr('dx', d => d < 0 ? 5.5 : -5.5)
-    .attr('dy', -2)
-    .attr('alignment-baseline', 'middle')
-    .attr('text-anchor', 'middle');
-
-  yAxis.selectAll(".tick text")
-    .attr('dy', d => d < 0 ? -5.5 : 5.5)
-    .attr('dx', 2)
-    .attr('alignment-baseline', 'middle')
-    .attr('text-anchor', 'middle');
-
-  // x and y axes
+  // draw actual x and y axes
   const name = "axes-arrow"
   createArrowMarker(name, svg, size, color);
 
