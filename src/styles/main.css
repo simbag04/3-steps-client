@@ -1,0 +1,66 @@
+:root {
+  --header-padding: 40px;
+  --padding: 20px;
+  --large-gap: 20px;
+  --medium-gap: 14px;
+  --small-gap: 10px;
+  --tiny-gap: 5px;
+  --border-radius: 10px;
+  --header-color: #52b788;
+  --button-color: #b7e4c7;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+.flex {
+  display: flex;
+}
+
+.vertical {
+  flex-direction: column;
+}
+
+.horizontal {
+  flex-direction: row;
+}
+
+.center {
+  align-items: center;
+}
+
+.large-gap {
+  gap: var(--large-gap);
+}
+
+.medium-gap {
+  gap: var(--medium-gap);
+}
+
+.small-gap {
+  gap: var(--small-gap);
+}
+
+.tiny-gap {
+  gap: var(--tiny-gap);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  background-color: var(--button-color);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px var(--padding);
+}
+
+button:hover {
+  transform: scale(1.1);
+  transition: transform .25s;
+}

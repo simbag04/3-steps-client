@@ -1,0 +1,65 @@
+:root {
+  --color1: red;
+  --color2: green;
+  --color3: blue;
+  --color4: purple;
+  --random-color: blue;
+}
+
+/* graph colors styling */
+.stroke {
+  stroke: black;
+}
+
+.stroke.f {
+  stroke: var(--random-color);
+}
+
+.fill.f {
+  fill: var(--random-color);
+}
+
+.stroke.c2 {
+  stroke: var(--color2);
+}
+
+.fill.c2 {
+  fill: var(--color2);
+}
+
+.stroke.c3 {
+  stroke: var(--color3);
+}
+
+.fill.c3 {
+  fill: var(--color3);
+}
+
+.stroke.c4 {
+  stroke: var(--color4);
+}
+
+.fill.c4 {
+  fill: var(--color4);
+}
+
+.fill.hole {
+  fill: white;
+}
+
+/* text colors styling */
+.c1 {
+  color: var(--color1);
+}
+
+.c2 {
+  color: var(--color2);
+}
+
+.c3 {
+  color: var(--color3);
+}
+
+.c4 {
+  color: var(--color4);
+}

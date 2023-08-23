@@ -1,0 +1,13 @@
+.navbar {
+  justify-content: space-between;
+  padding: var(--header-padding);
+  background-color: var(--header-color);
+}
+
+.logo {
+  color: white;
+}
+
+.links {
+  gap: 10px;
+}

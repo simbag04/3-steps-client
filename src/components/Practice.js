@@ -6,9 +6,10 @@
  * 
  */
 
-import React, { lazy, Suspense,useCallback,useState } from "react";
+import React, { lazy, Suspense,useCallback,useEffect,useState } from "react";
+import '../styles/practice.css'
 
-export const Practice = ({ name }) => {
+export const Practice = ({ name, title }) => {
   const [text, setText] = useState(null); // feedback text, such as "Incorrect"
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
   const [streak, setStreak] = useState(0); // current streak
@@ -38,6 +39,7 @@ export const Practice = ({ name }) => {
       setStreak(streak => streak + 1);
       setText("Good job!")
     } else {
+      setGoToNext(true)
       setStreak(0);
       setText("Incorrect!")
     }
@@ -47,7 +49,8 @@ export const Practice = ({ name }) => {
   const DynamicComponent = lazy(() => import(`../topics/${name}/Question.js`));
 
   return (
-    <div className="flex vertical center">
+    <div className="flex vertical center medium-gap practice">
+      <h1 className="title">{title}: Practice</h1>
       <Suspense fallback={<div>Loading...</div>}>
         <DynamicComponent goToNext={goToNext} checkAnswer={checkAnswer} inputChangeHandler={inputChangeHandler} nextQuestion={nextQuestion}/>
       </Suspense>

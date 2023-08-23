@@ -39,11 +39,12 @@ const Question = ({ goToNext, checkAnswer, inputChangeHandler, nextQuestion }) =
     setTitle(q.title)
     setQuestion(q.question);
     setOptions(q.options);
-    
+    setSelectedOption(null);
+
     // set color for graphs
     document.documentElement.style.setProperty('--random-color',
       colors[getRandomNumber(0, colors.length - 1)])
-      
+
     // setup for next question
     nextQuestion();
   }, [nextQuestion, colors])
@@ -68,24 +69,27 @@ const Question = ({ goToNext, checkAnswer, inputChangeHandler, nextQuestion }) =
   }, [nextButtonHandler])
 
   return (
-    <div className="flex vertical center">
+    <div className="question flex vertical center medium-gap">
       {title}
       {question}
-      {options && options.map((option, index) => (
-        <label key={index}>
-          <input
-            type="radio"
-            name="selectedOption"
-            value={option}
-            onChange={() => {
-              setSelectedOption(option)
-              inputChangeHandler();
-            }}
-            checked={selectedOption === option}
-          />
-          {option.component}
-        </label>
-      ))}
+      <div className="flex horizontal center medium-gap">
+        {options && options.map((option, index) => (
+          <label key={index} className={selectedOption === option ? 'selected' : ""}>
+            <input
+              type="radio"
+              name="selectedOption"
+              value={option}
+              onChange={() => {
+                if (!goToNext) {
+                  setSelectedOption(option)
+                  inputChangeHandler();
+                }
+              }}
+            />
+            {option.component}
+          </label>
+        ))}
+      </div>
       {!goToNext && <button onClick={checkButtonHandler}>Check</button>}
       {goToNext && <button onClick={nextButtonHandler}>Next</button>}
     </div>

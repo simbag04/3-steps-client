@@ -9,9 +9,9 @@
 import { useEffect, useState } from "react";
 import '../styles/learn.css'
 
-const Learn = ({ learnContent }) => {
-  const [step, setStep] = useState(0); 
-  const [remaining, setRemaining] = useState(true);   
+const Learn = ({ learnContent, title }) => {
+  const [step, setStep] = useState(0);
+  const [remaining, setRemaining] = useState(true);
   const [items, setItems] = useState([]);
 
   const addItem = () => {
@@ -31,10 +31,11 @@ const Learn = ({ learnContent }) => {
 
   return (
     <div className='learn-section flex vertical center medium-gap medium-font'>
+      <h2 className="title">{title}: Learn</h2>
       {items.map((content, index) => {
         return <div key={index} className="flex vertical center medium-gap">{content}</div>
       })}
-      {remaining ? <button onClick={addItem}>Next</button> : null }
+      {remaining ? <button onClick={addItem}>Next</button> : null}
     </div>
   );
 }

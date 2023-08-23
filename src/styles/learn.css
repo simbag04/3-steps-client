@@ -1,15 +1,3 @@
-.flex {
-  display: flex;
-}
-
-.vertical {
-  flex-direction: column;
-}
-
-.center {
-  align-items: center;
-}
-
 .medium-gap {
   gap: 10px;
 }
@@ -21,9 +9,10 @@
 .learn-section {
   width: 60%;
   margin: auto;
+  text-align: center;
+  padding: var(--padding);
 }
 
-svg {
-  margin: 0;
-  padding: 0;
+.title {
+  align-self: start;
 }

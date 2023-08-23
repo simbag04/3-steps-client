@@ -14,6 +14,7 @@ import { useEffect, useRef } from "react"
 import { createFunctionGraph, createBlankCanvas, createArrowMarker } from "../../helpers/graph-helpers";
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
+import './graph.css'
 
 const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor, size }) => {
   const svgRef = useRef(null);

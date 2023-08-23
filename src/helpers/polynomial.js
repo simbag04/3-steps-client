@@ -86,6 +86,7 @@ function extractCoeffs(root) {
  * @param {Array} terms list of terms that have currently been extracted from root
  */
 function extractTerms(root, terms) {
+  if (!root) return;
   if (root.data !== '+') {
     terms.push(newPolynomialTerm(root));
   } else {

@@ -25,7 +25,7 @@ function graphToLimit() {
   }
 
   // question content
-  const question = <div>
+  const question = <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression={` g(x) `} inline={true}></Latex></h3>
     <LimitExampleGraph f={f} xval={x} y={y}
       fColor={"f"} xColor={"x"} yColor={"y"} size={400} />
@@ -88,7 +88,7 @@ function limitToGraph() {
 
   // generate options
   const o1 = {
-    component: <div>
+    component: <div className="flex vertical center medium-gap">
       <h3>Graph of <Latex expression={` g(x) `} inline={true}/></h3>
       <LimitExampleGraph f={f1} xval={x1} y={y1} fColor={"f"} xColor={"x"} yColor={"y"} size={300} />
     </div>,
@@ -111,7 +111,7 @@ function limitToGraph() {
   const f2 = x => g2.evaluate({ x });
 
   const o2 = {
-    component: <div>
+    component: <div className="flex vertical center medium-gap">
       <h3>Graph of <Latex expression={` g(x) `} inline={true}/></h3>
       <LimitExampleGraph f={f2} xval={x2} y={y2} fColor={"f"} xColor={"x"} yColor={"y"} size={300} />
     </div>,
