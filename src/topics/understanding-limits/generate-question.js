@@ -90,7 +90,7 @@ function limitToGraph() {
   const o1 = {
     component: <div className="flex vertical center medium-gap">
       <h3>Graph of <Latex expression={` g(x) `} inline={true}/></h3>
-      <LimitExampleGraph f={f1} xval={x1} y={y1} fColor={"f"} xColor={"x"} yColor={"y"} size={300} />
+      <LimitExampleGraph f={f1} xval={x1} y={y1} fColor={"f"} xColor={"x"} yColor={"y"} size={400} />
     </div>,
     correct: true
   }
@@ -113,7 +113,7 @@ function limitToGraph() {
   const o2 = {
     component: <div className="flex vertical center medium-gap">
       <h3>Graph of <Latex expression={` g(x) `} inline={true}/></h3>
-      <LimitExampleGraph f={f2} xval={x2} y={y2} fColor={"f"} xColor={"x"} yColor={"y"} size={300} />
+      <LimitExampleGraph f={f2} xval={x2} y={y2} fColor={"f"} xColor={"x"} yColor={"y"} size={400} />
     </div>,
     correct: false
   }

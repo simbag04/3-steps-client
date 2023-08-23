@@ -6,7 +6,7 @@
  * 
  */
 
-import React, { lazy, Suspense,useCallback,useEffect,useState } from "react";
+import React, { lazy, Suspense, useCallback, useState } from "react";
 import '../styles/practice.css'
 
 export const Practice = ({ name, title }) => {

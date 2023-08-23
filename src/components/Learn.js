@@ -8,11 +8,13 @@
 
 import { useEffect, useState } from "react";
 import '../styles/learn.css'
+import { useNavigate } from "react-router-dom";
 
-const Learn = ({ learnContent, title }) => {
+const Learn = ({ learnContent, title, name }) => {
   const [step, setStep] = useState(0);
   const [remaining, setRemaining] = useState(true);
   const [items, setItems] = useState([]);
+  const nav = useNavigate();
 
   const addItem = () => {
     items.push(learnContent[step]);
@@ -20,6 +22,10 @@ const Learn = ({ learnContent, title }) => {
     if (step + 1 >= learnContent.length) {
       setRemaining(false);
     }
+  }
+
+  const practiceButtonHandler = () => {
+    nav(`/topic/${name}/practice`)
   }
 
   useEffect(() => {
@@ -36,6 +42,7 @@ const Learn = ({ learnContent, title }) => {
         return <div key={index} className="flex vertical center medium-gap">{content}</div>
       })}
       {remaining ? <button onClick={addItem}>Next</button> : null}
+      {remaining ? null : <button onClick={practiceButtonHandler}>Let's Practice!</button>}
     </div>
   );
 }

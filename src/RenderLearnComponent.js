@@ -29,6 +29,6 @@ export const RenderLearnComponent = () => {
   })
 
   return (
-    <Learn learnContent={learnContent} title={title} />
+    <Learn learnContent={learnContent} title={title} name={name} />
   );
 }
