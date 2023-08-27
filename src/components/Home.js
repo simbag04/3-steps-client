@@ -4,14 +4,13 @@
  * I split links into learn/practice so it was easier to render different content
  */
 
-import { Link } from "react-router-dom"
+import { AllCourses } from "./AllCourses"
 
 export const Home = () => {
   return (
     <div>
-      <Link to="/topic/understanding-limits/learn">Understanding Limits</Link>
-      <Link to="/topic/understanding-limits/practice">Understanding Limits Practice</Link>
-      <Link to="/topic/evaluate-limits-using-graphs">Evaluate Limits Using Graphs</Link>
+      <h1>View Courses</h1>
+      <AllCourses></AllCourses>
     </div>
   )
 }
