@@ -9,7 +9,6 @@ import { AllCourses } from "./AllCourses"
 export const Home = () => {
   return (
     <div>
-      <h1>View Courses</h1>
       <AllCourses></AllCourses>
     </div>
   )

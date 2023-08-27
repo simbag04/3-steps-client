@@ -10,32 +10,71 @@ import { RenderLearnComponent } from "./RenderLearnComponent";
 import { RenderPracticeComponent } from "./RenderPracticeComponent";
 import './styles/main.css'
 import { Navbar } from "./components/Navbar";
-import { createContext } from "react";
+import { createContext, useState, useEffect } from "react";
 import { AllCourses } from "./components/AllCourses";
 import { Course } from "./components/Course";
 import { Unit } from "./components/Unit";
+import { Login } from "./components/Login";
+import { Logout } from "./components/Logout";
+import { Register } from "./components/Register";
 
 export const ApiContext = createContext();
+export const UserContext = createContext();
 
 function App() {
+  const [user, setUser] = useState(null);
+  const parseJwt = (token) => {
+    try {
+      return JSON.parse(atob(token.split(".")[1]))
+    } catch (e) {
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    const verifyAuth = async () => {
+      const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (token && user) {
+        const decodedJwt = parseJwt(token);
+        if (decodedJwt.exp * 1000 < Date.now()) {
+          localStorage.setItem("token", null);
+          localStorage.setItem("user", null);
+        } else {
+          setUser(user);
+        }
+      }
+    }
+
+    const attemptLogin = async () => {
+      await verifyAuth();
+    }
+
+    attemptLogin().catch(console.error);
+  }, [])
+
   return (
     <div>
       <ApiContext.Provider value={'http://localhost:5000'}>
-        <HashRouter>
-          <Routes>
-            <Route path="/" element={<Navbar />}>
-              <Route index element={<Home />} />
-
-              <Route path="/courses" element={<AllCourses />} />
-              <Route path="/:cname" element={<Course />} />
-              <Route path="/:cname/:uname" element={<Unit />} />
-              <Route path="/:cname/:uname/:name/learn"
-                element={<RenderLearnComponent />} />
-              <Route path="/:cname/:uname/:name/practice"
-                element={<RenderPracticeComponent />} />
-            </Route>
-          </Routes>
-        </HashRouter>
+        <UserContext.Provider value={{ user, setUser }}>
+          <HashRouter>
+            <Routes>
+              <Route path="/" element={<Navbar />}>
+                <Route index element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/courses" element={<AllCourses />} />
+                <Route path="/:cname" element={<Course />} />
+                <Route path="/:cname/:uname" element={<Unit />} />
+                <Route path="/:cname/:uname/:name/learn"
+                  element={<RenderLearnComponent />} />
+                <Route path="/:cname/:uname/:name/practice"
+                  element={<RenderPracticeComponent />} />
+              </Route>
+            </Routes>
+          </HashRouter>
+        </UserContext.Provider>
       </ApiContext.Provider>
     </div >
   );
