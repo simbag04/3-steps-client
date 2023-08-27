@@ -32,7 +32,7 @@ export const Unit = () => {
       {topics &&
         topics.map((topic) => {
           return (
-            <div className="flex vertical center small-gap">
+            <div key={topic._id} className="flex vertical center small-gap">
               {topic.name}
               <Link to={`/${cname}/${uname}/${topic.slug}/learn`}>Learn</Link>
               <Link to={`/${cname}/${uname}/${topic.slug}/practice`}>Practice</Link>

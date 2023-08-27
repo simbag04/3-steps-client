@@ -25,7 +25,6 @@ export const Login = () => {
   const formSubmitHandler = async (e) => {
     e.preventDefault();
 
-    console.log(formData);
     const result = await login(formData);
     if (result !== "Login successful") {
       setMessage(result)

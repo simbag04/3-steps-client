@@ -32,7 +32,7 @@ export const Course = () => {
       <div>
         {units &&
           units.map((unit) => {
-            return <Link to={`/${cname}/${unit.slug}`}>{unit.name}</Link>
+            return <Link key={unit._id} to={`/${cname}/${unit.slug}`}>{unit.name}</Link>
           })}
       </div>
       <div>
