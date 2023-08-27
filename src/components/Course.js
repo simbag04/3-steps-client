@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { ApiContext } from "../App";
 import { Link } from "react-router-dom";
 
@@ -8,6 +8,11 @@ export const Course = () => {
   const apiLink = useContext(ApiContext);
   const [units, setUnits] = useState(null);
   const [title, setTitle] = useState(null);
+  const nav = useNavigate();
+
+  const backToCoursesHandler = () => {
+    nav('/courses');
+  }
 
   useEffect(() => {
     const getUnits = async () => {
@@ -22,12 +27,17 @@ export const Course = () => {
   }, [cname, apiLink])
 
   return (
-    <div>
+    <div className="flex vertical center large-gap">
       <h1>{title}</h1>
-      {units && 
-        units.map((unit) => {
-          return <Link to={`/course/${cname}/unit/${unit.slug}`}>{unit.name}</Link>
-        })}
+      <div>
+        {units &&
+          units.map((unit) => {
+            return <Link to={`/${cname}/${unit.slug}`}>{unit.name}</Link>
+          })}
+      </div>
+      <div>
+        <button onClick={backToCoursesHandler}>Back to Courses</button>
+      </div>
     </div>
   )
 }

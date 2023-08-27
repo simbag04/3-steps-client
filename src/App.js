@@ -25,13 +25,14 @@ function App() {
           <Routes>
             <Route path="/" element={<Navbar />}>
               <Route index element={<Home />} />
-              <Route path="/topic/:name/learn"
-                element={<RenderLearnComponent />} />
-              <Route path="/topic/:name/practice"
-                element={<RenderPracticeComponent />} />
+
               <Route path="/courses" element={<AllCourses />} />
-              <Route path="/course/:cname" element={<Course />} />
-              <Route path="/course/:cname/unit/:uname" element={<Unit />} />
+              <Route path="/:cname" element={<Course />} />
+              <Route path="/:cname/:uname" element={<Unit />} />
+              <Route path="/:cname/:uname/:name/learn"
+                element={<RenderLearnComponent />} />
+              <Route path="/:cname/:uname/:name/practice"
+                element={<RenderPracticeComponent />} />
             </Route>
           </Routes>
         </HashRouter>

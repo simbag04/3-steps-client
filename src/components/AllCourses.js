@@ -23,12 +23,13 @@ export const AllCourses = () => {
   }, [apiLink])
 
   return (
-    <div>
+    <div className="flex vertical center large-gap">
+      <h1>All Courses</h1>
       {courses &&
         courses.map((course) => {
           course.url_name = getUrlName(course.name);
           return (<div key={course._id}>
-            <Link to={`/course/${course.url_name}`}>{course.name}</Link>
+            <Link to={`/${course.url_name}`}>{course.name}</Link>
           </div>)
         })
       }

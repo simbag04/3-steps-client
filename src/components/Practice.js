@@ -8,11 +8,13 @@
 
 import React, { lazy, Suspense, useCallback, useState } from "react";
 import '../styles/practice.css'
+import { useNavigate } from "react-router-dom";
 
-export const Practice = ({ name, title }) => {
+export const Practice = ({cname, uname, name, title }) => {
   const [text, setText] = useState(null); // feedback text, such as "Incorrect"
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
   const [streak, setStreak] = useState(0); // current streak
+  const nav = useNavigate();
 
   // this function is called to reset variables for the next question
   const nextQuestion = useCallback(() => {
@@ -24,6 +26,10 @@ export const Practice = ({ name, title }) => {
   // this is intended to be used when there is a change to an answer input
   const inputChangeHandler = () => {
     setText(null);
+  }
+
+  const backToTopicsButtonHandler = () => {
+    nav(`/${cname}/${uname}`)
   }
 
   /**
@@ -57,6 +63,7 @@ export const Practice = ({ name, title }) => {
 
       {text && <div>{text}</div>}
       <div>Streak: {streak}</div>
+      <button onClick={backToTopicsButtonHandler}>Back to Topics</button>
     </div>
   );
 }

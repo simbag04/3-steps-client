@@ -7,7 +7,7 @@ import { Practice } from "./components/Practice";
 import { useState, useEffect } from 'react';
 
 export const RenderPracticeComponent = () => {
-  const { name } = useParams();
+  const { cname, uname, name } = useParams();
   const [title, setTitle] = useState(null);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export const RenderPracticeComponent = () => {
 
   return (
     <div>
-      <Practice name={name} title={title} />
+      <Practice cname={cname} uname={uname} name={name} title={title} />
     </div>
   );
 };

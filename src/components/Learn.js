@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import '../styles/learn.css'
 import { useNavigate } from "react-router-dom";
 
-const Learn = ({ learnContent, title, name }) => {
+const Learn = ({ learnContent, title, cname, uname, name }) => {
   const [step, setStep] = useState(0);
   const [remaining, setRemaining] = useState(true);
   const [items, setItems] = useState([]);
@@ -25,7 +25,11 @@ const Learn = ({ learnContent, title, name }) => {
   }
 
   const practiceButtonHandler = () => {
-    nav(`/topic/${name}/practice`)
+    nav(`/${cname}/${uname}/${name}/practice`)
+  }
+
+  const backToTopicsButtonHandler = () => {
+    nav(`/${cname}/${uname}`)
   }
 
   useEffect(() => {
@@ -43,6 +47,8 @@ const Learn = ({ learnContent, title, name }) => {
       })}
       {remaining ? <button onClick={addItem}>Next</button> : null}
       {remaining ? null : <button onClick={practiceButtonHandler}>Let's Practice!</button>}
+      <button onClick={backToTopicsButtonHandler}>Back to Topics</button>
+
     </div>
   );
 }

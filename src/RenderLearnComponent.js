@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import Learn from './components/Learn';
 
 export const RenderLearnComponent = () => {
-  const { name } = useParams();
+  const { cname, uname, name } = useParams();
   const [learnContent, setLearnContent]= useState(null);
   const [title, setTitle] = useState(null);
   useEffect(() => {
@@ -29,6 +29,6 @@ export const RenderLearnComponent = () => {
   })
 
   return (
-    <Learn learnContent={learnContent} title={title} name={name} />
+    <Learn learnContent={learnContent} title={title} cname={cname} uname={uname} name={name} />
   );
 }
