@@ -1,5 +1,23 @@
+.practice-section {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  gap: var(--huge-gap);
+}
+
 .practice {
   padding: var(--padding);
-  width: 60%;
-  margin: auto;
+}
+
+.stats {
+  background-color: var(--button-color);
+  padding: var(--padding);
+  border-radius: var(--border-radius);
+}
+
+.stats button {
+  background-color: var(--header-color);
 }

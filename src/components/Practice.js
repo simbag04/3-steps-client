@@ -16,10 +16,12 @@ import { ApiContext } from "../App";
 export const Practice = ({ cname, uname, name, title }) => {
   const [text, setText] = useState(null); // feedback text, such as "Incorrect"
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
+  const [newQ, setNewQ] = useState(false);
   const [streak, setStreak] = useState(0); // current streak
   const [bestStreak, setBestStreak] = useState(0); // all time best streak
   const [totalCorrect, setTotalCorrect] = useState(0); // total problems correct
-  const [totalAttempted, setTotalAttempted] = useState(0); // tota problems attempted
+  const [totalAttempted, setTotalAttempted] = useState(0); // total problems attempted
+  const [correct, setCorrect] = useState(null);
 
   const nav = useNavigate();
   const { user } = useContext(UserContext);
@@ -49,7 +51,7 @@ export const Practice = ({ cname, uname, name, title }) => {
         } catch (err) {
           console.log(err)
         }
-      } 
+      }
     }
 
     setVariables().catch(console.error)
@@ -59,6 +61,8 @@ export const Practice = ({ cname, uname, name, title }) => {
   const nextQuestion = useCallback(() => {
     setText(null);
     setGoToNext(false);
+    setCorrect(null);
+    setNewQ(newQ => !newQ);
   }, [setGoToNext, setText]);
 
   // this function removes the feedback text
@@ -78,10 +82,10 @@ export const Practice = ({ cname, uname, name, title }) => {
    * 
    */
   const checkAnswer = async (res) => {
-    if (res === undefined) {
+    if (correct === null) {
       setText("You must select an answer to continue")
     } else {
-      if (res) {
+      if (correct) {
         setGoToNext(true);
         setStreak(streak => streak + 1);
         setBestStreak(Math.max(streak + 1, bestStreak))
@@ -93,6 +97,7 @@ export const Practice = ({ cname, uname, name, title }) => {
         setText("Incorrect!")
       }
       setTotalAttempted(totalAttempted => totalAttempted + 1);
+
       if (user) {
         try {
           await fetch(`${apiLink}/topic/${name}/question`, {
@@ -112,21 +117,30 @@ export const Practice = ({ cname, uname, name, title }) => {
   }
 
   // lazily import component
-  const DynamicComponent = lazy(() => import(`../topics/${name}/Question.js`));
+  const Question = lazy(() => import(`../topics/${name}/Question.js`));
 
   return (
     <div className="flex vertical center medium-gap practice">
       <h1 className="title">{title}: Practice</h1>
-      <Suspense fallback={<div>Loading...</div>}>
-        <DynamicComponent goToNext={goToNext} checkAnswer={checkAnswer} inputChangeHandler={inputChangeHandler} nextQuestion={nextQuestion} />
-      </Suspense>
+      <div className="practice-section">
+        <div>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Question goToNext={goToNext} inputChangeHandler={inputChangeHandler} setCorrect={setCorrect} newQ={newQ}/>
+          </Suspense>
+        </div>
+        <div className="stats flex vertical center medium-gap">
+          <h2>Progress</h2>
+          {text && <div>{text}</div>}
+          <div>Streak: {streak}</div>
+          <div>Best Streak: {bestStreak}</div>
+          <div>Problems correct: {totalCorrect}</div>
+          <div>Problems attempted: {totalAttempted}</div>
+          <button onClick={backToTopicsButtonHandler}>Back to Topics</button>
+          {!goToNext && <button onClick={checkAnswer}>Check</button>}
+          {goToNext && <button onClick={nextQuestion}>Next</button>}
+        </div>
+      </div>
 
-      {text && <div>{text}</div>}
-      <div>Streak: {streak}</div>
-      <div>Best Streak: {bestStreak}</div>
-      <div>Problems correct: {totalCorrect}</div>
-      <div>Problems attempted: {totalAttempted}</div>
-      <button onClick={backToTopicsButtonHandler}>Back to Topics</button>
     </div>
   );
 }

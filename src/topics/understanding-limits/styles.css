@@ -19,6 +19,7 @@ label {
   padding: 10px;
   border: 2px solid lightgray;
   border-radius: var(--border-radius);
+  z-index: 100;
 }
 
 input[type="radio"] {
@@ -27,6 +28,16 @@ input[type="radio"] {
 
 .selected {
   border: 2px solid #007bff;
+  border-radius: var(--border-radius);
+}
+
+.correct {
+  border: 4px solid green;
+  border-radius: var(--border-radius);
+}
+
+.incorrect {
+  border: 4px solid red;
   border-radius: var(--border-radius);
 }
 
