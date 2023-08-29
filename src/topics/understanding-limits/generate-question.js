@@ -1,6 +1,8 @@
-import { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, generateRandomPolynomialWithPoint } from "../../helpers/functions";
+import { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, generateRandomPolynomialWithPoint, shuffleArray } from "../../helpers/functions";
 import Latex from "../../helpers/Latex";
 import LimitExampleGraph from "./LimitExampleGraph";
+
+const colors = ['red', 'green', 'blue', 'orange', 'purple'];
 
 /**
  * generates random question that asks users to select the limit that best matches the graph
@@ -19,7 +21,7 @@ function graphToLimit() {
   const yvalNum = getRandomNumber(0, 2);
   let y = null;
   if (yvalNum === 0) {
-    y = getRandomNumber(-7, 7); 
+    y = getRandomNumber(-7, 7);
   } else if (yvalNum === 1) {
     y = realY;
   }
@@ -33,7 +35,7 @@ function graphToLimit() {
 
   // generate options
   const o1 = {
-    component: <Latex expression={` {\\lim}_{{x \\to ${x}}}{g(x)} = ${realY} `} inline={true}/>,
+    component: <Latex expression={` {\\lim}_{{x \\to ${x}}}{g(x)} = ${realY} `} inline={true} />,
     correct: true
   }
 
@@ -52,11 +54,12 @@ function graphToLimit() {
     const rand = getRandomWithExclusions(-7, 7, [realY])
     ex = `{\\lim}_{{x \\to ${x}}}{g(x)} = ${rand}`;
   }
-  o2.component = <Latex expression={` ${ex} `} inline={true}/>
+  o2.component = <Latex expression={` ${ex} `} inline={true} />
 
-  const options = [o1, o2];
+  const input = shuffleArray([o1, o2]);
+  const type = 'mc'
 
-  return { title, question, options }
+  return { title, question, input, type }
 }
 
 /**
@@ -83,13 +86,13 @@ function limitToGraph() {
     y1 = realY1;
   }
 
-  const question = 
+  const question =
     <Latex expression={` {\\lim}_{{x \\to ${x1}}}{g(x)} = ${realY1} `} inline={true} />
 
   // generate options
   const o1 = {
     component: <div className="flex vertical center medium-gap">
-      <h3>Graph of <Latex expression={` g(x) `} inline={true}/></h3>
+      <h3>Graph of <Latex expression={` g(x) `} inline={true} /></h3>
       <LimitExampleGraph f={f1} xval={x1} y={y1} fColor={"f"} xColor={"x"} yColor={"y"} size={400} />
     </div>,
     correct: true
@@ -112,15 +115,30 @@ function limitToGraph() {
 
   const o2 = {
     component: <div className="flex vertical center medium-gap">
-      <h3>Graph of <Latex expression={` g(x) `} inline={true}/></h3>
+      <h3>Graph of <Latex expression={` g(x) `} inline={true} /></h3>
       <LimitExampleGraph f={f2} xval={x2} y={y2} fColor={"f"} xColor={"x"} yColor={"y"} size={400} />
     </div>,
     correct: false
   }
 
-  const options = [o1, o2];
+  const input = shuffleArray([o1, o2]);
+  const type = 'mc'
 
-  return { title, question, options }
+  return { title, question, input, type }
 }
 
-export { graphToLimit, limitToGraph }
+function generateRandomQuestion() {
+  // determine type of question to generate
+  const rand = getRandomNumber(0, 1);
+  let q = null;
+  if (rand === 0) {
+    q = graphToLimit();
+  } else {
+    q = limitToGraph();
+  }
+  document.documentElement.style.setProperty('--random-color',
+    colors[getRandomNumber(0, colors.length - 1)])
+  return q;
+}
+
+export default generateRandomQuestion;
