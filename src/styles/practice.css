@@ -24,7 +24,7 @@
 
 label {
   padding: 10px;
-  border: 2px solid lightgray;
+  box-shadow: 0 0 0 2px lightgray;
   border-radius: var(--border-radius);
   z-index: 100;
 }
@@ -34,16 +34,37 @@ input[type="radio"] {
 }
 
 .selected {
-  border: 2px solid #007bff;
+  box-shadow: 0 0 0 2px #007bff;
   border-radius: var(--border-radius);
 }
 
 .correct {
-  border: 4px solid green;
+  box-shadow: 0 0 0 4px green;
   border-radius: var(--border-radius);
 }
 
 .incorrect {
-  border: 4px solid red;
+  box-shadow: 0 0 0 4px red;
   border-radius: var(--border-radius);
+}
+
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.feedback {
+  padding: 10px var(--padding);
+  border-radius: var(--border-radius);
+}
+
+.feedback.good {
+  background-color: lightgreen;
+}
+
+.feedback.bad {
+  background-color: lightpink;
 }

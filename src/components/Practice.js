@@ -9,6 +9,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import '../styles/practice.css'
 import { Stats } from "./Stats";
+import { Mastered } from "./Mastered";
 
 export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
@@ -16,6 +17,8 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const correctRef = useRef(null);
   const [qFunction, setQFunction] = useState(() => () => { });
   const [currQ, setCurrQ] = useState({});
+  const [showMastered, setShowMastered] = useState(false)
+
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [classes, setClasses] = useState("");
@@ -28,7 +31,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
       .catch(error => {
         console.error(error);
       })
-  })
+  }, [name])
 
   useEffect(() => {
     setCurrQ(qFunction());
@@ -56,6 +59,8 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
 
   return (
     <div className="flex vertical center medium-gap practice">
+      {!showMastered ? 
+      <>
       <h1 className="title">{title}: Practice</h1>
       <div className="practice-section">
         {currQ && currQ.type === 'mc' &&
@@ -77,9 +82,11 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
         }
 
         <Stats cname={cname} uname={uname} name={name} correctRef={correctRef}
-          goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ}></Stats>
+          goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered}></Stats>
       </div>
-
+      </> : 
+      <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered}/>
+}
     </div>
   );
 }

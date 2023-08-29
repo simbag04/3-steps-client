@@ -3,13 +3,14 @@ import { UserContext } from "../App";
 import { ApiContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
-export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ }) => {
-  const [text, setText] = useState(null); // feedback text, such as "Incorrect"
+export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems }) => {
+  const [text, setText] = useState("none"); // feedback text, such as "Incorrect"
+  const [feedback, setFeedback] = useState("");
   const [streak, setStreak] = useState(0); // current streak
   const [bestStreak, setBestStreak] = useState(0); // all time best streak
   const [totalCorrect, setTotalCorrect] = useState(0); // total problems correct
   const [totalAttempted, setTotalAttempted] = useState(0); // total problems attempted
-  
+
   const { user } = useContext(UserContext);
   const apiLink = useContext(ApiContext);
   const nav = useNavigate();
@@ -60,14 +61,19 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
     } else {
       if (correctRef.current) {
         setGoToNext(true);
+        if (bestStreak < numProblems && streak + 1 === numProblems) {
+          setShowMastered(true)
+        }
         setStreak(streak => streak + 1);
         setBestStreak(Math.max(streak + 1, bestStreak))
         setTotalCorrect(totalCorrect => totalCorrect + 1);
         setText("Good job!")
+        setFeedback("good")
       } else {
         setGoToNext(true)
         setStreak(0);
         setText("Incorrect!")
+        setFeedback("bad")
       }
       setTotalAttempted(totalAttempted => totalAttempted + 1);
 
@@ -92,23 +98,29 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
 
   // this function is called to reset variables for the next question
   const nextQuestion = useCallback(() => {
-    setText(null);
+    setText("none");
     setGoToNext(false);
     correctRef.current = null;
     setNewQ(newQ => !newQ);
   }, [setGoToNext, setText, correctRef, setNewQ]);
 
   return (
-    <div className="stats flex vertical center medium-gap">
-      <h2>Progress</h2>
-      {text && <div>{text}</div>}
-      <div>Streak: {streak}</div>
-      <div>Best Streak: {bestStreak}</div>
-      <div>Problems correct: {totalCorrect}</div>
-      <div>Problems attempted: {totalAttempted}</div>
-      <button onClick={backToTopicsButtonHandler}>Back to Topics</button>
-      {!goToNext && <button onClick={checkAnswer}>Check</button>}
-      {goToNext && <button onClick={nextQuestion}>Next</button>}
+    <div className="flex vertical center large-gap">
+      <div className="stats flex vertical center medium-gap">
+        <h2>Progress</h2>
+        <div>Streak: {streak}</div>
+        <div>Best Streak: {bestStreak}</div>
+        <div>Problems correct: {totalCorrect}</div>
+        <div>Problems attempted: {totalAttempted}</div>
+        <button onClick={backToTopicsButtonHandler}>Back to Topics</button>
+        {!goToNext && <button onClick={checkAnswer}>Check</button>}
+        {goToNext && <button onClick={nextQuestion}>Next</button>}
+      </div>
+      <div className={"feedback " + 
+      (text !== "none" ? "visible" : "invisible") + " " + feedback}>
+        {<div>{text}</div>}
+      </div>
     </div>
+
   )
 }
