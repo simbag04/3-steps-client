@@ -6,7 +6,7 @@
  * 
  */
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import '../styles/practice.css'
 import { Stats } from "./Stats";
 
@@ -17,9 +17,8 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [qFunction, setQFunction] = useState(() => () => { });
   const [currQ, setCurrQ] = useState({});
 
-  const selectedOptionRef = useRef(null);
-  const selectedIndexRef = useRef(null);
-  const optionRefs = useRef([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [classes, setClasses] = useState("");
 
   useEffect(() => {
     import(`../topics/${name}/generate-question.js`)
@@ -33,55 +32,27 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
 
   useEffect(() => {
     setCurrQ(qFunction());
-    optionRefs.current.forEach((ref) => {
-      ref.current.classList.remove("correct", "incorrect", "selected")
-    })
-    selectedIndexRef.current = null;
-    selectedOptionRef.current = null;
+    setSelectedOption(null);
+    setClasses("");
   }, [newQ, qFunction])
 
-  const changeStyling = useCallback(() => {
-    if (goToNext) {
-      if (selectedOptionRef.current && selectedOptionRef.current.correct) {
-        optionRefs.current.forEach((ref, i) => {
-          if (i === selectedIndexRef.current) {
-            ref.current.classList.add("correct");
-          } else {
-            ref.current.classList.remove("correct", "incorrect");
-          }
-        })
-      } else {
-        optionRefs.current.forEach((ref, i) => {
-          if (i === selectedIndexRef.current) {
-            ref.current.classList.add("incorrect");
-          } else {
-            ref.current.classList.remove("correct", "incorrect");
-          }
-        });
-      }
-    } else {
-      optionRefs.current.forEach((ref, i) => {
-        if (i === selectedIndexRef.current) {
-          ref.current.classList.add('selected');
-        } else {
-          ref.current.className = "";
-        }
-      })
-    }
-  }, [goToNext])
-
-  const handleClick = (option, index) => {
+  const handleClick = (option) => {
     if (!goToNext) {
-      selectedOptionRef.current = option
+      setClasses('selected')
+      setSelectedOption(option)
       correctRef.current = option.correct
-      selectedIndexRef.current = index
     }
-    changeStyling();
   }
 
   useEffect(() => {
-    changeStyling()
-  }, [goToNext, changeStyling])
+    if (goToNext) {
+      if (selectedOption.correct) {
+        setClasses('correct')
+      } else {
+        setClasses('incorrect')
+      }
+    }
+  }, [goToNext, selectedOption])
 
   return (
     <div className="flex vertical center medium-gap practice">
@@ -93,11 +64,10 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
             {currQ.question}
             <div className="flex horizontal center medium-gap">
               {currQ.input && currQ.input.map((option, index) => {
-                optionRefs.current[index] = optionRefs.current[index] || React.createRef();
                 return (
                   <label key={index}
-                    ref={optionRefs.current[index]}
-                    onClick={() => handleClick(option, index)}>
+                    className= {selectedOption === option ? classes : ""}
+                    onClick={() => handleClick(option)}>
                     {option.component}
                   </label>
                 )
