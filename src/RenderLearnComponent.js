@@ -19,9 +19,9 @@ export const RenderLearnComponent = () => {
         console.error(error)
       })
 
-    import(`./topics/${name}/title.js`)
+    import(`./topics/${name}/constants.js`)
       .then(module => {
-        setTitle(module.default)
+        setTitle(module.title)
       })
       .catch(error => {
         console.error(error)

@@ -10,9 +10,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import '../styles/practice.css'
 import { Stats } from "./Stats";
 
-import '../topics/understanding-limits/styles.css'
-
-export const Practice = ({ cname, uname, name, title }) => {
+export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
   const [newQ, setNewQ] = useState(false);
   const correctRef = useRef(null);
@@ -36,7 +34,6 @@ export const Practice = ({ cname, uname, name, title }) => {
   useEffect(() => {
     setCurrQ(qFunction());
     optionRefs.current.forEach((ref) => {
-      console.log(ref);
       ref.current.classList.remove("correct", "incorrect", "selected")
     })
     selectedIndexRef.current = null;

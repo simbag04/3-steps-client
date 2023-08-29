@@ -54,7 +54,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
  * @param {boolean or undefined} res correctness of answer
  * 
  */
-  const checkAnswer = async (res) => {
+  const checkAnswer = async () => {
     if (correctRef.current === null) {
       setText("You must select an answer to continue")
     } else {
@@ -73,9 +73,10 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
 
       if (user) {
         try {
+          const body = { result: correctRef.current }
           await fetch(`${apiLink}/topic/${name}/question`, {
             method: 'put',
-            body: JSON.stringify({ result: res }),
+            body: JSON.stringify(body),
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'bearer ' + localStorage.getItem("token")

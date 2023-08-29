@@ -9,11 +9,13 @@ import { useState, useEffect } from 'react';
 export const RenderPracticeComponent = () => {
   const { cname, uname, name } = useParams();
   const [title, setTitle] = useState(null);
+  const [numProblems, setNumProblems] = useState(0);
 
   useEffect(() => {
-    import(`./topics/${name}/title.js`)
+    import(`./topics/${name}/constants.js`)
       .then(module => {
-        setTitle(module.default)
+        setTitle(module.title)
+        setNumProblems(module.streak)
       })
       .catch(error => {
         console.error(error)
@@ -22,7 +24,7 @@ export const RenderPracticeComponent = () => {
 
   return (
     <div>
-      <Practice cname={cname} uname={uname} name={name} title={title} />
+      <Practice cname={cname} uname={uname} name={name} title={title} numProblems={numProblems}/>
     </div>
   );
 };
