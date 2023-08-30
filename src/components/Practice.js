@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import '../styles/practice.css'
 import { Stats } from "./Stats";
 import { Mastered } from "./Mastered";
+import star from '../helpers/star.svg'
 
 export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
@@ -18,6 +19,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [qFunction, setQFunction] = useState(() => () => { });
   const [currQ, setCurrQ] = useState({});
   const [showMastered, setShowMastered] = useState(false)
+  const [mastered, setMastered] = useState(false);
 
 
   const [selectedOption, setSelectedOption] = useState(null);
@@ -59,34 +61,37 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
 
   return (
     <div className="flex vertical center medium-gap practice">
-      {!showMastered ? 
-      <>
-      <h1 className="title">{title}: Practice</h1>
-      <div className="practice-section">
-        {currQ && currQ.type === 'mc' &&
-          <div className="question flex vertical center medium-gap">
-            {currQ.title}
-            {currQ.question}
-            <div className="flex horizontal center medium-gap">
-              {currQ.input && currQ.input.map((option, index) => {
-                return (
-                  <label key={index}
-                    className= {selectedOption === option ? classes : ""}
-                    onClick={() => handleClick(option)}>
-                    {option.component}
-                  </label>
-                )
-              })}
-            </div>
-          </div>
-        }
+      {!showMastered ?
+        <>
+          <h1 className="title flex horizontal center small-gap">
+            <span>{title}: Practice</span>
+            <span className="flex horizontal center"> {mastered ? <img src={star} alt="star" /> : null}</span>
+          </h1>
+          <div className="practice-section">
+            {currQ && currQ.type === 'mc' &&
+              <div className="question flex vertical center medium-gap">
+                {currQ.title}
+                {currQ.question}
+                <div className="flex horizontal center medium-gap">
+                  {currQ.input && currQ.input.map((option, index) => {
+                    return (
+                      <label key={index}
+                        className={selectedOption === option ? classes : ""}
+                        onClick={() => handleClick(option)}>
+                        {option.component}
+                      </label>
+                    )
+                  })}
+                </div>
+              </div>
+            }
 
-        <Stats cname={cname} uname={uname} name={name} correctRef={correctRef}
-          goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered}></Stats>
-      </div>
-      </> : 
-      <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered}/>
-}
+            <Stats cname={cname} uname={uname} name={name} correctRef={correctRef}
+              goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered} setMastered={setMastered}></Stats>
+          </div>
+        </> :
+        <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered} />
+      }
     </div>
   );
 }

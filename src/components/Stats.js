@@ -3,7 +3,7 @@ import { UserContext } from "../App";
 import { ApiContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
-export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems }) => {
+export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setMastered }) => {
   const [text, setText] = useState("none"); // feedback text, such as "Incorrect"
   const [feedback, setFeedback] = useState("");
   const [streak, setStreak] = useState(0); // current streak
@@ -35,6 +35,11 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
             setTotalAttempted(json.entry.problems_attempted)
             setTotalCorrect(json.entry.problems_correct)
             setBestStreak(json.entry.best_streak)
+            console.log()
+
+            if (json.entry.best_streak >= numProblems) {
+              setMastered(true);
+            }
           }
         } catch (err) {
           console.log(err)
@@ -43,7 +48,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
     }
 
     setVariables().catch(console.error)
-  }, [apiLink, name, user])
+  }, [apiLink, name, user, numProblems, setMastered])
 
   const backToTopicsButtonHandler = () => {
     nav(`/${cname}/${uname}`)
@@ -64,6 +69,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
         if (bestStreak < numProblems && streak + 1 === numProblems) {
           setShowMastered(true)
         }
+        if (bestStreak >= numProblems) setMastered(true);
         setStreak(streak => streak + 1);
         setBestStreak(Math.max(streak + 1, bestStreak))
         setTotalCorrect(totalCorrect => totalCorrect + 1);
