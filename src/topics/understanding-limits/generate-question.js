@@ -59,7 +59,20 @@ function graphToLimit() {
   const input = shuffleArray([o1, o2]);
   const type = 'mc'
 
-  return { title, question, input, type }
+  const hints1 = <div>Recall the definition of a limit:
+    <Latex expression={`\\ {\\lim}`} inline={true} />
+    <Latex expression={`_{x \\to 2}`} inline={true} />
+    <Latex expression={`x^2`} inline={true} />
+    <Latex expression={`\\ =\\ `} inline={true} />
+    <Latex expression={`\\ 4 `} inline={true} />
+  </div>
+
+
+  const hints2 = <div>In this graph, what is <Latex expression={`x`} inline={true}/> approaching? What is <Latex expression={`y`} inline={true}/> approaching?</div>
+
+  const hints = [hints1, hints2];
+
+  return { title, question, input, type, hints }
 }
 
 /**
@@ -124,7 +137,20 @@ function limitToGraph() {
   const input = shuffleArray([o1, o2]);
   const type = 'mc'
 
-  return { title, question, input, type }
+  const hints1 = <div>Recall the definition of a limit:
+    <Latex expression={`\\ {\\lim}`} inline={true} />
+    <Latex expression={`_{x \\to 2}`} inline={true} />
+    <Latex expression={`x^2`} inline={true} />
+    <Latex expression={`\\ =\\ `} inline={true} />
+    <Latex expression={`\\ 4 `} inline={true} />
+  </div>
+
+
+  const hints2 = <div>In this graph, what is <Latex expression={`x`} inline={true}/> approaching? What is <Latex expression={`y`} inline={true}/> approaching?</div>
+
+  const hints = [hints1, hints2];
+
+  return { title, question, input, type, hints }
 }
 
 function generateRandomQuestion() {

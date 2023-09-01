@@ -3,7 +3,7 @@ import { UserContext } from "../App";
 import { ApiContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
-export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setMastered }) => {
+export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setMastered, setShowHints, hintsUsed, setHintsUsed }) => {
   const [text, setText] = useState("none"); // feedback text, such as "Incorrect"
   const [feedback, setFeedback] = useState("");
   const [streak, setStreak] = useState(0); // current streak
@@ -63,52 +63,68 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
   const checkAnswer = async () => {
     if (correctRef.current === null) {
       setText("You must select an answer to continue")
+      return;
     } else {
       if (correctRef.current) {
         setGoToNext(true);
-        if (bestStreak < numProblems && streak + 1 === numProblems) {
-          setShowMastered(true)
+        if (!hintsUsed) {
+          if (bestStreak < numProblems && streak + 1 === numProblems) {
+            setShowMastered(true)
+          }
+          if (bestStreak >= numProblems) setMastered(true);
+          setStreak(streak => streak + 1);
+          setBestStreak(Math.max(streak + 1, bestStreak))
+          setTotalCorrect(totalCorrect => totalCorrect + 1);
+          setTotalAttempted(totalAttempted => totalAttempted + 1);
         }
-        if (bestStreak >= numProblems) setMastered(true);
-        setStreak(streak => streak + 1);
-        setBestStreak(Math.max(streak + 1, bestStreak))
-        setTotalCorrect(totalCorrect => totalCorrect + 1);
+
         setText("Good job!")
         setFeedback("good")
       } else {
+        if (!hintsUsed) {
+          setStreak(0);
+          setTotalAttempted(totalAttempted => totalAttempted + 1);
+        }
         setGoToNext(true)
-        setStreak(0);
         setText("Incorrect!")
         setFeedback("bad")
       }
-      setTotalAttempted(totalAttempted => totalAttempted + 1);
 
-      if (user) {
-        try {
-          const body = { result: correctRef.current }
-          await fetch(`${apiLink}/topic/${name}/question`, {
-            method: 'put',
-            body: JSON.stringify(body),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'bearer ' + localStorage.getItem("token")
-            }
-          })
+      if (!hintsUsed) {
+        if (user) {
+          try {
+            const body = { result: correctRef.current }
+            await fetch(`${apiLink}/topic/${name}/question`, {
+              method: 'put',
+              body: JSON.stringify(body),
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.getItem("token")
+              }
+            })
 
-        } catch (err) {
-          console.log(err)
+          } catch (err) {
+            console.log(err)
+          }
         }
       }
+
     }
   }
 
   // this function is called to reset variables for the next question
   const nextQuestion = useCallback(() => {
     setText("none");
+    setFeedback("")
     setGoToNext(false);
     correctRef.current = null;
     setNewQ(newQ => !newQ);
   }, [setGoToNext, setText, correctRef, setNewQ]);
+
+  const showHints = () => {
+    setShowHints(true);
+    setHintsUsed(true);
+  }
 
   return (
     <div className="flex vertical center large-gap">
@@ -121,9 +137,10 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
         <button onClick={backToTopicsButtonHandler}>Back to Topics</button>
         {!goToNext && <button onClick={checkAnswer}>Check</button>}
         {goToNext && <button onClick={nextQuestion}>Next</button>}
+        {!goToNext && <button onClick={showHints}>I Need a Hint!</button>}
       </div>
-      <div className={"feedback " + 
-      (text !== "none" ? "visible" : "invisible") + " " + feedback}>
+      <div className={"feedback " +
+        (text !== "none" ? "visible" : "invisible") + " " + feedback}>
         {<div>{text}</div>}
       </div>
     </div>
