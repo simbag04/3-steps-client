@@ -8,10 +8,6 @@
   gap: var(--huge-gap);
 }
 
-.practice {
-  padding: var(--padding);
-}
-
 .stats {
   background-color: var(--button-color);
   padding: var(--padding);

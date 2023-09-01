@@ -67,7 +67,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   }, [goToNext, selectedOption])
 
   return (
-    <div className="flex vertical center medium-gap practice">
+    <div className="flex vertical center medium-gap">
       {!showHints ?
         !showMastered ?
           <>

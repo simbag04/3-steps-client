@@ -8,7 +8,6 @@
 
 .learn-section {
   width: 60%;
-  margin: auto;
   text-align: center;
-  padding: var(--padding);
+  margin: auto;
 }
