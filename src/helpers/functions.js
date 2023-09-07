@@ -60,9 +60,21 @@ function getRandomWithExclusions(min, max, exclusions) {
  * @param {number} constant number to further compress polynomial by
  * @returns math.js node representing scaled polynomial
  */
-function compressPolynomial(expression, max, values, constant) {
+function compressPolynomial(expression, max, values) {
   const node = math.parse(expression);
 
+  /// MAKES FLAT GRAPH ////////
+  let maxabs = Math.max(max, ...values);
+  for (let i = -11; i < 11; i += 0.01) {
+    maxabs = Math.max(Math.abs(node.evaluate({ x: i })), maxabs);
+  }
+
+  const scale = Math.ceil(maxabs / max);
+  const scaledNode = math.parse(`(1/${scale})(${expression})`);
+  return scaledNode;
+
+  /*
+  /////////////// ONLY FITS LOCAL MINS/MAXS WITHIN RANGE /////////////////////
   const vars = ['x'];
   let n = build(`(${expression})`, ['x']);
 
@@ -90,6 +102,9 @@ function compressPolynomial(expression, max, values, constant) {
   const scale = Math.ceil(maxabs / max);
   const scaledNode = math.parse(`(1/${scale * constant})(${expression})`);
   return scaledNode;
+  */
+
+
 }
 
 /**
@@ -99,7 +114,7 @@ function compressPolynomial(expression, max, values, constant) {
  */
 function modifyForWholeNumber(node) {
   const f = (x) => node.evaluate({ x });
-  let data = generateFunctionData(f);
+  let data = generateFunctionData(f, -11, 11);
 
   // filter out values where y is > 8 or < -8
   data = data.filter(d => Math.abs(d.y) < 7 && Math.abs(d.x) < 8);
@@ -129,7 +144,7 @@ function modifyForWholeNumber(node) {
  */
 function generateRandomPolynomial(degree) {
   const expression = getPolynomialFunction(degree);
-  const scaledNode = compressPolynomial(expression, 9, [], 50);
+  const scaledNode = compressPolynomial(expression, 9, []);
   return modifyForWholeNumber(scaledNode);
 }
 
@@ -171,13 +186,13 @@ function generateRandomPolynomialWithPoint(degree, x, y) {
   let expression = getPolynomialFunction(degree);
   let node = math.parse(expression);
   let max = 9;
-  node = compressPolynomial(node.toString(), max, [], 50);
+  node = compressPolynomial(node.toString(), max, []);
   let yval = node.evaluate({ x });
   let move = y - yval;
 
   while (Math.abs(move) > 10 - max) {
     max--;
-    node = compressPolynomial(node.toString(), max, [Math.abs(yval)], 1);
+    node = compressPolynomial(node.toString(), max, [Math.abs(yval)]);
     yval = node.evaluate({ x });
     move = y - yval;
   }

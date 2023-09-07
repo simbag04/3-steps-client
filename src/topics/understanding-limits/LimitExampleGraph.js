@@ -11,7 +11,8 @@
  */
 
 import { useEffect, useRef } from "react"
-import { createFunctionGraph, createBlankCanvas, createArrowMarker } from "../../helpers/graph-helpers";
+import { createFunctionGraph, createBlankCanvas, createFunctionLimitLine, createLimitLine, convertScale, findOffsets } from "../../helpers/graph-helpers";
+import { AXIS_OFFSET, CLOSE_DIST, FAR_DIST } from "../../helpers/constants";
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import './graph.css'
@@ -48,7 +49,7 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor, size }) => {
         .style('stroke-dasharray', 2)
         .attr('d', line)
 
-      const { data, id } = createFunctionGraph(svgRef, f, width, height, null, xScale, yScale, fColor)
+      const { data, id } = createFunctionGraph(svg, f, width, height, null, xScale, yScale, fColor, -11, 11, true, true);
       createAllLimitLines(svg, line, xval, yval,
         xColor, yColor, fColor,
         xScale, yScale, data, id, textSize);
@@ -70,7 +71,6 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor, size }) => {
           .attr('cy', yScale(y))
           .attr('r', 3)
       }
-
     }
 
   }, [svgRef, f, fColor, xColor, xval, y, yColor, size])
@@ -99,18 +99,13 @@ function createAllLimitLines(svg, line, xval, yval,
   xColor, yColor, fColor,
   xScale, yScale, data, id, textSize) {
 
-  // offsets
-  const axisOffset = 0.3;
-  const farDist = 1;
-  const closeDist = 0.3;
-
   // horizontal and vertical arrows
-  createLimitLine(svg, line, xval - farDist,
-    xval - closeDist,
-    axisOffset, axisOffset, 'x-limits', xColor)
-  createLimitLine(svg, line, xval + farDist,
-    xval + closeDist,
-    axisOffset, axisOffset, 'x-limits', xColor)
+  createLimitLine(svg, line, xval - FAR_DIST,
+    xval - CLOSE_DIST,
+    AXIS_OFFSET, AXIS_OFFSET, 'x-limits', xColor)
+  createLimitLine(svg, line, xval + FAR_DIST,
+    xval + CLOSE_DIST,
+    AXIS_OFFSET, AXIS_OFFSET, 'x-limits', xColor)
 
   svg.append('circle')
     .attr('class', 'fill stroke ' + xColor)
@@ -118,12 +113,12 @@ function createAllLimitLines(svg, line, xval, yval,
     .attr('cy', yScale(0))
     .attr('r', 1)
 
-  createLimitLine(svg, line, axisOffset,
-    axisOffset,
-    yval - farDist, yval - closeDist, 'y-limits', yColor)
-  createLimitLine(svg, line, axisOffset,
-    axisOffset,
-    yval + farDist, yval + closeDist, 'y-limits', yColor)
+  createLimitLine(svg, line, AXIS_OFFSET,
+    AXIS_OFFSET,
+    yval - FAR_DIST, yval - CLOSE_DIST, 'y-limits', yColor)
+  createLimitLine(svg, line, AXIS_OFFSET,
+    AXIS_OFFSET,
+    yval + FAR_DIST, yval + CLOSE_DIST, 'y-limits', yColor)
 
   svg.append('circle')
     .attr('class', 'fill stroke ' + yColor)
@@ -132,8 +127,6 @@ function createAllLimitLines(svg, line, xval, yval,
     .attr('r', 1)
 
   // function arrows
-
-  // pre work: find points at which function is offset distance away from point
   const dataUpToPoint = data.filter((d) => d.x < xval);
 
   // create path up to point to get its length
@@ -145,47 +138,22 @@ function createAllLimitLines(svg, line, xval, yval,
     .attr('d', line);
 
   // get path length and use that to find points at which to genrate limit arrows
-  const farDistLength = xScale(farDist) - xScale(0);
-  const closeDistLength = xScale(closeDist) - xScale(0);
-
   const functionLine = d3.select(`[data-uuid="${id}"]`).node();
   const pathLength = d3.select(`[data-uuid="${pointId}"]`).node().getTotalLength();
 
-  // arrow from the left
-  const farPointOne = functionLine.getPointAtLength(pathLength - farDistLength)
-  const closePointOne = functionLine.getPointAtLength(pathLength - closeDistLength)
-  const pointsOne = convertScale(farPointOne, closePointOne, xScale, yScale)
-  const offsetsOne = findOffsets(pointsOne, axisOffset, yval);
+  const leftLine = createFunctionLimitLine(
+    svg, functionLine, pathLength, xScale, yScale, line, fColor, false);
+  const rightLine = createFunctionLimitLine(
+    svg, functionLine, pathLength, xScale, yScale, line, fColor, true);
 
-  if (isNaN(offsetsOne.y)) offsetsOne.y = axisOffset;
-
-  createLimitLine(svg, line,
-    pointsOne.farx + offsetsOne.x,
-    pointsOne.closex + offsetsOne.x,
-    pointsOne.fary + offsetsOne.y,
-    pointsOne.closey + offsetsOne.y,
-    'f-limits', fColor)
-
-  // arrow from the right
-  const farPointTwo = functionLine.getPointAtLength(pathLength + farDistLength)
-  const closePointTwo = functionLine.getPointAtLength(pathLength + closeDistLength)
-  const pointsTwo = convertScale(farPointTwo, closePointTwo, xScale, yScale);
-  const offsetsTwo = findOffsets(pointsTwo, axisOffset, yval);
-
-  if (isNaN(offsetsTwo.y)) offsetsTwo.y = axisOffset;
-
-  createLimitLine(svg, line,
-    pointsTwo.farx + offsetsTwo.x,
-    pointsTwo.closex + offsetsTwo.x,
-    pointsTwo.fary + offsetsTwo.y,
-    pointsTwo.closey + offsetsTwo.y,
-    'f-limits', fColor)
+  const farPointOne = leftLine.farPoint;
+  const farPointTwo = rightLine.farPoint;
 
   // text at point
 
   // get offset values
   const pointsText = convertScale(farPointOne, farPointTwo, xScale, yScale);
-  const offsetsText = findOffsets(pointsText, 3 * axisOffset, yval);
+  const offsetsText = findOffsets(pointsText, 3 * AXIS_OFFSET);
 
   // adjust offset values by ensuring they are a minimum distance away from line
   offsetsText.y = isNaN(offsetsText.y) ? 0.7 : offsetsText.y;
@@ -214,91 +182,13 @@ function createAllLimitLines(svg, line, xval, yval,
 
   // add text
   svg.append('text')
-    .attr('x', xScale(xval + (offsetsText.x)))
+    .attr('x', xScale(xval + offsetsText.x))
     .attr('y', yScale(yval + offsetsText.y))
     .attr('text-anchor', 'middle')
     .attr('alignment-baseline', 'middle')
     .attr('class', 'text')
     .style('font-size', textSize)
     .text(`(${xval}, ${Math.round(yval)})`)
-}
-
-/**
- * perpendicular slope from points
- * @param {object} points object representing points from which to compute slope
- * @returns perpendicular slope from points
- */
-function findSlope(points) {
-  return (-1 * (points.farx - points.closex)) / (points.fary - points.closey);
-}
-
-/**
- * Finds offsets of lines/text from function line
- * @param {object} points object representing points from which line needs to be offset
- * @param {number} axisOffset amount of offset
- * @param {number} yval yval of point
- * @returns x, y representing by how much lines need to move in each direction
- */
-function findOffsets(points, axisOffset, yval) {
-  let slope = findSlope(points)
-  const hyp = findHypotenusefromSlope(1, slope);
-  let scale = -1 * axisOffset / hyp;
-  if (yval < 0) scale *= -1;
-  if (slope > 0) scale *= -1
-  const x = scale;
-  const y = (scale) * slope;
-
-  return { x, y }
-}
-
-/**
- * converts points from svg scale to normal -10 to 10 x/y
- * @param {object} far far point
- * @param {object} close close point
- * @param {scale} xScale xscale of graph
- * @param {scale} yScale yscale of graph
- * @returns points object with converted x/y values
- */
-function convertScale(far, close, xScale, yScale) {
-  const farx = xScale.invert(far.x)
-  const closex = xScale.invert(close.x)
-  const fary = yScale.invert(far.y)
-  const closey = yScale.invert(close.y)
-  return { farx, closex, fary, closey }
-}
-
-/**
- * 
- * @param {svg} svg svg in which to append limit line
- * @param {function} line function for 'd' attribute of path
- * @param {number} x1 x1 of line
- * @param {number} x2 x2 of line
- * @param {number} y1 y1 of line
- * @param {number} y2 y2 of line
- * @param {string} name of arrow markers on line
- * @param {string} classes custom classes o add to generated arrow
- */
-function createLimitLine(svg, line, x1, x2, y1, y2, name, classes) {
-  if (d3.select(`#${name}`).empty()) {
-    createArrowMarker(name, svg, 4, null, classes)
-  }
-
-  svg.append('path')
-    .datum([{ x: x1, y: y1 }, { x: x2, y: y2 }])
-    .attr('class', 'stroke ' + classes)
-    .attr('stroke-width', 1)
-    .attr('marker-end', `url(#${name})`)
-    .attr('d', line)
-}
-
-/**
- * finds hypotenuse frm width/height of triangle
- * @param {number} x width
- * @param {number} y height
- * @returns hypotenuse of triangle formed with width/height
- */
-function findHypotenusefromSlope(x, y) {
-  return Math.sqrt(((x) ** 2) + ((y) ** 2))
 }
 
 export default LimitExampleGraph
