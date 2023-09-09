@@ -20,19 +20,25 @@ const AsymptoticGraph = ({ functions, size, x, y }) => {
         .x(d => xScale(d.x))
         .y(d => yScale(d.y))
 
-      svg.append('path')
-        .datum([{ x: xScale.invert(0), y }, { x: xScale.invert(width), y: y }])
-        .attr('class', 'stroke ')
-        .attr('stroke-width', 1)
-        .style('stroke-dasharray', 2)
-        .attr('d', line)
+      for (let i = 0; i < y.length; i++) {
+        svg.append('path')
+          .datum([{ x: xScale.invert(0), y: y[i] }, { x: xScale.invert(width), y: y[i] }])
+          .attr('class', 'stroke ')
+          .attr('stroke-width', 1)
+          .style('stroke-dasharray', 2)
+          .attr('d', line)
+      }
 
-      svg.append('path')
-        .datum([{ x, y: yScale.invert(0) }, { x, y: yScale.invert(height) }])
-        .attr('class', 'stroke ')
-        .attr('stroke-width', 1)
-        .style('stroke-dasharray', 2)
-        .attr('d', line)
+
+      for (let i = 0; i < x.length; i++) {
+        svg.append('path')
+          .datum([{ x: x[i], y: yScale.invert(0) }, { x: x[i], y: yScale.invert(height) }])
+          .attr('class', 'stroke ')
+          .attr('stroke-width', 1)
+          .style('stroke-dasharray', 2)
+          .attr('d', line)
+      }
+
     }
 
   }, [functions, size, x, y])

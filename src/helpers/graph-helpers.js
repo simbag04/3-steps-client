@@ -12,7 +12,7 @@ import { FAR_DIST, CLOSE_DIST, AXIS_OFFSET } from "./constants";
 const generateFunctionData = (f, min, max) => {
   let data = [];
 
-  for (let i = min; i <= max; i += 0.001) {
+  for (let i = min; i <= max; i += 0.01) {
     const x = i;
     const y = f(i)
     data.push({ x, y });
@@ -37,13 +37,30 @@ const generateFunctionData = (f, min, max) => {
  * @param {boolean} rightArrow whether there should be an arrow on the right of the graph
  * @returns data that was used to graph function, id of svg path of function
  */
-const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, classes, min, max, leftArrow, rightArrow) => {
+const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, classes, min, max, leftArrow, rightArrow, type) => {
   let data = generateFunctionData(f, min, max);
 
   data = data.filter((d) => d.x > Math.min(xScale.invert(0), max) &&
     d.x < Math.max(xScale.invert(width), min) &&
     d.y > yScale.invert(height) &&
     d.y < yScale.invert(0))
+
+  if (type === "asymptotic") {
+    if (min > xScale.invert(0)) {
+      const y = data[0].y > 0 ? yScale.invert(0) : yScale.invert(height)
+      let d = findIntersections(f, y, min + 0.00001, data[0].x, 0.01);
+      if (d) data.unshift({x: d, y: f(d)});
+    }
+
+    
+    if (max < xScale.invert(width)) {
+      const y = data[data.length - 1].y > 0 ? yScale.invert(0) : yScale.invert(height)
+      let d = findIntersections(f, y, data[data.length - 1].x, max - 0.00001, 0.01);
+      if (d) data.push({x: d, y: f(d)});
+    }
+    
+  }
+  
 
   const line = d3.line()
     .x(d => xScale(d.x))
@@ -70,6 +87,35 @@ const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, class
   return { data, id };
 }
 
+function findIntersections(func, y, xMin, xMax, tolerance) {
+  var a = xMin;
+  var b = xMax;
+  
+  while (b - a > 0.00001) {
+    var xMid = (a + b) / 2;
+    var yMid = func(xMid);
+    
+    if (y > 0 && yMid <= y && y - yMid < tolerance) {
+      return xMid;
+    }
+    if (y < 0 && yMid >= y && yMid - y < tolerance) {
+      return xMid;
+    }
+    
+    if (func(xMin) < func(xMax) && yMid < y) {
+      a = xMid;
+    } else if (func(xMin) < func(xMax)) {
+      b = xMid;
+    } else if (func(xMin) > func(xMax) && yMid < y) {
+      b = xMid;
+    } else if (func(xMin) > func(xMax)) {
+      a = xMid;
+    }
+  }
+
+  return (a + b) / 2;
+}
+
 /**
  * 
  * @param {svg} svg svg on which to draw function graph
@@ -86,7 +132,7 @@ const createMultipleFunctionsGraph = (svg, functions, width, height, xScale, ySc
 
   for (let i = 0; i < functions.length; i++) {
     const func = functions[i];
-    const { data, id } = createFunctionGraph(svg, func.f, width, height, null, xScale, yScale, func.classes, func.min, func.max, func.leftArrow, func.rightArrow);
+    const { data, id } = createFunctionGraph(svg, func.f, width, height, null, xScale, yScale, func.classes, func.min, func.max, func.leftArrow, func.rightArrow, func.type);
 
     dataArray[dataArray.length] = { data, id };
 

@@ -47,7 +47,8 @@ const asymptoticFunctions = [
     rightArrow: true,
     classes: 'c4',
     leftCircle: false,
-    rightCircle: false
+    rightCircle: false,
+    type: "asymptotic"
   },
   {
     f: x => n4.evaluate({ x }),
@@ -59,7 +60,8 @@ const asymptoticFunctions = [
     rightArrow: true,
     classes: 'c4',
     leftCircle: false,
-    rightCircle: false
+    rightCircle: false,
+    type: "asymptotic"
   }
 ]
 
@@ -156,7 +158,7 @@ const Section8 = () => {
       </div>
       <div className="flex vertical center">
         <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
-        <AsymptoticGraph functions={asymptoticFunctions} size={400} x={1} y={1} />
+        <AsymptoticGraph functions={asymptoticFunctions} size={400} x={[1]} y={[1]} />
       </div>
     </>
   )

@@ -1,8 +1,7 @@
+import { COLORS } from "../../helpers/constants";
 import { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, generateRandomPolynomialWithPoint, shuffleArray } from "../../helpers/functions";
 import Latex from "../../helpers/Latex";
 import LimitExampleGraph from "./LimitExampleGraph";
-
-const colors = ['red', 'green', 'blue', 'orange', 'purple'];
 
 /**
  * generates random question that asks users to select the limit that best matches the graph
@@ -163,7 +162,7 @@ function generateRandomQuestion() {
     q = limitToGraph();
   }
   document.documentElement.style.setProperty('--random-color',
-    colors[getRandomNumber(0, colors.length - 1)])
+    COLORS[getRandomNumber(0, COLORS.length - 1)])
   return q;
 }
 
