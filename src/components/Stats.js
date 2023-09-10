@@ -35,7 +35,6 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
             setTotalAttempted(json.entry.problems_attempted)
             setTotalCorrect(json.entry.problems_correct)
             setBestStreak(json.entry.best_streak)
-            console.log()
 
             if (json.entry.best_streak >= numProblems) {
               setMastered(true);

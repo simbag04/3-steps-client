@@ -28,6 +28,8 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [classes, setClasses] = useState("");
 
+  const [textInput, setTextInput] = useState("");
+
   useEffect(() => {
     import(`../topics/${name}/generate-question.js`)
       .then(module => {
@@ -46,6 +48,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     setClasses("");
     setHintsIndex(0)
     setHintsUsed(false);
+    setTextInput("")
   }, [newQ, qFunction])
 
   const handleClick = (option) => {
@@ -56,15 +59,22 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     }
   }
 
+  const handleInput = (e) => {
+    if (!goToNext) {
+      setTextInput(e.target.value);
+      correctRef.current = String(currQ.ans) === e.target.value;
+    }
+  }
+
   useEffect(() => {
     if (goToNext) {
-      if (selectedOption.correct) {
+      if (correctRef.current) {
         setClasses('correct')
       } else {
         setClasses('incorrect')
       }
     }
-  }, [goToNext, selectedOption])
+  }, [goToNext])
 
   return (
     <div className="flex vertical center medium-gap">
@@ -76,10 +86,10 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
               <span className="flex horizontal center"> {mastered ? <img src={star} alt="star" /> : null}</span>
             </h1>
             <div className="practice-section">
-              {currQ && currQ.type === 'mc' &&
-                <div className="question flex vertical center medium-gap">
-                  {currQ.title}
-                  {currQ.question}
+              <div className="question flex vertical center medium-gap">
+                {currQ && currQ.title}
+                {currQ && currQ.question}
+                {currQ && currQ.type === 'mc' &&
                   <div className="flex horizontal center medium-gap">
                     {currQ.input && currQ.input.map((option, index) => {
                       return (
@@ -91,8 +101,15 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                       )
                     })}
                   </div>
-                </div>
-              }
+                }
+                {currQ && currQ.type === 'frq' &&
+                  <span className="flex horizontal center medium-gap">
+                    {currQ.nextToInput}
+                    <input type="text" onChange={handleInput} value={textInput} className={classes}></input>
+                  </span>
+                }
+              </div>
+
 
               <Stats cname={cname} uname={uname} name={name} correctRef={correctRef}
                 goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered} setMastered={setMastered}
@@ -101,8 +118,8 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
           </> :
           <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered} />
 
-        : currQ && currQ.hints && 
-        <Hints currQ={currQ} setShowHints={setShowHints} hintsIndex={hintsIndex} setHintsIndex={setHintsIndex}/>
+        : currQ && currQ.hints &&
+        <Hints currQ={currQ} setShowHints={setShowHints} hintsIndex={hintsIndex} setHintsIndex={setHintsIndex} />
       }
 
     </div>

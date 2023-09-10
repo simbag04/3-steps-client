@@ -1,6 +1,4 @@
 import * as math from 'mathjs'
-import { build, derivative, simplify } from './calculus';
-import { extractCoeffs } from './polynomial';
 import { generateFunctionData } from './graph-helpers';
 
 /**
@@ -200,4 +198,33 @@ function generateRandomPolynomialWithPoint(degree, x, y) {
   const modifiedNode = math.parse(expression);
   return modifiedNode;
 }
-export { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, shuffleArray, generateRandomPolynomialWithPoint }
+
+/**
+ * 
+ * @param {Array} points array of 3 points ({x, y}) to fit quadratic to
+ * @returns math.js node representing polynomial expression
+ */
+function fitPointsToQuadratic(points) {
+  // Ensure we have at least 3 points
+  if (points.length < 3) {
+    console.error('At least 3 points are required for quadratic regression.');
+    return null;
+  }
+  const x1 = points[0].x;
+  const y1 = points[0].y;
+  const x2 = points[1].x;
+  const y2 = points[1].y;
+  const x3 = points[2].x;
+  const y3 = points[2].y;
+
+  
+  const det = (x1 - x2) * (x1 - x3) * (x2 - x3);
+  const a = ((x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / det);
+  const b = ((x3 * x3 * (y1 - y2) + x2 * x2 * (y3 - y1) + x1 * x1 * (y2 - y3)) / det);
+  const c = ((x2 * x3 * (x2 - x3) * y1 + x3 * x1 * (x3 - x1) * y2 + x1 * x2 * (x1 - x2) * y3) / det);
+
+  // Return math.js node
+  return math.parse(`${a === 0 ? `` : `${a}x^2`} + ${b === 0 ? `` : `${b}x`} + ${c}`)
+}
+
+export { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, shuffleArray, generateRandomPolynomialWithPoint, fitPointsToQuadratic }

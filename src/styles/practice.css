@@ -29,6 +29,13 @@ input[type="radio"] {
   display: none;
 }
 
+input {
+  padding: 5px;
+  box-shadow: 0 0 0 2px lightgray;
+  border: none;
+  border-radius: var(--border-radius);
+}
+
 .selected {
   box-shadow: 0 0 0 2px #007bff;
   border-radius: var(--border-radius);
