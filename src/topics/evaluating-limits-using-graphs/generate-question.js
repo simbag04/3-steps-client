@@ -60,7 +60,18 @@ function asymptoticGraphQuestion() {
     <Latex expression={`\\lim_{x \\to ${val}} g(x)`} inline={true} /> =
   </span>
 
-  return { question, ans, type, nextToInput }
+  const hints = [
+    <div className="flex vertical center small-gap">
+      <span>{nextToInput} ?</span>
+      Focus on x = {val} on the graph.
+      {question}
+    </div>,
+    <div>
+      What can we say about the limit at a point where the function appears to be boundless?
+    </div>
+  ]
+
+  return { question, ans, type, nextToInput, hints }
 
 }
 
@@ -164,7 +175,23 @@ function jumpGraphQuestion() {
     <Latex expression={`\\lim_{x \\to ${qX + signText}}g(x)`} inline={true} /> =
   </span>
 
-  return { question, ans, type, nextToInput }
+  const hints = [
+    <div className="flex vertical center small-gap">
+      <span>{nextToInput} ?</span>
+      Focus on x = {qX} on the graph.
+      {question}
+    </div>,
+    <div>
+      Are we interested in the limit from the left, right, or both directions?
+    </div>,
+    <div>
+      {ans === 'dne' ? "What do we know about limits at point where there is a jump in the graph?" :
+        sign === 2 ? `Looking at the graph, what do we know about the asked limit?` :
+          "Which sub-function graph should we look at to get our answer?"}
+    </div>
+  ]
+
+  return { question, ans, type, nextToInput, hints }
 }
 
 function oscillatingGraphQuestion() {
@@ -196,7 +223,18 @@ function oscillatingGraphQuestion() {
     <Latex expression={`\\lim_{x \\to ${horizShift}} g(x)`} inline={true} /> =
   </span>
 
-  return { question, ans, type, nextToInput }
+  const hints = [
+    <div className="flex vertical center small-gap">
+      <span>{nextToInput} ?</span>
+      Focus on x = {horizShift} on the graph.
+      {question}
+    </div>,
+    <div>
+      What can we say about the limit of a function at a point where the function is oscillating?
+    </div>
+  ]
+
+  return { question, ans, type, nextToInput, hints }
 }
 
 function generateRandomQuestion() {
@@ -216,7 +254,7 @@ function generateRandomQuestion() {
     <h2>Evaluate the limit.</h2>
     <div>Enter "dne" if the limit doesn't exist</div>
   </div>
-  
+
   document.documentElement.style.setProperty('--random-color',
     COLORS[getRandomNumber(0, COLORS.length - 1)])
 

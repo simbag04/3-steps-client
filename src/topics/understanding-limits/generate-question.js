@@ -60,10 +60,10 @@ function graphToLimit() {
 
   const hints1 = <div>Recall the definition of a limit:
     <Latex expression={`\\ {\\lim}`} inline={true} />
-    <Latex expression={`_{x \\to 2}`} inline={true} />
-    <Latex expression={`x^2`} inline={true} />
+    <Latex expression={`_{x \\to a}`} inline={true} />
+    <Latex expression={`f(x)`} inline={true} />
     <Latex expression={`\\ =\\ `} inline={true} />
-    <Latex expression={`\\ 4 `} inline={true} />
+    <Latex expression={`\\ L `} inline={true} />
   </div>
 
 
@@ -138,14 +138,14 @@ function limitToGraph() {
 
   const hints1 = <div>Recall the definition of a limit:
     <Latex expression={`\\ {\\lim}`} inline={true} />
-    <Latex expression={`_{x \\to 2}`} inline={true} />
-    <Latex expression={`x^2`} inline={true} />
+    <Latex expression={`_{x \\to a}`} inline={true} />
+    <Latex expression={`f(x)`} inline={true} />
     <Latex expression={`\\ =\\ `} inline={true} />
-    <Latex expression={`\\ 4 `} inline={true} />
+    <Latex expression={`\\ L `} inline={true} />
   </div>
 
 
-  const hints2 = <div>In this graph, what is <Latex expression={`x`} inline={true}/> approaching? What is <Latex expression={`y`} inline={true}/> approaching?</div>
+  const hints2 = <div>Which graph accurately shows the correct <Latex expression={`x`} inline={true}/> value approaching the correct <Latex expression={`y`} inline={true}/> value?</div>
 
   const hints = [hints1, hints2];
 
