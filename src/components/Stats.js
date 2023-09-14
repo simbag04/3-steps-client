@@ -3,7 +3,7 @@ import { UserContext } from "../App";
 import { ApiContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
-export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setMastered, setShowHints, hintsUsed, setHintsUsed }) => {
+export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed }) => {
   const [text, setText] = useState(""); // feedback text, such as "Incorrect"
   const [feedback, setFeedback] = useState("");
   const [dbEntry, setDbEntry] = useState({});
@@ -27,7 +27,12 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
 
           const json = await apiRes.json();
           setDbEntry(json.entry);
-          setMastered(json.entry.star_1_achieved_on)
+          const nsg = json.entry.next_star_goal;
+          setStars({
+            star1: nsg > 1,
+            star2: nsg > 2,
+            star3: nsg > 3
+          })
 
         } catch (err) {
           console.log(err)
@@ -36,7 +41,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
     }
 
     setVariables().catch(console.error)
-  }, [apiLink, name, user, numProblems, setMastered])
+  }, [apiLink, name, user, numProblems, setStars])
 
   const backToTopicsButtonHandler = () => {
     nav(`/${cname}/${uname}`)
@@ -81,7 +86,12 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
             if (json.entry.star_1_achieved_on !== prevMastered) {
               setShowMastered(true)
             }
-            setMastered(json.entry.star_1_achieved_on);
+            const nsg = json.entry.next_star_goal;
+            setStars({
+              star1: nsg > 1,
+              star2: nsg > 2,
+              star3: nsg > 3
+            })
 
           } catch (err) {
             console.log(err)

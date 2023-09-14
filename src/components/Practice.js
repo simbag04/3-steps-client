@@ -10,7 +10,9 @@ import React, { useEffect, useRef, useState } from "react";
 import '../styles/practice.css'
 import { Stats } from "./Stats";
 import { Mastered } from "./Mastered";
-import star from '../helpers/star.svg'
+import bronzeStar from '../helpers/bronze-star.svg'
+import silverStar from '../helpers/silver-star.svg'
+import goldStar from '../helpers/gold-star.svg'
 import { Hints } from "./Hints";
 
 export const Practice = ({ cname, uname, name, title, numProblems }) => {
@@ -20,7 +22,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [qFunction, setQFunction] = useState(() => () => { });
   const [currQ, setCurrQ] = useState({});
   const [showMastered, setShowMastered] = useState(false)
-  const [mastered, setMastered] = useState(false);
+  const [stars, setStars] = useState({ star1: false, star2: false, star3: false });
   const [showHints, setShowHints] = useState(false);
   const [hintsIndex, setHintsIndex] = useState(0);
   const [hintsUsed, setHintsUsed] = useState(false);
@@ -83,7 +85,11 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
           <>
             <h1 className="title flex horizontal center small-gap">
               <span>{title}: Practice</span>
-              <span className="flex horizontal center"> {mastered ? <img src={star} alt="star" /> : null}</span>
+              <span className="flex horizontal center">
+                {stars.star1 ? <img src={bronzeStar} alt="star" /> : null}
+                {stars.star2 ? <img src={silverStar} alt="star" /> : null}
+                {stars.star3 ? <img src={goldStar} alt="star" /> : null}
+              </span> 
             </h1>
             {currQ && currQ.title}
             <div className="practice-section">
@@ -113,7 +119,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
 
 
               <Stats cname={cname} uname={uname} name={name} correctRef={correctRef}
-                goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered} setMastered={setMastered}
+                goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered} setStars={setStars}
                 setShowHints={setShowHints} hintsUsed={hintsUsed} setHintsUsed={setHintsUsed}></Stats>
             </div>
           </> :
@@ -126,7 +132,3 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     </div>
   );
 }
-
-/**
- * 
- */
