@@ -36,7 +36,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
             setTotalCorrect(json.entry.problems_correct)
             setBestStreak(json.entry.best_streak)
 
-            if (json.entry.best_streak >= numProblems) {
+            if (json.entry.star_1_achieved_on) {
               setMastered(true);
             }
           }
@@ -67,7 +67,11 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
       if (correctRef.current) {
         setGoToNext(true);
         if (!hintsUsed) {
-          if (bestStreak < numProblems && streak + 1 === numProblems) {
+          console.log(bestStreak)
+          console.log(streak)
+          console.log(numProblems)
+          if (bestStreak < numProblems && (streak + 1 === numProblems)) {
+            console.log("here")
             setShowMastered(true)
           }
           if (bestStreak >= numProblems) setMastered(true);
