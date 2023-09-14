@@ -85,10 +85,11 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
               <span>{title}: Practice</span>
               <span className="flex horizontal center"> {mastered ? <img src={star} alt="star" /> : null}</span>
             </h1>
+            {currQ && currQ.title}
             <div className="practice-section">
               <div className="question flex vertical center medium-gap">
-                {currQ && currQ.title}
                 {currQ && currQ.question}
+
                 {currQ && currQ.type === 'mc' &&
                   <div className="flex horizontal center medium-gap">
                     {currQ.input && currQ.input.map((option, index) => {

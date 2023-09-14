@@ -4,12 +4,9 @@ import { ApiContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
 export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setMastered, setShowHints, hintsUsed, setHintsUsed }) => {
-  const [text, setText] = useState("none"); // feedback text, such as "Incorrect"
+  const [text, setText] = useState(""); // feedback text, such as "Incorrect"
   const [feedback, setFeedback] = useState("");
-  const [streak, setStreak] = useState(0); // current streak
-  const [bestStreak, setBestStreak] = useState(0); // all time best streak
-  const [totalCorrect, setTotalCorrect] = useState(0); // total problems correct
-  const [totalAttempted, setTotalAttempted] = useState(0); // total problems attempted
+  const [dbEntry, setDbEntry] = useState({});
 
   const { user } = useContext(UserContext);
   const apiLink = useContext(ApiContext);
@@ -29,17 +26,9 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
           })
 
           const json = await apiRes.json();
+          setDbEntry(json.entry);
+          setMastered(json.entry.star_1_achieved_on)
 
-          if (!json.new_topic) {
-            setStreak(json.entry.current_streak);
-            setTotalAttempted(json.entry.problems_attempted)
-            setTotalCorrect(json.entry.problems_correct)
-            setBestStreak(json.entry.best_streak)
-
-            if (json.entry.star_1_achieved_on) {
-              setMastered(true);
-            }
-          }
         } catch (err) {
           console.log(err)
         }
@@ -65,39 +54,19 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
       return;
     } else {
       if (correctRef.current) {
-        setGoToNext(true);
-        if (!hintsUsed) {
-          console.log(bestStreak)
-          console.log(streak)
-          console.log(numProblems)
-          if (bestStreak < numProblems && (streak + 1 === numProblems)) {
-            console.log("here")
-            setShowMastered(true)
-          }
-          if (bestStreak >= numProblems) setMastered(true);
-          setStreak(streak => streak + 1);
-          setBestStreak(Math.max(streak + 1, bestStreak))
-          setTotalCorrect(totalCorrect => totalCorrect + 1);
-          setTotalAttempted(totalAttempted => totalAttempted + 1);
-        }
-
         setText("Good job!")
         setFeedback("good")
       } else {
-        if (!hintsUsed) {
-          setStreak(0);
-          setTotalAttempted(totalAttempted => totalAttempted + 1);
-        }
-        setGoToNext(true)
         setText("Incorrect!")
         setFeedback("bad")
       }
+      setGoToNext(true);
 
       if (!hintsUsed) {
         if (user) {
           try {
             const body = { result: correctRef.current }
-            await fetch(`${apiLink}/topic/${name}/question`, {
+            const apiRes = await fetch(`${apiLink}/topic/${name}/question`, {
               method: 'put',
               body: JSON.stringify(body),
               headers: {
@@ -105,6 +74,14 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
                 'Authorization': 'bearer ' + localStorage.getItem("token")
               }
             })
+
+            const json = await apiRes.json();
+            const prevMastered = dbEntry.star_1_achieved_on;
+            setDbEntry(json.entry)
+            if (json.entry.star_1_achieved_on !== prevMastered) {
+              setShowMastered(true)
+            }
+            setMastered(json.entry.star_1_achieved_on);
 
           } catch (err) {
             console.log(err)
@@ -117,7 +94,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
 
   // this function is called to reset variables for the next question
   const nextQuestion = useCallback(() => {
-    setText("none");
+    setText("");
     setFeedback("")
     setGoToNext(false);
     correctRef.current = null;
@@ -129,23 +106,37 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
     setHintsUsed(true);
   }
 
+  const login = () => nav('/login');
+  const register = () => nav('/register');
+
   return (
     <div className="flex vertical center large-gap">
       <div className="stats flex vertical center medium-gap">
         <h2>Progress</h2>
-        <div>Streak: {streak}</div>
-        <div>Best Streak: {bestStreak}</div>
-        <div>Problems correct: {totalCorrect}</div>
-        <div>Problems attempted: {totalAttempted}</div>
+        {user ?
+          <>
+            <div>Streak: {dbEntry.current_streak}</div>
+            <div>Best Streak: {dbEntry.best_streak}</div>
+            <div>Problems correct: {dbEntry.problems_correct}</div>
+            <div>Problems attempted: {dbEntry.problems_attempted}</div>
+          </> :
+          <>
+            <div>Please sign in to save your progress!</div>
+            <button onClick={login}>Login</button>
+            <button onClick={register}>Register</button>
+          </>
+        }
+
         <button onClick={backToTopicsButtonHandler}>Back to Topics</button>
         {!goToNext && <button onClick={checkAnswer}>Check</button>}
         {goToNext && <button onClick={nextQuestion}>Next</button>}
         {!goToNext && <button onClick={showHints}>I Need a Hint!</button>}
       </div>
-      <div className={"feedback " +
-        (text !== "none" ? "visible" : "invisible") + " " + feedback}>
-        {<div>{text}</div>}
-      </div>
+      {text !== "" ?
+        <div className={"feedback " + feedback}>
+          {<div>{text}</div>}
+        </div> : null
+      }
     </div>
 
   )
