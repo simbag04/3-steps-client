@@ -26,6 +26,10 @@
   justify-items: center;
 }
 
-.topic-el {
-  border: 2px solid var(--header-color);
+.topic-el.review {
+  border: 2px solid red;
+}
+
+.topic-el.ok {
+  border: 2px solid green;
 }
