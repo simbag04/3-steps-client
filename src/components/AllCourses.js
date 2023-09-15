@@ -25,14 +25,16 @@ export const AllCourses = () => {
   return (
     <div className="flex vertical center large-gap">
       <h1>All Courses</h1>
-      {courses &&
-        courses.map((course) => {
-          course.url_name = getUrlName(course.name);
-          return (<div key={course._id}>
-            <Link to={`/${course.url_name}`}>{course.name}</Link>
-          </div>)
-        })
-      }
+      <div className="navigation unit">
+        {courses &&
+          courses.map((course) => {
+            course.url_name = getUrlName(course.name);
+            return (<div key={course._id}>
+              <Link className="element unit-el" to={`/${course.url_name}`}><h2>{course.name}</h2></Link>
+            </div>)
+          })
+        }
+      </div>
     </div>
   )
 }

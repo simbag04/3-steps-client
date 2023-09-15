@@ -16,6 +16,7 @@
 
 .stats button {
   background-color: var(--header-color);
+  color: white;
 }
 
 label {

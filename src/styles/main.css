@@ -7,8 +7,8 @@
   --small-gap: 10px;
   --tiny-gap: 5px;
   --border-radius: 10px;
-  --header-color: #52b788;
-  --button-color: #b7e4c7;
+  --header-color: #1565c0;
+  --button-color: #bbdefb;
 }
 
 body {
@@ -19,6 +19,10 @@ body {
 
 .start {
   text-align: start;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .katex {
@@ -76,14 +80,19 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
 }
 
-button {
+a {
+  text-decoration: none;
+  color: black;
+}
+
+button, a {
   background-color: var(--button-color);
   border: none;
   border-radius: var(--border-radius);
   padding: 10px var(--padding);
 }
 
-button:hover {
+button:hover, a:hover, .hover:hover {
   transform: scale(1.1);
   transition: transform .25s;
 }

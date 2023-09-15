@@ -28,11 +28,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
           const json = await apiRes.json();
           setDbEntry(json.entry);
           const nsg = json.entry.next_star_goal;
-          setStars({
-            star1: nsg > 1,
-            star2: nsg > 2,
-            star3: nsg > 3
-          })
+          setStars(nsg)
 
         } catch (err) {
           console.log(err)
@@ -87,11 +83,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
               setShowMastered(true)
             }
             const nsg = json.entry.next_star_goal;
-            setStars({
-              star1: nsg > 1,
-              star2: nsg > 2,
-              star3: nsg > 3
-            })
+            setStars(nsg)
 
           } catch (err) {
             console.log(err)

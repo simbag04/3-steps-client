@@ -10,10 +10,8 @@ import React, { useEffect, useRef, useState } from "react";
 import '../styles/practice.css'
 import { Stats } from "./Stats";
 import { Mastered } from "./Mastered";
-import bronzeStar from '../helpers/bronze-star.svg'
-import silverStar from '../helpers/silver-star.svg'
-import goldStar from '../helpers/gold-star.svg'
 import { Hints } from "./Hints";
+import { Stars } from "./Stars";
 
 export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
@@ -22,7 +20,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [qFunction, setQFunction] = useState(() => () => { });
   const [currQ, setCurrQ] = useState({});
   const [showMastered, setShowMastered] = useState(false)
-  const [stars, setStars] = useState({ star1: false, star2: false, star3: false });
+  const [stars, setStars] = useState(0);
   const [showHints, setShowHints] = useState(false);
   const [hintsIndex, setHintsIndex] = useState(0);
   const [hintsUsed, setHintsUsed] = useState(false);
@@ -85,11 +83,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
           <>
             <h1 className="title flex horizontal center small-gap">
               <span>{title}: Practice</span>
-              <span className="flex horizontal center">
-                {stars.star1 ? <img src={bronzeStar} alt="star" /> : null}
-                {stars.star2 ? <img src={silverStar} alt="star" /> : null}
-                {stars.star3 ? <img src={goldStar} alt="star" /> : null}
-              </span> 
+              <Stars star_goal={stars} />
             </h1>
             {currQ && currQ.title}
             <div className="practice-section">
