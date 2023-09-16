@@ -12,7 +12,8 @@ function review_date_passed(date) {
   today.setHours(0, 0, 0, 0)
   d.setHours(0, 0, 0, 0)
 
-  return today.getTime() > d.getTime();
+
+  return (today.getTime() - d.getTime())/(24 * 60 * 60 * 1000);
 }
 
 export { format_review_date, review_date_passed }

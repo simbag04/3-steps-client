@@ -29,3 +29,11 @@
   width: 15px;
   height: auto;
 }
+
+.progress {
+  min-height: 30px;
+}
+
+.review-info {
+  min-height: 40px;
+}

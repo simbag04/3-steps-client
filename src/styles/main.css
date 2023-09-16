@@ -109,3 +109,7 @@ button:hover, a:hover, .hover:hover {
   text-align: center;
 }
 
+.invisible {
+  visibility: hidden;
+}
+

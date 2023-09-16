@@ -36,12 +36,10 @@ export const Course = () => {
     <div className="flex vertical center large-gap">
       <h1>{title}</h1>
       <div className="navigation unit">
-        <div>
-          {units &&
-            units.map((unit) => {
-              return <Link className="element unit-el" key={unit._id} to={`/${cname}/${unit.slug}`}><h2>{unit.name}</h2></Link>
-            })}
-        </div>
+        {units &&
+          units.map((unit) => {
+            return <Link className="element unit-el" key={unit._id} to={`/${cname}/${unit.slug}`}><h2>{unit.name}</h2></Link>
+          })}
       </div>
 
       <div>

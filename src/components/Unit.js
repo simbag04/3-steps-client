@@ -45,24 +45,27 @@ export const Unit = () => {
           topics.map((t, i) => {
             const topic = user ? t.topic_id : t;
             const date = user && t && t.next_review_date ? t.next_review_date.date : null;
+            const rdp = review_date_passed(date);
             return (
               <div key={topic ? topic._id : i}
-                className={"element topic-el center small-gap " + (review_date_passed(date) ? "review" : "ok")}>
+                className={"element topic-el center small-gap " + (date && rdp >= 0 ? "review" : "ok")}>
                 <h2 className="text-center">{topic && topic.name}</h2>
                 <div className="buttons">
                   <Link to={`/${cname}/${uname}/${topic && topic.slug}/learn`}>Learn</Link>
                   <Link to={`/${cname}/${uname}/${topic && topic.slug}/practice`}>
-                    {review_date_passed(date) ? "Review" : "Practice"}</Link>
+                    {rdp ? "Review" : "Practice"}</Link>
                 </div>
                 {user && t && topic &&
                   <span className="flex horizontal center">
-                    Progress: <Stars star_goal={t.next_star_goal} star_2={t.star_2_review_dates} star_3={t.star_3_review_dates} streak={topic.streak_for_mastery} current_streak={t.your_streak} />
+                    <strong>Progress: </strong><Stars star_goal={t.next_star_goal} star_2={t.star_2_review_dates} star_3={t.star_3_review_dates} streak={topic.streak_for_mastery} current_streak={t.best_streak} />
                   </span>}
-                {date && <span>
-                  {review_date_passed(date) ?
-                    <span>It's time to review! Streak: {t.next_review_date.streak}/2</span> :
-                    <span>Next review: {format_review_date(t.next_review_date.date)}</span>}
-                </span>}
+                {date && t ? <span className="text-center review-info">
+                  {rdp >= 9 && t.next_star_goal === 4 ?
+                    <span><strong>Review in the next {14 - rdp} days to keep the gold star!</strong></span> : 
+                    rdp >= 0 ?
+                    <span>It's time to review! Streak: {t.next_review_date.streak}/2</span> 
+                    : <span>Next review: <strong>{format_review_date(t.next_review_date.date)}</strong></span>}
+                </span> : <span className="review-info invisible">none</span>}
               </div>
             )
           })

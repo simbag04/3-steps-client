@@ -15,7 +15,7 @@ export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => 
 
   const handleMouseEnter = (e) => {
     setVisible(true);
-    setPosition({ x: e.clientX, y: e.clientY });
+    setPosition({ x: e.pageX, y: e.pageY });
   };
 
   const handleMouseLeave = () => {
@@ -28,11 +28,14 @@ export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => 
     top: `${position.y}px`,
   };
 
+  const num2ReviewsLeft = star_goal && star_2 ? star_goal > 2 ? 0 : Math.min((3 - star_2.length) + 1, 3) : 0;
+  const num3ReviewsLeft = star_goal && star_3 ? star_goal > 3 ? 0 : Math.min((2 - star_3.length) + 1, 2) : 0;
+
   return (
-    <> 
+    <>
       {user ?
         <>
-          <span className="flex horizontal center">
+          <span className="flex horizontal center progress">
             {star_goal > 1 ? <img className="star" src={bronzeStar} alt="star" /> : null}
             {star_goal === 1 ? <img className="opaque small-star" src={bronzeStar} alt="star" /> : null}
             {star_goal > 2 ? <img className="star" src={silverStar} alt="star" /> : null}
@@ -48,11 +51,11 @@ export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => 
             </span>
             {star_2 && <span>
               <img className="star" src={silverStar} alt='star' />
-              {star_goal > 2 ? <img src={check} alt='check' /> : <img src={cross} alt='cross' />} <strong>{3 - star_2.length}/3 </strong> {star_2.length !== 2 ? "reviews" : "review"} (at least 2 days apart) remaining
+              {star_goal > 2 ? <img src={check} alt='check' /> : <img src={cross} alt='cross' />} <strong>{num2ReviewsLeft}/3 </strong> reviews (at least 2 days apart) remaining
             </span>}
             {star_3 && <span>
               <img className="star" src={goldStar} alt='star' />
-              {star_goal > 3 ? <img src={check} alt='check' /> : <img src={cross} alt='cross' />} <strong>{2 - star_3.length}/2 </strong> {star_3.length !== 1 ? "reviews" : "review"} (at least 7 days apart) remaining
+              {star_goal > 3 ? <img src={check} alt='check' /> : <img src={cross} alt='cross' />} <strong>{num3ReviewsLeft}/2 </strong> reviews (at least 7 days apart) remaining
             </span>}
             {star_goal > 3 ? <span className='text-center'>Review every 2 weeks to keep the gold star!</span> : null}
           </div>
