@@ -20,7 +20,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [qFunction, setQFunction] = useState(() => () => { });
   const [currQ, setCurrQ] = useState({});
   const [showMastered, setShowMastered] = useState(false)
-  const [stars, setStars] = useState(0);
+  const [stars, setStars] = useState({});
   const [showHints, setShowHints] = useState(false);
   const [hintsIndex, setHintsIndex] = useState(0);
   const [hintsUsed, setHintsUsed] = useState(false);
@@ -77,14 +77,17 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   }, [goToNext])
 
   return (
-    <div className="flex vertical center medium-gap">
+    <div className="flex vertical center medium-gap practice">
       {!showHints ?
         !showMastered ?
           <>
-            <h1 className="title flex horizontal center small-gap">
-              <span>{title}: Practice</span>
-              <Stars star_goal={stars} />
-            </h1>
+            <span className="flex horizontal center small-gap">
+              <h1 className="title flex horizontal center small-gap">
+                <span>{title}: Practice</span>
+              </h1>
+              <Stars star_goal={stars.star_goal} star_2={stars.star_2} star_3={stars.star_3} streak={stars.streak} current_streak={stars.current_streak} />
+            </span>
+
             {currQ && currQ.title}
             <div className="practice-section">
               <div className="question flex vertical center medium-gap">

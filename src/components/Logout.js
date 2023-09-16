@@ -21,7 +21,7 @@ export const Logout = () => {
     <div className="flex vertical center medium-gap">
       <h1>Logout</h1>
       <div className="logout-text">Are you sure you want to log out?</div>
-      <div className="flex horizontal center medium-gap">
+      <div className="buttons">
         <button onClick={goHomeHandler}>Home</button>
         <button onClick={logoutHandler}>Yes</button>
       </div>

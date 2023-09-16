@@ -17,6 +17,10 @@ body {
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
+.opaque {
+  opacity: 50%;
+}
+
 .start {
   text-align: start;
 }
@@ -96,3 +100,12 @@ button:hover, a:hover, .hover:hover {
   transform: scale(1.1);
   transition: transform .25s;
 }
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  grid-auto-flow: column;
+  text-align: center;
+}
+

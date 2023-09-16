@@ -19,7 +19,7 @@
   color: white;
 }
 
-label {
+.practice label {
   padding: 10px;
   box-shadow: 0 0 0 2px lightgray;
   border-radius: var(--border-radius);

@@ -49,10 +49,15 @@ export const Unit = () => {
               <div key={topic ? topic._id : i}
                 className={"element topic-el center small-gap " + (review_date_passed(date) ? "review" : "ok")}>
                 <h2 className="text-center">{topic && topic.name}</h2>
-                <Link to={`/${cname}/${uname}/${topic && topic.slug}/learn`}>Learn</Link>
-                <Link to={`/${cname}/${uname}/${topic && topic.slug}/practice`}>
-                  {review_date_passed(date) ? "Review" : "Practice"}</Link>
-                {user && t && <Stars star_goal={t.next_star_goal} />}
+                <div className="buttons">
+                  <Link to={`/${cname}/${uname}/${topic && topic.slug}/learn`}>Learn</Link>
+                  <Link to={`/${cname}/${uname}/${topic && topic.slug}/practice`}>
+                    {review_date_passed(date) ? "Review" : "Practice"}</Link>
+                </div>
+                {user && t && topic &&
+                  <span className="flex horizontal center">
+                    Progress: <Stars star_goal={t.next_star_goal} star_2={t.star_2_review_dates} star_3={t.star_3_review_dates} streak={topic.streak_for_mastery} current_streak={t.your_streak} />
+                  </span>}
                 {date && <span>
                   {review_date_passed(date) ?
                     <span>It's time to review! Streak: {t.next_review_date.streak}/2</span> :

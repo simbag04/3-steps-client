@@ -91,7 +91,7 @@ export const Register = () => {
               onChange={handleInputChange}>
             </input>
           </label>
-          <div className="flex horizontal center medium-gap">
+          <div className="buttons">
             <button type="submit">Register</button>
             <button type="button" onClick={goHome}>Home</button>
           </div>

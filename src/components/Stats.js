@@ -28,7 +28,13 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
           const json = await apiRes.json();
           setDbEntry(json.entry);
           const nsg = json.entry.next_star_goal;
-          setStars(nsg)
+          setStars({
+            star_goal: nsg,
+            star_2: json.entry.star_2_review_dates,
+            star_3: json.entry.star_3_review_dates,
+            streak: numProblems,
+            current_streak: json.entry.best_streak
+          })
 
         } catch (err) {
           console.log(err)
@@ -83,7 +89,13 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
               setShowMastered(true)
             }
             const nsg = json.entry.next_star_goal;
-            setStars(nsg)
+            setStars({
+              star_goal: nsg,
+              star_2: json.entry.star_2_review_dates,
+              star_3: json.entry.star_3_review_dates,
+              streak: numProblems,
+              current_streak: json.entry.best_streak
+            })
 
           } catch (err) {
             console.log(err)
