@@ -1,8 +1,8 @@
 import Latex from "../../helpers/Latex"
-import JumpGraph from "./JumpGraph"
+import JumpGraph from "../../components/graphs/JumpGraph"
 import * as math from 'mathjs'
-import FunctionGraph from "./FunctionGraph"
-import AsymptoticGraph from "./AsymptoticGraph"
+import FunctionGraph from "../../components/graphs/FunctionGraph"
+import AsymptoticGraph from "../../components/graphs/AsymptoticGraph"
 
 const n1 = math.parse("-x")
 const n2 = math.parse("0.5x + 4")

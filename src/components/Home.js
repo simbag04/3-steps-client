@@ -4,7 +4,7 @@
  * I split links into learn/practice so it was easier to render different content
  */
 
-import { AllCourses } from "./AllCourses"
+import { AllCourses } from "./navigation/AllCourses"
 
 export const Home = () => {
   return (

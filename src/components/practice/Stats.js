@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect, useCallback } from "react";
-import { UserContext } from "../App";
-import { ApiContext } from "../App";
+import { UserContext } from "../../App";
+import { ApiContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 
 export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed }) => {

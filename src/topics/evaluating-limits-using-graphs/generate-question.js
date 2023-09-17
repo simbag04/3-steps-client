@@ -5,9 +5,9 @@
 import Latex from "../../helpers/Latex";
 import { fitPointsToQuadratic, generateRandomPolynomialWithPoint, getRandomNumber, getRandomWithExclusions } from "../../helpers/functions";
 import * as math from 'mathjs'
-import AsymptoticGraph from "./AsymptoticGraph";
+import AsymptoticGraph from "../../components/graphs/AsymptoticGraph";
 import { COLORS } from "../../helpers/constants";
-import FunctionGraph from "./FunctionGraph";
+import FunctionGraph from "../../components/graphs/FunctionGraph";
 
 function asymptoticGraphQuestion() {
   const randomNumbers = getRandomNumber(1, 2);

@@ -11,12 +11,12 @@ import { RenderPracticeComponent } from "./RenderPracticeComponent";
 import './styles/main.css'
 import { Navbar } from "./components/Navbar";
 import { createContext, useState, useEffect } from "react";
-import { AllCourses } from "./components/AllCourses";
-import { Course } from "./components/Course";
-import { Unit } from "./components/Unit";
-import { Login } from "./components/Login";
-import { Logout } from "./components/Logout";
-import { Register } from "./components/Register";
+import { AllCourses } from "./components/navigation/AllCourses";
+import { Course } from "./components/navigation/Course";
+import { Unit } from "./components/navigation/Unit";
+import { Login } from "./components/auth/Login";
+import { Logout } from "./components/auth/Logout";
+import { Register } from "./components/auth/Register";
 
 export const ApiContext = createContext();
 export const UserContext = createContext();

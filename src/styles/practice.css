@@ -64,8 +64,3 @@ input {
 .feedback.bad {
   background-color: lightpink;
 }
-
-img {
-  width: 1.2em;
-  height: auto;
-}

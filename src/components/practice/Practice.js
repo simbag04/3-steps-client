@@ -7,11 +7,11 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import '../styles/practice.css'
+import '../../styles/practice.css'
 import { Stats } from "./Stats";
 import { Mastered } from "./Mastered";
 import { Hints } from "./Hints";
-import { Stars } from "./Stars";
+import { Stars } from "../Stars";
 
 export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
@@ -31,7 +31,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [textInput, setTextInput] = useState("");
 
   useEffect(() => {
-    import(`../topics/${name}/generate-question.js`)
+    import(`../../topics/${name}/generate-question.js`)
       .then(module => {
         setQFunction(() => module.default);
       })

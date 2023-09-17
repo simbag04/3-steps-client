@@ -1,7 +1,7 @@
 import { COLORS } from "../../helpers/constants";
 import { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, generateRandomPolynomialWithPoint, shuffleArray } from "../../helpers/functions";
 import Latex from "../../helpers/Latex";
-import LimitExampleGraph from "./LimitExampleGraph";
+import LimitExampleGraph from "../../components/graphs/LimitExampleGraph";
 
 /**
  * generates random question that asks users to select the limit that best matches the graph

@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
-import { ApiContext } from "../App";
+import { ApiContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 
-import { UserContext } from "../App";
+import { UserContext } from "../../App";
 
 export const Login = () => {
   const apiLink = useContext(ApiContext)

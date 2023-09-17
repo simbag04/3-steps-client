@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { ApiContext, UserContext } from "../App";
-import { Stars } from "./Stars";
-import '../styles/navigation.css'
-import { format_review_date, review_date_passed } from "../helpers/format-helpers";
+import { ApiContext, UserContext } from "../../App";
+import { Stars } from "../Stars";
+import '../../styles/navigation.css'
+import { format_review_date, review_date_passed } from "../../helpers/format-helpers";
 
 export const Unit = () => {
   const { cname, uname } = useParams();
@@ -53,7 +53,7 @@ export const Unit = () => {
                 <div className="buttons">
                   <Link to={`/${cname}/${uname}/${topic && topic.slug}/learn`}>Learn</Link>
                   <Link to={`/${cname}/${uname}/${topic && topic.slug}/practice`}>
-                    {rdp ? "Review" : "Practice"}</Link>
+                    {rdp && rdp >= 0 ? "Review" : "Practice"}</Link>
                 </div>
                 {user && t && topic &&
                   <span className="flex horizontal center">

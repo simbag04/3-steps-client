@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react"
 import { createBlankCanvas, createMultipleFunctionsGraph } from "../../helpers/graph-helpers";
-import '../understanding-limits/graph.css'
+import '../../styles/graph.css'
 import * as d3 from 'd3';
 
 const AsymptoticGraph = ({ functions, size, x, y }) => {

@@ -1,5 +1,4 @@
-import './styles.css'
-import LimitExampleGraph from "./LimitExampleGraph"
+import LimitExampleGraph from "../../components/graphs/LimitExampleGraph"
 import Latex from '../../helpers/Latex'
 import * as math from 'mathjs'
 

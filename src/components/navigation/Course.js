@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
-import { ApiContext, UserContext } from "../App";
+import { ApiContext, UserContext } from "../../App";
 import { Link } from "react-router-dom";
 
 export const Course = () => {

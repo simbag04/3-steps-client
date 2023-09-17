@@ -3,7 +3,7 @@
  */
 
 import { useParams } from 'react-router-dom';
-import { Practice } from "./components/Practice";
+import { Practice } from "./components/practice/Practice";
 import { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { ApiContext } from './App';
