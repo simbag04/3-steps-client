@@ -19,6 +19,7 @@ function review_date_passed(date) {
 
   // create dates
   const today = new Date();
+  // today.setDate(today.getDate() + 2)
   const d = new Date(date);
   // reset hours
   today.setHours(0, 0, 0, 0) 

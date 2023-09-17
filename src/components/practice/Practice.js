@@ -27,6 +27,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [showHints, setShowHints] = useState(false); // stores whether to show hints page
   const [hintsIndex, setHintsIndex] = useState(0); // stores what hint user is on
   const [hintsUsed, setHintsUsed] = useState(false); // stores whether hints were used
+  const [titleWord, setTitleWord] = useState("Practice"); // Practice or Review
 
   const [selectedOption, setSelectedOption] = useState(null); // current option that was selected
   const [classes, setClasses] = useState(""); // stores classes for styling
@@ -91,7 +92,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
             <span className="flex horizontal center small-gap">
               {/* Title with stars */}
               <h1 className="title flex horizontal center small-gap">
-                <span>{title}: Practice</span>
+                <span>{title}: {titleWord}</span>
               </h1>
               <Stars star_goal={stars.star_goal} star_2={stars.star_2} star_3={stars.star_3} streak={stars.streak} current_streak={stars.current_streak} />
             </span>
@@ -126,10 +127,10 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
               {/* Stats box */}
               <Stats cname={cname} uname={uname} name={name} correctRef={correctRef}
                 goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered} setStars={setStars}
-                setShowHints={setShowHints} hintsUsed={hintsUsed} setHintsUsed={setHintsUsed}></Stats>
+                setShowHints={setShowHints} hintsUsed={hintsUsed} setHintsUsed={setHintsUsed} setTitleWord={setTitleWord}></Stats>
             </div>
           </> :
-          <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered} />
+          <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered} stars={stars}/>
         : currQ && currQ.hints &&
         <Hints currQ={currQ} setShowHints={setShowHints} hintsIndex={hintsIndex} setHintsIndex={setHintsIndex} />
       }

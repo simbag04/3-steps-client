@@ -13,20 +13,40 @@
  *  - setStars: info about the stars user has earned on this topic
  *  - setShowHints: state that shows "Hints" page when true
  *  - hintsUsed/setHintsUsed: state that represents what hint the user is currently on
+ *  - setTitleWord: state that represents "Practice" or "Review" in title
  */
 import { useState, useContext, useEffect, useCallback } from "react";
 import { UserContext } from "../../App";
 import { ApiContext } from "../../App";
 import { useNavigate } from "react-router-dom";
+import { format_review_date, review_date_passed } from "../../helpers/format-helpers";
 
-export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed }) => {
+export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed, setTitleWord }) => {
   const [text, setText] = useState(""); // feedback text, such as "Incorrect"
   const [feedback, setFeedback] = useState(""); // added to feedback element classes for styling
   const [dbEntry, setDbEntry] = useState({}); // entry for this user for this topic in DB
+  const [reviewDatePassed, setReviewDatePassed] = useState(-1);
 
-  const { user } = useContext(UserContext); 
+  const { user } = useContext(UserContext);
   const apiLink = useContext(ApiContext);
   const nav = useNavigate();
+
+  const setVariablesAfterAPICall = useCallback((json) => {
+    // set variables
+    const date = json.entry.next_review_date;
+    const rdp = review_date_passed(date ? date.date : null);
+    setDbEntry(json.entry);
+    setReviewDatePassed(rdp);
+    setTitleWord(rdp && rdp >= 0 ? "Review" : "Practice")
+    setStars({
+      star_goal: json.entry.next_star_goal,
+      star_2: json.entry.star_2_review_dates,
+      star_3: json.entry.star_3_review_dates,
+      streak: numProblems,
+      current_streak: json.entry.best_streak,
+      next_review_date: date.date
+    })
+  }, [numProblems, setStars, setTitleWord])
 
   // set variables based on database
   useEffect(() => {
@@ -42,16 +62,8 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
             }
           })
           const json = await apiRes.json();
+          setVariablesAfterAPICall(json)
 
-          // set variables
-          setDbEntry(json.entry);
-          setStars({
-            star_goal: json.entry.next_star_goal,
-            star_2: json.entry.star_2_review_dates,
-            star_3: json.entry.star_3_review_dates,
-            streak: numProblems,
-            current_streak: json.entry.best_streak
-          })
         } catch (err) {
           console.log(err)
         }
@@ -59,7 +71,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
     }
 
     setVariables().catch(console.error)
-  }, [apiLink, name, user, numProblems, setStars])
+  }, [apiLink, name, user, numProblems, setStars, setTitleWord, setVariablesAfterAPICall])
 
   const backToTopicsButtonHandler = () => nav(`/${cname}/${uname}`)
 
@@ -103,20 +115,11 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
             const json = await apiRes.json();
 
             // check if this question resulted in user getting first star
-            const prevMastered = dbEntry.star_1_achieved_on;
-            if (json.entry.star_1_achieved_on !== prevMastered) {
+            const prevMastered = dbEntry.next_star_goal;
+            if (json.entry.next_star_goal !== prevMastered) {
               setShowMastered(true)
             }
-
-            // set variables
-            setDbEntry(json.entry)
-            setStars({
-              star_goal: json.entry.next_star_goal,
-              star_2: json.entry.star_2_review_dates,
-              star_3: json.entry.star_3_review_dates,
-              streak: numProblems,
-              current_streak: json.entry.best_streak
-            })
+            setVariablesAfterAPICall(json)
           } catch (err) {
             console.log(err)
           }
@@ -143,7 +146,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
   const register = () => nav('/register');
 
   return (
-    <div className="flex vertical center large-gap">
+    <div className="stats-section flex vertical center medium-gap text-center">
       <div className="stats flex vertical center medium-gap">
         <h2>Progress</h2>
         {user ?
@@ -153,6 +156,16 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
             <div>Best Streak: {dbEntry.best_streak}</div>
             <div>Problems correct: {dbEntry.problems_correct}</div>
             <div>Problems attempted: {dbEntry.problems_attempted}</div>
+
+            {/* Review text */}
+            {reviewDatePassed >= 9 && dbEntry.next_star_goal === 4 ? 
+            <div>Review within <strong>{14 - reviewDatePassed}</strong> days! Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div>
+            : reviewDatePassed && reviewDatePassed >= 0 ?
+              <div>Review Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div> :
+              reviewDatePassed && <div>Next review: <strong>
+                  {dbEntry && dbEntry.next_review_date && format_review_date(dbEntry.next_review_date.date)}
+                </strong>
+              </div>}
           </> :
           <>
             {/* No stats shown if user is not logged in */}
