@@ -1,20 +1,22 @@
+/**
+ * Login page
+ * Renders email/password field for user to log in
+ */
 import { useContext, useState } from "react";
 import { ApiContext } from "../../App";
 import { useNavigate } from "react-router-dom";
-
 import { UserContext } from "../../App";
 
 export const Login = () => {
   const apiLink = useContext(ApiContext)
   const { setUser } = useContext(UserContext)
   const nav = useNavigate();
-  const [formData, setFormData] = useState({});
-  const [message, setMessage] = useState(null);
+  const [formData, setFormData] = useState({}); // data that user inputs
+  const [message, setMessage] = useState(null); // login error messages
 
-  const goHome = () => {
-    nav('/');
-  }
-
+  const goHome = () => nav('/');
+  
+  // sets form data
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -22,6 +24,7 @@ export const Login = () => {
     })
   }
 
+  // submits form data
   const formSubmitHandler = async (e) => {
     e.preventDefault();
 
@@ -33,8 +36,14 @@ export const Login = () => {
     }
   }
 
+  /**
+   * helper login function
+   * @param {Object} data inputted credentials
+   * @returns json response
+   */
   const login = async (data) => {
     try {
+      // create http req
       const res = await fetch(`${apiLink}/log-in`, {
         method: 'post',
         body: JSON.stringify(data),
@@ -45,9 +54,8 @@ export const Login = () => {
 
       const json = await res.json();
       if (json.token) {
-        // save token in local storage
+        // save token/user in local storage
         localStorage.setItem("token", json.token);
-
         localStorage.setItem("user", JSON.stringify(json.body));
         setUser(json.body);
       }

@@ -35,41 +35,46 @@ const generateFunctionData = (f, min, max) => {
  * @param {int} max domain maximum value
  * @param {boolean} leftArrow whether there should be an arrow on the left of the graph
  * @param {boolean} rightArrow whether there should be an arrow on the right of the graph
+ * @param {String} type can be "asymptotic"
  * @returns data that was used to graph function, id of svg path of function
  */
 const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, classes, min, max, leftArrow, rightArrow, type) => {
-  let data = generateFunctionData(f, min, max);
+  let data = generateFunctionData(f, min, max); // generate data
 
+  // filter data
   data = data.filter((d) => d.x > Math.min(xScale.invert(0), max) &&
     d.x < Math.max(xScale.invert(width), min) &&
     d.y > yScale.invert(height) &&
     d.y < yScale.invert(0))
 
   if (type === "asymptotic") {
+    // make left part of graph go to edge
     if (min > xScale.invert(0)) {
+      // get data point of intersection with top/bottom of graph
       const y = data[0].y > 0 ? yScale.invert(0) : yScale.invert(height)
       let d = findIntersections(f, y, min + 0.00001, data[0].x, 0.01);
-      if (d) data.unshift({x: d, y: f(d)});
+      if (d) data.unshift({x: d, y: f(d)}); // add point to beginning of data
     }
 
-    
+    // make right part of graph go to edge
     if (max < xScale.invert(width)) {
+      // data point of intersection with top/bottom
       const y = data[data.length - 1].y > 0 ? yScale.invert(0) : yScale.invert(height)
       let d = findIntersections(f, y, data[data.length - 1].x, max - 0.00001, 0.01);
-      if (d) data.push({x: d, y: f(d)});
+      if (d) data.push({x: d, y: f(d)}); // add point to end of data
     }
-    
   }
-  
 
   const line = d3.line()
     .x(d => xScale(d.x))
     .y(d => yScale(d.y))
 
+  // arrow markers for graph
   const markerSize = 5;
   const name = 'function-arrow'
   createArrowMarker(name, svg, markerSize, color, classes)
 
+  // create graph
   const id = uuidv4();
   svg.append('path')
     .datum(data)
@@ -82,15 +87,25 @@ const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, class
     .attr('marker-start', leftArrow ? `url(#${name})` : null)
     .attr('d', line);
 
-  svg.select(".tick-text").raise();
+  svg.select(".tick-text").raise(); // raise tickmarks on top
 
   return { data, id };
 }
 
+/**
+ * 
+ * @param {function} func for which to find intersections
+ * @param {number} y of intersection point
+ * @param {number} xMin of domain
+ * @param {number} xMax of domain
+ * @param {number} tolerance for how far away ans can be from y
+ * @returns 
+ */
 function findIntersections(func, y, xMin, xMax, tolerance) {
   var a = xMin;
   var b = xMax;
   
+  // binary search
   while (b - a > 0.00001) {
     var xMid = (a + b) / 2;
     var yMid = func(xMid);
@@ -102,18 +117,23 @@ function findIntersections(func, y, xMin, xMax, tolerance) {
       return xMid;
     }
     
+    // update based on graph behavior
     if (func(xMin) < func(xMax) && yMid < y) {
+      // increasing graph, y too low
       a = xMid;
     } else if (func(xMin) < func(xMax)) {
+      // increasing graph, y too high
       b = xMid;
     } else if (func(xMin) > func(xMax) && yMid < y) {
+      // decreasing graph, y too low
       b = xMid;
     } else if (func(xMin) > func(xMax)) {
+      // decreasing graph, y too high
       a = xMid;
     }
   }
 
-  return (a + b) / 2;
+  return (a + b) / 2; // nothing found so get midpoint
 }
 
 /**
@@ -124,18 +144,19 @@ function findIntersections(func, y, xMin, xMax, tolerance) {
  * @param {int} height of svg
  * @param {scale} xScale of svg
  * @param {scale} yScale of svg
- * 
  * @returns {Array} array of all data and ids of function graphs
  */
 const createMultipleFunctionsGraph = (svg, functions, width, height, xScale, yScale) => {
   const dataArray = [];
 
   for (let i = 0; i < functions.length; i++) {
+    // add graph for each function
     const func = functions[i];
     const { data, id } = createFunctionGraph(svg, func.f, width, height, null, xScale, yScale, func.classes, func.min, func.max, func.leftArrow, func.rightArrow, func.type);
 
-    dataArray[dataArray.length] = { data, id };
+    dataArray[dataArray.length] = { data, id }; // save return values
 
+    // append circles as holes/points if needed
     if (func.leftCircle) {
       svg
         .append('circle')
@@ -284,12 +305,7 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
     .attr('marker-end', `url(#${name})`)
     .attr('marker-start', `url(#${name})`);
 
-  return {
-    width: width,
-    height: height,
-    xScale: xScale,
-    yScale: yScale
-  }
+  return { width, height, xScale, yScale }
 };
 
 /**
@@ -326,10 +342,12 @@ function createArrowMarker(name, svg, size, color, classes) {
  * @param {string} classes custom classes o add to generated arrow
  */
 function createLimitLine(svg, line, x1, x2, y1, y2, name, classes) {
+  // check if arrow marker exists
   if (d3.select(`#${name}`).empty()) {
     createArrowMarker(name, svg, 4, null, classes)
   }
 
+  // add limit line
   svg.append('path')
     .datum([{ x: x1, y: y1 }, { x: x2, y: y2 }])
     .attr('class', 'stroke ' + classes)
@@ -377,7 +395,7 @@ function findSlope(points) {
 /**
  * Finds offsets of lines/text from function line
  * @param {object} points object representing points from which line needs to be offset
- * @param {number} yval yval of point
+ * @param {number} axisOffset how much line should be offset
  * @returns x, y representing by how much lines need to move in each direction
  */
 function findOffsets(points, axisOffset) {
@@ -402,6 +420,7 @@ function findOffsets(points, axisOffset) {
  * @param {function} line function that creates 'd' attribute in svg path
  * @param {String} fColor color of function
  * @param {boolean} right true if the limit line to be drawn should be from the right, false if left
+ * @param {String} markerName custom name of arrow marker
  * @returns points of the line in svg scale
  */
 
@@ -430,7 +449,5 @@ function createFunctionLimitLine(svg, functionLine, pathLength, xScale, yScale, 
 
   return { closePoint, farPoint }
 }
-
-
 
 export { createFunctionGraph, createBlankCanvas, createArrowMarker, generateFunctionData, createLimitLine, findHypotenusefromSlope, convertScale, findSlope, findOffsets, createMultipleFunctionsGraph, createFunctionLimitLine }

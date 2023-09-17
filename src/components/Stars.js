@@ -1,3 +1,15 @@
+/**
+ * Stars component
+ * This renders the number of stars for the user for the topic
+ * It also renders the info icon, with a popup on hover that shows more info about the stars
+ * Parameters: 
+ *  - star_goal: user's goal for next star to get to
+ *  - star_2: array of dates of review for star_2
+ *  - star_3: array of dates of review for star_3
+ *  - streak: streak to achieve to get the first star
+ *  - current_streak: user's best streak
+ */
+
 import bronzeStar from '../svgs/bronze-star.svg'
 import silverStar from '../svgs/silver-star.svg'
 import goldStar from '../svgs/gold-star.svg'
@@ -10,8 +22,8 @@ import { UserContext } from '../App'
 
 export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => {
   const { user } = useContext(UserContext);
-  const [visible, setVisible] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [visible, setVisible] = useState(false); // visibility of popup
+  const [position, setPosition] = useState({ x: 0, y: 0 }); // position of popup
 
   const handleMouseEnter = (e) => {
     setVisible(true);
@@ -28,6 +40,7 @@ export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => 
     top: `${position.y}px`,
   };
 
+  // vars to keep track of number of reviews left
   const num2ReviewsLeft = star_goal && star_2 ? star_goal > 2 ? 0 : Math.min((3 - star_2.length) + 1, 3) : 0;
   const num3ReviewsLeft = star_goal && star_3 ? star_goal > 3 ? 0 : Math.min((2 - star_3.length) + 1, 2) : 0;
 
@@ -35,6 +48,7 @@ export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => 
     <>
       {user ?
         <>
+          {/* Stars */}
           <span className="flex horizontal center progress">
             {star_goal > 1 ? <img className="star" src={bronzeStar} alt="star" /> : null}
             {star_goal === 1 ? <img className="opaque small-star" src={bronzeStar} alt="star" /> : null}
@@ -44,6 +58,7 @@ export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => 
             {star_goal === 3 ? <img className="opaque small-star" src={goldStar} alt="star" /> : null}
             <img className='info-svg' src={info} alt='info' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
           </span>
+          {/* Info Section */}
           <div style={infoStyle} className='stars-info flex vertical medium-gap'>
             <span>
               <img className="star" src={bronzeStar} alt='star' />

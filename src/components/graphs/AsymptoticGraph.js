@@ -1,3 +1,11 @@
+/**
+ * Creates asymptotic graph with dashed lines at asymptotes
+ * Parameters:
+ *  - functions: functions to graph
+ *  - size: size of graph
+ *  - x: array of x values of asymptotes
+ *  - y: array of y values of asymptotes
+ */
 import { useEffect, useRef } from "react"
 import { createBlankCanvas, createMultipleFunctionsGraph } from "../../helpers/graph-helpers";
 import '../../styles/graph.css'
@@ -29,7 +37,6 @@ const AsymptoticGraph = ({ functions, size, x, y }) => {
           .attr('d', line)
       }
 
-
       for (let i = 0; i < x.length; i++) {
         svg.append('path')
           .datum([{ x: x[i], y: yScale.invert(0) }, { x: x[i], y: yScale.invert(height) }])
@@ -38,9 +45,7 @@ const AsymptoticGraph = ({ functions, size, x, y }) => {
           .style('stroke-dasharray', 2)
           .attr('d', line)
       }
-
     }
-
   }, [functions, size, x, y])
 
   return (

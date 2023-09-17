@@ -1,15 +1,16 @@
+/**
+ * Logout page
+ */
 import { useNavigate } from "react-router-dom";
-
 import { UserContext } from "../../App";
 import { useContext } from "react";
 
 export const Logout = () => {
   const { setUser } = useContext(UserContext);
   const nav = useNavigate();
-  const goHomeHandler = () => {
-    nav('/');
-  }
-
+  const goHomeHandler = () => nav('/');
+  
+  // resets variables to log user out
   const logoutHandler = () => {
     setUser(null);
     localStorage.setItem("user", null);

@@ -26,7 +26,6 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
 /**
  * generates a random number with exclusions
  * @param {number} min minimum value of random number
@@ -55,54 +54,22 @@ function getRandomWithExclusions(min, max, exclusions) {
  * @param {string} expression polynomial to compress
  * @param {number} max max (and min) value of local min/max
  * @param {array} values other values that should be within [-max, max]
- * @param {number} constant number to further compress polynomial by
  * @returns math.js node representing scaled polynomial
  */
 function compressPolynomial(expression, max, values) {
   const node = math.parse(expression);
 
-  /// MAKES FLAT GRAPH ////////
+  /// Makes all values within expression fit in graph range
+  // find most extreme value
   let maxabs = Math.max(max, ...values);
   for (let i = -11; i < 11; i += 0.01) {
     maxabs = Math.max(Math.abs(node.evaluate({ x: i })), maxabs);
   }
 
+  // scale to make graph fit
   const scale = Math.ceil(maxabs / max);
   const scaledNode = math.parse(`(1/${scale})(${expression})`);
   return scaledNode;
-
-  /*
-  /////////////// ONLY FITS LOCAL MINS/MAXS WITHIN RANGE /////////////////////
-  const vars = ['x'];
-  let n = build(`(${expression})`, ['x']);
-
-  // find zeros of the derivative for local mins/maxs
-  const deriv = derivative(n, 'x', vars);
-  const simplified = simplify(deriv, vars);
-
-  // extract and format coefficients
-  let { coeffs } = extractCoeffs(simplified);
-  if (coeffs.length === 1) return node;
-  coeffs = coeffs.reverse();
-  for (let i = coeffs.length; i < 4; i++) coeffs.push(0);
-
-  // find real roots
-  const roots = math.polynomialRoot(...coeffs);
-  const realRoots = roots.filter((r) => math.typeOf(r) !== 'Complex')
-
-  // find min/max value at local mins/maxs of function
-  let maxabs = Math.max(max, ...values);
-  for (let i = 0; i < realRoots.length; i++) {
-    maxabs = Math.max(Math.abs(node.evaluate({ x: realRoots[i] })), maxabs);
-  }
-
-  // find scale factor for function and modify
-  const scale = Math.ceil(maxabs / max);
-  const scaledNode = math.parse(`(1/${scale * constant})(${expression})`);
-  return scaledNode;
-  */
-
-
 }
 
 /**
@@ -114,20 +81,22 @@ function modifyForWholeNumber(node) {
   const f = (x) => node.evaluate({ x });
   let data = generateFunctionData(f, -11, 11);
 
-  // filter out values where y is > 8 or < -8
+  // filter out values where y is > 7 or < -7, x is > 8 or < -8
   data = data.filter(d => Math.abs(d.y) < 7 && Math.abs(d.x) < 8);
 
+  // random x value in domain
   const minx = Math.ceil(data[0].x);
   const maxx = Math.floor(data[data.length - 1].x);
 
   const x = getRandomWithExclusions(minx, maxx, [-1, 0, 1]);
   const y = f(x);
 
-  let move = (Math.ceil(y) === 0 ? Math.floor(y) : Math.ceil(y)) - y;
+  // find constant by which to move graph up or down to get integer y
+  let move;
   if (Math.round(y) < 0) {
-    move = Math.min(-2, Math.round(y)) - y;
+    move = Math.min(-2, Math.round(y)) - y; // y must be <= -2
   } else {
-    move = Math.max(2, Math.round(y)) - y;
+    move = Math.max(2, Math.round(y)) - y; // int y must be >= 2
   }
 
   let expression = `(${node.toString()} + ${move})`
@@ -138,7 +107,7 @@ function modifyForWholeNumber(node) {
 /**
  * Generates ready to graph random polynomial function
  * @param {number} degree degree of polynomial to be generated
- * @returns ready to graph polynomial function
+ * @returns ready to graph polynomial function with integer point at x
  */
 function generateRandomPolynomial(degree) {
   const expression = getPolynomialFunction(degree);
@@ -181,13 +150,17 @@ function getPolynomialFunction(degree) {
  * @returns math.js node representing polynomial expression
  */
 function generateRandomPolynomialWithPoint(degree, x, y) {
+  // generate polynomial
   let expression = getPolynomialFunction(degree);
   let node = math.parse(expression);
+
+  // initialize variables
   let max = 9;
   node = compressPolynomial(node.toString(), max, []);
   let yval = node.evaluate({ x });
   let move = y - yval;
 
+  // compress polynomial enough that constant by which graph moves up or down is still within [-10, 10]
   while (Math.abs(move) > 10 - max) {
     max--;
     node = compressPolynomial(node.toString(), max, [Math.abs(yval)]);
@@ -210,6 +183,8 @@ function fitPointsToQuadratic(points) {
     console.error('At least 3 points are required for quadratic regression.');
     return null;
   }
+
+  // get points
   const x1 = points[0].x;
   const y1 = points[0].y;
   const x2 = points[1].x;
@@ -217,7 +192,7 @@ function fitPointsToQuadratic(points) {
   const x3 = points[2].x;
   const y3 = points[2].y;
 
-  
+  // formula
   const det = (x1 - x2) * (x1 - x3) * (x2 - x3);
   const a = ((x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / det);
   const b = ((x3 * x3 * (y1 - y2) + x2 * x2 * (y3 - y1) + x1 * x1 * (y2 - y3)) / det);

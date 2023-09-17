@@ -1,3 +1,7 @@
+/**
+ * Register page
+ * Renders all fields for user to register
+ */
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom";
@@ -5,15 +9,14 @@ import { ApiContext } from "../../App";
 
 export const Register = () => {
   const nav = useNavigate();
-  const [registered, setRegistered] = useState(false);
-  const [formData, setFormData] = useState({});
-  const [message, setMessage] = useState(null);
+  const [registered, setRegistered] = useState(false); // registration complete
+  const [formData, setFormData] = useState({}); // user inputs
+  const [message, setMessage] = useState(null); // error messages
   const apiLink = useContext(ApiContext)
 
-  const goHome = () => {
-    nav('/')
-  }
+  const goHome = () => nav('/')
 
+  // updates user inputs
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -21,9 +24,11 @@ export const Register = () => {
     })
   }
 
+  // submits form
   const formSubmitHandler = async (e) => {
     e.preventDefault();
     try {
+      // create http req
       const res = await fetch(`${apiLink}/sign-up`, {
         method: 'post',
         body: JSON.stringify(formData),
@@ -32,19 +37,20 @@ export const Register = () => {
         }
       })
 
+      // result
       const json = await res.json();
       if (!json.success) {
         setMessage(json.message);
       } else {
         setRegistered(true);
       }
-
     } catch (err) {
     }
   }
 
   return (
     <div className="register flex vertical center medium-gap">
+      {/* Form */}
       <h1>Register</h1>
       {registered ? null :
         <form onSubmit={formSubmitHandler} className="flex vertical center medium-gap">
@@ -98,6 +104,7 @@ export const Register = () => {
         </form>
       }
       <div>
+        {/* link to login or error messages */}
         {registered ?
           <div>
             Registration successful!

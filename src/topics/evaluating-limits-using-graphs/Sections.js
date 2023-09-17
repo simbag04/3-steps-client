@@ -4,6 +4,7 @@ import * as math from 'mathjs'
 import FunctionGraph from "../../components/graphs/FunctionGraph"
 import AsymptoticGraph from "../../components/graphs/AsymptoticGraph"
 
+// functions to be used in sections
 const n1 = math.parse("-x")
 const n2 = math.parse("0.5x + 4")
 const functions = [
@@ -81,6 +82,7 @@ const oscillatingFunctions = [
   }
 ]
 
+// sections
 const Section1 = () => {
   return (
     <>

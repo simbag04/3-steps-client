@@ -1,6 +1,8 @@
+/**
+ * Navbar top component
+ */
 import { Outlet, useNavigate } from "react-router-dom"
 import '../styles/navbar.css'
-
 import { UserContext } from "../App";
 import { useContext } from "react";
 
@@ -8,17 +10,10 @@ export const Navbar = () => {
   const nav = useNavigate();
   const { user } = useContext(UserContext);
 
-  const login = () => {
-    nav('/login');
-  }
-
-  const logout = () => {
-    nav('/logout')
-  }
-
-  const register = () => {
-    nav('/register')
-  }
+  // nav links
+  const login = () => nav('/login');
+  const logout = () => nav('/logout');
+  const register = () => nav('/register')
 
   return (
     <>

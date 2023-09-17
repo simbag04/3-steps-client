@@ -1,3 +1,9 @@
+/**
+ * Creates jump graph with limit lines at the jump
+ * Parameters:
+ *  - functions: functions to graph
+ *  - size: size of graph
+ */
 import { useEffect, useRef } from "react"
 import { createBlankCanvas, createFunctionLimitLine, createMultipleFunctionsGraph } from "../../helpers/graph-helpers";
 import '../../styles/graph.css'
@@ -18,11 +24,13 @@ const JumpGraph = ({ functions, size }) => {
 
       const { dataArray } = createMultipleFunctionsGraph(svg, functions, width, height, xScale, yScale)
 
+      // select function lines
       let f1 = d3.select(`[data-uuid="${dataArray[0].id}"]`).node();
       let pathLength1 = f1.getTotalLength();
 
       let f2 = d3.select(`[data-uuid="${dataArray[1].id}"]`).node();
 
+      // create limit lines
       createFunctionLimitLine(svg, f1, pathLength1, xScale, yScale, line, "c2", false, "right")
       createFunctionLimitLine(svg, f2, 0, xScale, yScale, line, "c3", true, "left")
       
