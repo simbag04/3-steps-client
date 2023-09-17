@@ -7,6 +7,7 @@
  *  - name: url name of topic
  *  - title: topic name
  *  - setShowMastered: state for whether this page should be shown
+ *  - stars: info about current stars for user for topic
  */
 import { useNavigate } from "react-router-dom"
 import { Stars } from "../Stars";
@@ -26,6 +27,7 @@ export const Mastered = ({ cname, uname, name, title, setShowMastered, stars }) 
 
   return (
     <div className="flex vertical center large-gap">
+      {/* title with stars */}
       <span className="flex horizontal center small-gap">
         <h1>{title}</h1>
         <Stars star_goal={stars.star_goal} star_2={stars.star_2} star_3={stars.star_3} streak={stars.streak} current_streak={stars.current_streak} />
