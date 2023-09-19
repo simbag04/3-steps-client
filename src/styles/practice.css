@@ -1,21 +1,23 @@
 .practice-section {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-content: center;
-  align-items: center;
+  display: flex;
   justify-content: center;
-  justify-items: center;
+  align-items: center;
   gap: var(--huge-gap);
 }
 
 .stats-section {
   max-width: 200px;
+  min-width: 170px;
 }
 
 .stats {
   background-color: var(--button-color);
   padding: var(--padding);
   border-radius: var(--border-radius);
+}
+
+.question {
+  max-width: max-content;
 }
 
 .stats button {
@@ -28,6 +30,18 @@
   box-shadow: 0 0 0 2px lightgray;
   border-radius: var(--border-radius);
   z-index: 100;
+}
+
+.options {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--medium-gap);
+}
+
+.options.wrap {
+  flex-direction: column;
 }
 
 input[type="radio"] {

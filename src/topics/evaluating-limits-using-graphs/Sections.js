@@ -3,6 +3,7 @@ import JumpGraph from "../../components/graphs/JumpGraph"
 import * as math from 'mathjs'
 import FunctionGraph from "../../components/graphs/FunctionGraph"
 import AsymptoticGraph from "../../components/graphs/AsymptoticGraph"
+import { GRAPH_SIZE } from "../../helpers/constants"
 
 // functions to be used in sections
 const n1 = math.parse("-x")
@@ -91,7 +92,7 @@ const Section1 = () => {
       </div>
       <div className="flex vertical center">
         <h3>Graph of <Latex expression={`f(x)`} inline={true} /></h3>
-        <FunctionGraph functions={functions} size={400} />
+        <FunctionGraph functions={functions} size={GRAPH_SIZE} />
       </div>
     </>
   )
@@ -130,7 +131,7 @@ const Section5 = () => {
 
       <div className="flex vertical center">
         <h3>Graph of <Latex expression={`f(x)`} inline={true} /></h3>
-        <JumpGraph functions={functions} size={400} />
+        <JumpGraph functions={functions} size={GRAPH_SIZE} />
       </div>
     </>
   )
@@ -160,7 +161,7 @@ const Section8 = () => {
       </div>
       <div className="flex vertical center">
         <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
-        <AsymptoticGraph functions={asymptoticFunctions} size={400} x={[1]} y={[1]} />
+        <AsymptoticGraph functions={asymptoticFunctions} size={GRAPH_SIZE} x={[1]} y={[1]} />
       </div>
     </>
   )
@@ -182,7 +183,7 @@ const Section10 = () => {
       </div>
       <div className="flex vertical center">
         <h3>Graph of <Latex expression={`h(x)`} inline={true} /></h3>
-        <FunctionGraph functions={oscillatingFunctions} size={400} />
+        <FunctionGraph functions={oscillatingFunctions} size={GRAPH_SIZE} />
       </div>
     </>
   )

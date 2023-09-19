@@ -2,11 +2,13 @@ import { COLORS } from "../../helpers/constants";
 import { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, generateRandomPolynomialWithPoint, shuffleArray } from "../../helpers/functions";
 import Latex from "../../helpers/Latex";
 import LimitExampleGraph from "../../components/graphs/LimitExampleGraph";
+import { GRAPH_SIZE } from "../../helpers/constants";
 
 /**
  * generates random question that asks users to select the limit that best matches the graph
  * @returns title, question, options for question type
  */
+
 function graphToLimit() {
   // title for question
   const title = <h2>Which limit best represents the graph?</h2>
@@ -29,7 +31,7 @@ function graphToLimit() {
   const question = <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression={` g(x) `} inline={true}></Latex></h3>
     <LimitExampleGraph f={f} xval={x} y={y}
-      fColor={"f"} xColor={"x"} yColor={"y"} size={400} />
+      fColor={"f"} xColor={"x"} yColor={"y"} size={GRAPH_SIZE} />
   </div>
 
   // generate options
@@ -105,7 +107,7 @@ function limitToGraph() {
   const o1 = {
     component: <div className="flex vertical center medium-gap">
       <h3>Graph of <Latex expression={` g(x) `} inline={true} /></h3>
-      <LimitExampleGraph f={f1} xval={x1} y={y1} fColor={"f"} xColor={"x"} yColor={"y"} size={400} />
+      <LimitExampleGraph f={f1} xval={x1} y={y1} fColor={"f"} xColor={"x"} yColor={"y"} size={GRAPH_SIZE} />
     </div>,
     correct: true
   }
@@ -128,7 +130,7 @@ function limitToGraph() {
   const o2 = {
     component: <div className="flex vertical center medium-gap">
       <h3>Graph of <Latex expression={` g(x) `} inline={true} /></h3>
-      <LimitExampleGraph f={f2} xval={x2} y={y2} fColor={"f"} xColor={"x"} yColor={"y"} size={400} />
+      <LimitExampleGraph f={f2} xval={x2} y={y2} fColor={"f"} xColor={"x"} yColor={"y"} size={GRAPH_SIZE} />
     </div>,
     correct: false
   }
@@ -154,7 +156,7 @@ function limitToGraph() {
 
 function generateRandomQuestion() {
   // determine type of question to generate
-  const rand = getRandomNumber(0, 1);
+  const rand = 1;
   let q = null;
   if (rand === 0) {
     q = graphToLimit();

@@ -14,7 +14,7 @@ import bronzeStar from '../svgs/bronze-star.svg'
 import silverStar from '../svgs/silver-star.svg'
 import goldStar from '../svgs/gold-star.svg'
 import info from '../svgs/info-icon.svg'
-import { useContext, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import '../styles/stars.css'
 import check from '../svgs/check.svg'
 import cross from '../svgs/cross.svg'
@@ -24,10 +24,13 @@ export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => 
   const { user } = useContext(UserContext);
   const [visible, setVisible] = useState(false); // visibility of popup
   const [position, setPosition] = useState({ x: 0, y: 0 }); // position of popup
+  const infoRef = useRef(null);
 
-  const handleMouseEnter = (e) => {
-    setVisible(true);
-    setPosition({ x: e.pageX, y: e.pageY });
+  const handleMouseEnter = () => {
+    if (infoRef.current) {
+      setVisible(true);
+      setPosition({ x: infoRef.current.offsetLeft, y: infoRef.current.offsetTop });
+    }
   };
 
   const handleMouseLeave = () => {
@@ -36,8 +39,8 @@ export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => 
 
   const infoStyle = {
     display: visible ? 'flex' : 'none',
-    left: `${position.x + 10}px`, // Adjust the distance from the cursor
-    top: `${position.y}px`,
+    right: `${window.outerWidth - position.x - 100}px`, // Adjust the distance from the cursor
+    top: `${position.y + 25}px`,
   };
 
   // vars to keep track of number of reviews left
@@ -56,7 +59,7 @@ export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => 
             {star_goal === 2 ? <img className="opaque small-star" src={silverStar} alt="star" /> : null}
             {star_goal > 3 ? <img className="star" src={goldStar} alt="star" /> : null}
             {star_goal === 3 ? <img className="opaque small-star" src={goldStar} alt="star" /> : null}
-            <img className='info-svg' src={info} alt='info' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
+            <img className='info-svg' ref={infoRef} src={info} alt='info' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
           </span>
           {/* Info Section */}
           <div style={infoStyle} className='stars-info flex vertical medium-gap'>

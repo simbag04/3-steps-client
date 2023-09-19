@@ -10,6 +10,7 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
+import ResizeObserver from "resize-observer-polyfill";
 import '../../styles/practice.css'
 import { Stats } from "./Stats";
 import { Mastered } from "./Mastered";
@@ -34,6 +35,11 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
 
   const [textInput, setTextInput] = useState(""); // stores text input
 
+  const questionRef = useRef(null); // ref that stores question div
+  const [width, setWidth] = useState(0); // width of question
+  const [wrap, setWrap] = useState(""); // whether options should wrap
+  const [moveStatsDown, setMoveStatsDown] = useState("horizontal"); // whether stats should move down
+
   // dynamically import relevant topic question
   useEffect(() => {
     import(`../../topics/${name}/generate-question.js`)
@@ -45,6 +51,34 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
       })
     setShowHints(false);
   }, [name])
+
+  useEffect(() => {
+    const element = questionRef.current;
+    if (!element) return;
+  
+    const resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        if (entry.target === element) {
+          setWidth(entry.contentRect.width);
+        }
+      }
+    });
+  
+    resizeObserver.observe(element);
+  
+    return () => {
+      resizeObserver.unobserve(element);
+      resizeObserver.disconnect();
+    };
+  }, [questionRef]);
+
+  useEffect(() => {
+    if (width > 0.95 * window.outerWidth) {
+      setWrap("wrap");
+    } else if (width + 200 > window.innerWidth) {
+      setMoveStatsDown("vertical");
+    } 
+  }, [width])
 
   // generates new question and sets variable appropriately
   useEffect(() => {
@@ -89,7 +123,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
       {!showHints ?
         !showMastered ?
           <>
-            <span className="flex horizontal center small-gap">
+            <span className="flex vertical center text-center">
               {/* Title with stars */}
               <h1 className="title flex horizontal center small-gap">
                 <span>{title}: {titleWord}</span>
@@ -98,12 +132,12 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
             </span>
             {/* Beginning of Question */}
             {currQ && currQ.title}
-            <div className="practice-section">
-              <div className="question flex vertical center medium-gap">
+            <div className={"practice-section " + moveStatsDown}>
+              <div className="question flex vertical center medium-gap" ref={questionRef}>
                 {currQ && currQ.question}
                 {/* Multiple choice input */}
                 {currQ && currQ.type === 'mc' &&
-                  <div className="flex horizontal center medium-gap">
+                  <div className={`options ` + wrap}>
                     {currQ.input && currQ.input.map((option, index) => {
                       return (
                         <label key={index}
@@ -130,7 +164,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                 setShowHints={setShowHints} hintsUsed={hintsUsed} setHintsUsed={setHintsUsed} setTitleWord={setTitleWord}></Stats>
             </div>
           </> :
-          <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered} stars={stars}/>
+          <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered} stars={stars} />
         : currQ && currQ.hints &&
         <Hints currQ={currQ} setShowHints={setShowHints} hintsIndex={hintsIndex} setHintsIndex={setHintsIndex} />
       }

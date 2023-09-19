@@ -39,6 +39,10 @@ body {
   display: flex;
 }
 
+.wrap {
+  flex-wrap: wrap;
+}
+
 .vertical {
   flex-direction: column;
 }

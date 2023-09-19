@@ -2,7 +2,7 @@ import Latex from "../../helpers/Latex";
 import { fitPointsToQuadratic, generateRandomPolynomialWithPoint, getRandomNumber, getRandomWithExclusions } from "../../helpers/functions";
 import * as math from 'mathjs'
 import AsymptoticGraph from "../../components/graphs/AsymptoticGraph";
-import { COLORS } from "../../helpers/constants";
+import { COLORS, GRAPH_SIZE } from "../../helpers/constants";
 import FunctionGraph from "../../components/graphs/FunctionGraph";
 
 /**
@@ -57,7 +57,7 @@ function asymptoticGraphQuestion() {
 
   const question = <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
-    <AsymptoticGraph functions={functions} size={400} x={xValues} y={[verticalShift]} />
+    <AsymptoticGraph functions={functions} size={GRAPH_SIZE} x={xValues} y={[verticalShift]} />
   </div>
 
   const nextToInput = <span>
@@ -190,7 +190,7 @@ function jumpGraphQuestion() {
 
   const question = <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
-    <FunctionGraph functions={functions} size={400} />
+    <FunctionGraph functions={functions} size={GRAPH_SIZE} />
   </div>
 
   const signText = sign === 0 ? `^{-}` : sign === 1 ? `^{+}` : ``;
@@ -247,7 +247,7 @@ function oscillatingGraphQuestion() {
   // set all other question stuff
   const question = <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
-    <FunctionGraph functions={functions} size={400} />
+    <FunctionGraph functions={functions} size={GRAPH_SIZE} />
   </div>
 
   const ans = 'dne'

@@ -19,7 +19,7 @@ export const Navbar = () => {
     <>
       <span className="navbar flex horizontal center">
         <h1 className="logo">3 Steps</h1>
-        <span className="links flex horizontal center">
+        <span className="links flex center">
           {user ?
             <>
               <div>Welcome, {user.first_name} {user.last_name}! </div>

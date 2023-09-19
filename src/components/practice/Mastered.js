@@ -26,7 +26,7 @@ export const Mastered = ({ cname, uname, name, title, setShowMastered, stars }) 
   const topics = () => nav(`/${cname}/${uname}`)
 
   return (
-    <div className="flex vertical center large-gap">
+    <div className="flex vertical center large-gap text-center">
       {/* title with stars */}
       <span className="flex horizontal center small-gap">
         <h1>{title}</h1>

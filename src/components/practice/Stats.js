@@ -160,7 +160,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
             {/* Review text */}
             {reviewDatePassed >= 9 && dbEntry.next_star_goal === 4 ? 
             <div>Review within <strong>{14 - reviewDatePassed}</strong> days! Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div>
-            : reviewDatePassed && reviewDatePassed >= 0 ?
+            : reviewDatePassed >= 0 ?
               <div>Review Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div> :
               reviewDatePassed && <div>Next review: <strong>
                   {dbEntry && dbEntry.next_review_date && format_review_date(dbEntry.next_review_date.date)}

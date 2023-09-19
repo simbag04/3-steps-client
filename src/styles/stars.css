@@ -1,6 +1,6 @@
 .star {
-  min-width: 30px;
-  min-height: 30px;
+  width: 30px;
+  height: auto;
 }
 
 .small-star {
@@ -20,7 +20,8 @@
   border-radius: var(--border-radius);
   position: absolute;
   z-index: 20;
-  width: 200px;
+  max-width: 200px;
+  min-width: 200px;
   text-align: center;
 }
 

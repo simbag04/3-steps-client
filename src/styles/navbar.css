@@ -11,4 +11,14 @@
 
 .links {
   gap: 10px;
+  flex-direction: row;
+}
+
+@media (max-width: 500px) {
+  .navbar {
+    padding: var(--padding);
+  }
+  .links {
+    flex-direction: column-reverse;
+  }
 }

@@ -22,7 +22,7 @@ const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor, size }) => {
 
   useEffect(() => {
     if (svgRef.current) {
-      const textSize = 12;
+      const textSize = 11;
       const graphSize = size;
       const { height, width, xScale, yScale } =
         createBlankCanvas(graphSize, graphSize, svgRef, textSize);

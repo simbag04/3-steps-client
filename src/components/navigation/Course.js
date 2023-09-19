@@ -38,7 +38,7 @@ export const Course = () => {
   }, [cname, apiLink, user])
 
   return (
-    <div className="flex vertical center large-gap">
+    <div className="flex vertical center large-gap text-center">
       <h1>{title}</h1>
       <div className="navigation unit">
         {/* Links to each unit with appropriate formatting */}

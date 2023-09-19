@@ -1,6 +1,7 @@
 import LimitExampleGraph from "../../components/graphs/LimitExampleGraph"
 import Latex from '../../helpers/Latex'
 import * as math from 'mathjs'
+import { GRAPH_SIZE } from "../../helpers/constants"
 
 /**
  * All content for this topic's learn section
@@ -75,7 +76,7 @@ const Section5 = () => {
       </div>
       <div className='flex vertical center'>
         <h3>Graph of <Latex expression={`${node.toTex()}`} inline={true} /></h3>
-        <LimitExampleGraph f={f} xval={xval} y={f(xval)} fColor={fColor} xColor={xColor} yColor={yColor} size={400} />
+        <LimitExampleGraph f={f} xval={xval} y={f(xval)} fColor={fColor} xColor={xColor} yColor={yColor} size={GRAPH_SIZE} />
       </div>
     </>
   )
@@ -107,7 +108,7 @@ const Section7 = () => {
       } inline={true} /></div>
       <div className='flex vertical center'>
         <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
-        <LimitExampleGraph f={f} xval={xval} y={6} fColor={fColor} xColor={xColor} yColor={yColor} size={400} />
+        <LimitExampleGraph f={f} xval={xval} y={6} fColor={fColor} xColor={xColor} yColor={yColor} size={GRAPH_SIZE} />
       </div>
     </>
   )
