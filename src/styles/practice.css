@@ -5,15 +5,15 @@
   gap: var(--huge-gap);
 }
 
-.stats-section {
-  max-width: 200px;
-  min-width: 170px;
-}
-
 .stats {
   background-color: var(--button-color);
   padding: var(--padding);
   border-radius: var(--border-radius);
+}
+
+.stats-question-info {
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .question {
@@ -29,7 +29,7 @@
   padding: 10px;
   box-shadow: 0 0 0 2px lightgray;
   border-radius: var(--border-radius);
-  z-index: 100;
+  z-index: 15;
 }
 
 .options {

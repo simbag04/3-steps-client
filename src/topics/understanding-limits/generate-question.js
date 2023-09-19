@@ -156,7 +156,7 @@ function limitToGraph() {
 
 function generateRandomQuestion() {
   // determine type of question to generate
-  const rand = 1;
+  const rand = getRandomNumber(0, 1);
   let q = null;
   if (rand === 0) {
     q = graphToLimit();

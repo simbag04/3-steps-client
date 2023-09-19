@@ -39,6 +39,8 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [width, setWidth] = useState(0); // width of question
   const [wrap, setWrap] = useState(""); // whether options should wrap
   const [moveStatsDown, setMoveStatsDown] = useState("horizontal"); // whether stats should move down
+  const [windowWidth, setWindowWidth] = useState(window.outerWidth); // width of window
+  const originalWidthRef = useRef(null);
 
   // dynamically import relevant topic question
   useEffect(() => {
@@ -52,33 +54,63 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     setShowHints(false);
   }, [name])
 
+  
+  // Create a function to handle the resize event
+  const handleResize = () => {
+    console.log("here")
+    setWindowWidth(window.outerWidth);
+  };
+
+  // Use useEffect to add and remove the resize event listener
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  
+
   useEffect(() => {
     const element = questionRef.current;
     if (!element) return;
-  
+
     const resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
         if (entry.target === element) {
+          if (wrap === "") {
+            originalWidthRef.current = entry.contentRect.width;
+          }
           setWidth(entry.contentRect.width);
         }
       }
     });
-  
+
     resizeObserver.observe(element);
-  
+
     return () => {
       resizeObserver.unobserve(element);
       resizeObserver.disconnect();
     };
-  }, [questionRef]);
+  }, [questionRef, windowWidth, wrap]);
 
   useEffect(() => {
-    if (width > 0.95 * window.outerWidth) {
+    console.log(windowWidth)
+    console.log(width)
+    console.log(originalWidthRef)
+    if (windowWidth > 0 && width > 0.95 * windowWidth) { 
       setWrap("wrap");
-    } else if (width + 200 > window.innerWidth) {
+    } else if (windowWidth > 0 && width + 300 > 0.95 * windowWidth) {
       setMoveStatsDown("vertical");
+    } else if (wrap === "wrap" && originalWidthRef && originalWidthRef.current < 0.95 * windowWidth) {
+      setWrap("")
+    } else if (moveStatsDown === "vertical") {
+      if (wrap === "" && originalWidthRef.current + 300 < 0.95 * windowWidth) {
+        setMoveStatsDown("horizontal")
+      } else if (wrap === "wrap" && width + 300 < 0.95 * windowWidth) {
+        setMoveStatsDown("horizontal")
+      }
     } 
-  }, [width])
+  }, [width, windowWidth, moveStatsDown, wrap])
 
   // generates new question and sets variable appropriately
   useEffect(() => {
@@ -119,7 +151,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   }, [goToNext])
 
   return (
-    <div className="flex vertical center medium-gap practice">
+    <div className="flex vertical center medium-gap practice text-center">
       {!showHints ?
         !showMastered ?
           <>
@@ -161,7 +193,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
               {/* Stats box */}
               <Stats cname={cname} uname={uname} name={name} correctRef={correctRef}
                 goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered} setStars={setStars}
-                setShowHints={setShowHints} hintsUsed={hintsUsed} setHintsUsed={setHintsUsed} setTitleWord={setTitleWord}></Stats>
+                setShowHints={setShowHints} hintsUsed={hintsUsed} setHintsUsed={setHintsUsed} setTitleWord={setTitleWord} moveStatsDown={moveStatsDown}></Stats>
             </div>
           </> :
           <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered} stars={stars} />

@@ -14,6 +14,7 @@
  *  - setShowHints: state that shows "Hints" page when true
  *  - hintsUsed/setHintsUsed: state that represents what hint the user is currently on
  *  - setTitleWord: state that represents "Practice" or "Review" in title
+ *  - moveStatsDown: whether the stats is below the question, in which case it should be styled horizontally
  */
 import { useState, useContext, useEffect, useCallback } from "react";
 import { UserContext } from "../../App";
@@ -21,7 +22,7 @@ import { ApiContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { format_review_date, review_date_passed } from "../../helpers/format-helpers";
 
-export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed, setTitleWord }) => {
+export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed, setTitleWord, moveStatsDown }) => {
   const [text, setText] = useState(""); // feedback text, such as "Incorrect"
   const [feedback, setFeedback] = useState(""); // added to feedback element classes for styling
   const [dbEntry, setDbEntry] = useState({}); // entry for this user for this topic in DB
@@ -144,42 +145,52 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
 
   const login = () => nav('/login');
   const register = () => nav('/register');
+  const style = {
+    width: moveStatsDown === "horizontal" ? "200px" : `${Math.min(window.outerWidth * 0.8, 350)}px`
+  }
 
   return (
     <div className="stats-section flex vertical center medium-gap text-center">
-      <div className="stats flex vertical center medium-gap">
+      <div style={style} className="stats flex vertical center medium-gap">
         <h2>Progress</h2>
-        {user ?
-          <>
-            {/* General user stats */}
-            <div>Streak: {dbEntry.current_streak}</div>
-            <div>Best Streak: {dbEntry.best_streak}</div>
-            <div>Problems correct: {dbEntry.problems_correct}</div>
-            <div>Problems attempted: {dbEntry.problems_attempted}</div>
+        <div className={`stats-content flex center medium-gap vertical`}>
+          <div className={`stats-question-info flex ${moveStatsDown === "horizontal" ? "vertical" : "horizontal"} center small-gap`}>
+            {user ?
+              <>
+                {/* General user stats */}
+                <div>Streak: <strong>{dbEntry.current_streak}</strong></div>
+                <div>Best Streak: <strong>{dbEntry.best_streak}</strong></div>
+                <div>Problems correct: <strong>{dbEntry.problems_correct}</strong></div>
+                <div>Problems attempted: <strong>{dbEntry.problems_attempted}</strong></div>
 
-            {/* Review text */}
-            {reviewDatePassed >= 9 && dbEntry.next_star_goal === 4 ? 
-            <div>Review within <strong>{14 - reviewDatePassed}</strong> days! Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div>
-            : reviewDatePassed >= 0 ?
-              <div>Review Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div> :
-              reviewDatePassed && <div>Next review: <strong>
-                  {dbEntry && dbEntry.next_review_date && format_review_date(dbEntry.next_review_date.date)}
-                </strong>
-              </div>}
-          </> :
-          <>
-            {/* No stats shown if user is not logged in */}
-            <div>Please sign in to save your progress!</div>
-            <button onClick={login}>Login</button>
-            <button onClick={register}>Register</button>
-          </>
-        }
+                {/* Review text */}
+                {reviewDatePassed >= 9 && dbEntry.next_star_goal === 4 ?
+                  <div>Review within <strong>{14 - reviewDatePassed}</strong> days! Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div>
+                  : reviewDatePassed >= 0 ?
+                    <div>Review Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div> :
+                    reviewDatePassed && <div>Next review: <strong>
+                      {dbEntry && dbEntry.next_review_date && format_review_date(dbEntry.next_review_date.date)}
+                    </strong>
+                    </div>}
+              </> :
+              <>
+                {/* No stats shown if user is not logged in */}
+                <div>Please sign in to save your progress!</div>
+                <button onClick={login}>Login</button>
+                <button onClick={register}>Register</button>
+              </>
+            }
+          </div>
 
-        {/* Buttons shown based on state variables */}
-        <button onClick={backToTopicsButtonHandler}>Back to Topics</button>
-        {!goToNext && <button onClick={checkAnswer}>Check</button>}
-        {goToNext && <button onClick={nextQuestion}>Next</button>}
-        {!goToNext && <button onClick={showHints}>I Need a Hint!</button>}
+          <div className={`stats-buttons flex ${moveStatsDown === "horizontal" ? "vertical" : "horizontal"} small-gap`}>
+            {/* Buttons shown based on state variables */}
+            {!goToNext && <button onClick={checkAnswer}><strong>Check</strong></button>}
+            {goToNext && <button onClick={nextQuestion}><strong>Next</strong></button>}
+            {!goToNext && <button onClick={showHints}><strong>I Need a Hint!</strong></button>}
+            <button onClick={backToTopicsButtonHandler}><strong>Back to Topics</strong></button>
+          </div>
+
+        </div>
       </div>
       {/* Feedback text */}
       {text !== "" ?
