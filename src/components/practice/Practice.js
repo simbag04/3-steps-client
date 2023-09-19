@@ -40,7 +40,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [wrap, setWrap] = useState(""); // whether options should wrap
   const [moveStatsDown, setMoveStatsDown] = useState("horizontal"); // whether stats should move down
   const [windowWidth, setWindowWidth] = useState(window.outerWidth); // width of window
-  const originalWidthRef = useRef(null);
+  const originalWidthRef = useRef(null); // width of question without wrapping
 
   // dynamically import relevant topic question
   useEffect(() => {
@@ -54,22 +54,21 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     setShowHints(false);
   }, [name])
 
-  
-  // Create a function to handle the resize event
-  const handleResize = () => {
-    console.log("here")
-    setWindowWidth(window.outerWidth);
-  };
 
-  // Use useEffect to add and remove the resize event listener
+  // Window resize listener
   useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.outerWidth);
+    };
+
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  
 
+
+  // gets width of question
   useEffect(() => {
     const element = questionRef.current;
     if (!element) return;
@@ -93,11 +92,9 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     };
   }, [questionRef, windowWidth, wrap]);
 
+  // sets structure of question based on widths
   useEffect(() => {
-    console.log(windowWidth)
-    console.log(width)
-    console.log(originalWidthRef)
-    if (windowWidth > 0 && width > 0.95 * windowWidth) { 
+    if (windowWidth > 0 && width > 0.95 * windowWidth) {
       setWrap("wrap");
     } else if (windowWidth > 0 && width + 300 > 0.95 * windowWidth) {
       setMoveStatsDown("vertical");
@@ -109,7 +106,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
       } else if (wrap === "wrap" && width + 300 < 0.95 * windowWidth) {
         setMoveStatsDown("horizontal")
       }
-    } 
+    }
   }, [width, windowWidth, moveStatsDown, wrap])
 
   // generates new question and sets variable appropriately

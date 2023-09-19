@@ -1,6 +1,6 @@
 .topic {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-auto-flow: row;
   gap: var(--huge-gap);
   align-items: stretch;
@@ -37,6 +37,5 @@
 @media (max-width: 400px) {
   .topic {
     width: 90%;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }

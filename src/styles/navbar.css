@@ -3,6 +3,17 @@
   padding: var(--header-padding);
   background-color: var(--header-color);
   color: white;
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 50;
+}
+
+.navbar img {
+  width: 2em;
+  display: none;
 }
 
 .logo {
@@ -14,11 +25,32 @@
   flex-direction: row;
 }
 
-@media (max-width: 500px) {
+.dropdown {
+  position: fixed;
+  width: 100%;
+  opacity: 0;
+  background-color: var(--header-color);
+  padding: var(--padding) 0;
+  transform: translateY(-100%);
+  transition: transform 0.5s, opacity 0.5s;
+  color: white;
+}
+
+.dropdown.active {
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
   .navbar {
     padding: var(--padding);
   }
+
   .links {
-    flex-direction: column-reverse;
+    display: none;
+  }
+
+  .navbar img {
+    display: block;
   }
 }
