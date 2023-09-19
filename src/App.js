@@ -55,7 +55,7 @@ function App() {
 
   return (
     <div>
-      <ApiContext.Provider value={'http://localhost:5000'}>
+      <ApiContext.Provider value={'https://three-steps-api.onrender.com'}>
         <UserContext.Provider value={{ user, setUser }}>
           <HashRouter>
             <Routes>
