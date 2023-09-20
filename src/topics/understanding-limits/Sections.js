@@ -1,4 +1,4 @@
-import LimitExampleGraph from "../../components/graphs/LimitExampleGraph"
+import LimitExampleGraph from "../../components/content-components/graphs/LimitExampleGraph"
 import Latex from '../../helpers/Latex'
 import * as math from 'mathjs'
 import { GRAPH_SIZE } from "../../helpers/constants"

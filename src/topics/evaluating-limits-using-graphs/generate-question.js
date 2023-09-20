@@ -1,9 +1,9 @@
 import Latex from "../../helpers/Latex";
 import { fitPointsToQuadratic, generateRandomPolynomialWithPoint, getRandomNumber, getRandomWithExclusions } from "../../helpers/functions";
 import * as math from 'mathjs'
-import AsymptoticGraph from "../../components/graphs/AsymptoticGraph";
+import AsymptoticGraph from "../../components/content-components/graphs/AsymptoticGraph";
 import { COLORS, GRAPH_SIZE } from "../../helpers/constants";
-import FunctionGraph from "../../components/graphs/FunctionGraph";
+import FunctionGraph from "../../components/content-components/graphs/FunctionGraph";
 
 /**
  * generates random question that shows a graph with asymptote(s) and asks users to find the limit at an asymptotic point

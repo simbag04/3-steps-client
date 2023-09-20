@@ -1,8 +1,8 @@
 import Latex from "../../helpers/Latex"
-import JumpGraph from "../../components/graphs/JumpGraph"
+import JumpGraph from "../../components/content-components/graphs/JumpGraph"
 import * as math from 'mathjs'
-import FunctionGraph from "../../components/graphs/FunctionGraph"
-import AsymptoticGraph from "../../components/graphs/AsymptoticGraph"
+import FunctionGraph from "../../components/content-components/graphs/FunctionGraph"
+import AsymptoticGraph from "../../components/content-components/graphs/AsymptoticGraph"
 import { GRAPH_SIZE } from "../../helpers/constants"
 
 // functions to be used in sections

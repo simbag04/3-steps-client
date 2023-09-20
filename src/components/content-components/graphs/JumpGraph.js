@@ -5,8 +5,8 @@
  *  - size: size of graph
  */
 import { useEffect, useRef } from "react"
-import { createBlankCanvas, createFunctionLimitLine, createMultipleFunctionsGraph } from "../../helpers/graph-helpers";
-import '../../styles/graph.css'
+import { createBlankCanvas, createFunctionLimitLine, createMultipleFunctionsGraph } from "../../../helpers/graph-helpers";
+import '../../../styles/graph.css'
 import * as d3 from 'd3';
 
 const JumpGraph = ({ functions, size }) => {
