@@ -90,7 +90,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
       resizeObserver.unobserve(element);
       resizeObserver.disconnect();
     };
-  }, [questionRef, windowWidth, wrap]);
+  }, [questionRef, windowWidth, wrap, showHints, showMastered]);
 
   // sets structure of question based on widths
   useEffect(() => {
