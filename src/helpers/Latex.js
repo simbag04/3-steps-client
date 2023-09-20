@@ -9,10 +9,10 @@
 import 'katex/dist/katex.min.css';  // Import KaTeX styles
 import { BlockMath, InlineMath } from 'react-katex';
 
-const Latex = ({classes, expression, inline}) => {
+const Latex = ({classes, expression, display}) => {
   return (
     <span className={classes}>
-      {inline ? 
+      {!display ? 
       <InlineMath math={expression} /> :
       <BlockMath math={expression} /> }
     </span>

@@ -16,6 +16,7 @@ import { Stats } from "./Stats";
 import { Mastered } from "./Mastered";
 import { Hints } from "./Hints";
 import { Stars } from "../Stars";
+import { useWindowSize } from "../../helpers/useWindowSize";
 
 export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
@@ -39,7 +40,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [width, setWidth] = useState(0); // width of question
   const [wrap, setWrap] = useState(""); // whether options should wrap
   const [moveStatsDown, setMoveStatsDown] = useState("horizontal"); // whether stats should move down
-  const [windowWidth, setWindowWidth] = useState(window.outerWidth); // width of window
+  const windowWidth = useWindowSize()[0]; // width of window
   const originalWidthRef = useRef(null); // width of question without wrapping
 
   // dynamically import relevant topic question
@@ -53,20 +54,6 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
       })
     setShowHints(false);
   }, [name])
-
-
-  // Window resize listener
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.outerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
 
   // gets width of question
   useEffect(() => {
