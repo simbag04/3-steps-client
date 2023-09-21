@@ -81,11 +81,11 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
 
   // sets structure of question based on widths
   useEffect(() => {
-    if (windowWidth > 0 && width > 0.95 * windowWidth) {
+    if (windowWidth > 0 && width > 0.8 * windowWidth) {
       setWrap("wrap");
     } else if (windowWidth > 0 && width + 300 > 0.95 * windowWidth) {
       setMoveStatsDown("vertical");
-    } else if (wrap === "wrap" && originalWidthRef && originalWidthRef.current < 0.95 * windowWidth) {
+    } else if (wrap === "wrap" && originalWidthRef && originalWidthRef.current < 0.8 * windowWidth) {
       setWrap("")
     } else if (moveStatsDown === "vertical") {
       if (wrap === "" && originalWidthRef.current + 300 < 0.95 * windowWidth) {

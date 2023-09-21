@@ -34,10 +34,10 @@ tr.table-color-2 {
   border-collapse: collapse;
 }
 
-.function-table.horizontal tr, .function-table.horizontal th {
+.function-table tbody.horizontal tr, .function-table tbody.horizontal th {
   grid-template-rows: 1fr 1fr;
 }
 
-.function-table.vertical tr, .function-table.vertical th {
+.function-table tbody.vertical tr, .function-table tbody.vertical th {
   grid-template-columns: 1fr 1fr;
 }

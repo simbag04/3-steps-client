@@ -35,6 +35,10 @@ body {
   padding: 0;
 }
 
+.large-font {
+  font-size: 18px;
+}
+
 .flex {
   display: flex;
 }

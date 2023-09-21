@@ -1,5 +1,6 @@
 import * as math from 'mathjs'
 import { generateFunctionData } from './graph-helpers';
+const nerdamer = require("nerdamer/all.min")
 
 /**
  * Shuffles an array
@@ -196,6 +197,60 @@ function generateRandomPolynomialWithPoint(degree, x, y) {
 
 /**
  * 
+ * @param {String} polynomial string with a polynomial
+ * @returns polynomial sorted in order of degree
+ */
+function sortPolynomialByDegree (polynomial) {
+  // get coefficients with nerdamer
+  const coefficients = nerdamer.coeffs(polynomial, 'x');
+  let ans = "";
+  const coeffs = [];
+  coefficients.each(function(e) {
+    coeffs.push(nerdamer(e).toString());
+  })
+
+  // build expression
+  for (let i = coeffs.length - 1; i >= 0; i--) {
+    if (coeffs[i] === "0") continue; // skip 0 terms
+
+    // add "+" before positive coefficient terms
+    if (i !== coeffs.length - 1) {
+      if (Number(coeffs[i]) > 0) {
+        ans += "+"
+      } 
+    }
+
+    if (coeffs[i] !== "1") {
+      ans += coeffs[i];
+    }
+
+    if (i > 1) {
+      ans += `x^${i}`;
+    } else if (i === 1) {
+      ans += 'x';
+    }
+  }
+  return ans;
+}
+
+/**
+ * 
+ * @param {String} xval xvalue from which to create factor
+ * @returns String in form (x - p), where p is the xval
+ */
+function getStringFactorFromXval (xval) {
+  const x = Number(xval);
+  if (x < 0) {
+    return `(x + ${Math.abs(x)})`
+  } else if (x > 0) {
+    return `(x - ${x})`
+  } else {
+    return `(x)`
+  }
+}
+
+/**
+ * 
  * @param {Array} points array of 3 points ({x, y}) to fit quadratic to
  * @returns math.js node representing polynomial expression
  */
@@ -224,4 +279,4 @@ function fitPointsToQuadratic(points) {
   return math.parse(`${a === 0 ? `` : `${a}x^2`} + ${b === 0 ? `` : `${b}x`} + ${c}`)
 }
 
-export { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, generateRandomPolynomialWithPoint, fitPointsToQuadratic }
+export { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, generateRandomPolynomialWithPoint, fitPointsToQuadratic, sortPolynomialByDegree, getStringFactorFromXval }
