@@ -28,7 +28,7 @@ function functionToTable() {
       <h2>Which table is best for estimating the limit of this function?</h2>
       <div>Assume both tables have correct function values.</div>
     </div>
-    <Latex expression={`g(x) = ${latexEq}`} classes={'large-font'} display={true}/>
+    <Latex expression={`g(x) = ${latexEq}`} classes={'large-font'} display={true} />
   </div>
 
   const node = math.parse(`${factor2}${factor3}`);
@@ -70,7 +70,20 @@ function functionToTable() {
   const input = shuffleArray([option1, option2])
   const type = 'mc'
 
-  return { title, question, input, type }
+  const hints = [
+    <div className="flex vertical center small-gap">
+      <div>Focus on <Latex expression={`x = ${xVal}`} />. Recall that a limit is about getting infinitely close to the xvalue.</div>
+      <div className="flex vertical center small-gap">
+        {option1.component}
+        {option2.component}
+      </div>
+    </div>,
+    <>
+      <div>When using a table, we really need to "zoom in" near the x-value. Which table does that?</div>
+    </>
+  ]
+
+  return { title, question, input, type, hints }
 }
 
 function tableToLimit() {
@@ -86,7 +99,7 @@ function tableToLimit() {
 
   const increasing = getRandomNumber(0, 1); // whether table values are increasing or decreasing
   const orderedValues = generateOrderedValues(endX - startX + 1, increasing); // values in table
-  let ans = String(orderedValues[3]); // default answer
+  let ans = String(orderedValues[xVal === startX ? 0 : 3]); // default answer
 
   // build table data
   for (let i = startX; i <= endX; i++) {
@@ -134,14 +147,30 @@ function tableToLimit() {
 
   const type = 'frq';
 
-  return { title, question, ans, type, nextToInput }
+  const hints = [
+    <div className="flex vertical center small-gap">
+      <div>We are focused on evaluating the limit as <Latex expression={`x`} /> approaches {xVal} from {sign === 0 ? "the left" : sign === 1 ? "the right" : "both sides"}. What side(s) do we see in the table?</div>
+      <FunctionTable xTitle={<Latex expression={`x`} />} yTitle={<Latex expression={`g(x)`} />} data={data} />
+    </div>,
+    <>
+      {ans === "dne" ?
+        <div>
+          Does the table show the sides that we need?
+        </div> :
+        <div>
+          Look closely at the values in the table near <Latex expression={`x = ${xVal}`} />. What do they seem to be approaching?
+        </div>}
+    </>
+  ]
+
+  return { title, question, ans, type, nextToInput, hints }
 }
 
 function generateRandomQuestion() {
   // determine type of question to generate
-  const rand = getRandomNumber(0, 1)
+  const rand = getRandomNumber(1, 10)
   let q = null;
-  if (rand === 0) {
+  if (rand <= 7) {
     q = tableToLimit();
   } else {
     q = functionToTable();
