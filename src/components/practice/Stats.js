@@ -45,7 +45,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
       star_3: json.entry.star_3_review_dates,
       streak: numProblems,
       current_streak: json.entry.best_streak,
-      next_review_date: date.date
+      next_review_date: date ? date.date : null
     })
   }, [numProblems, setStars, setTitleWord])
 
@@ -164,14 +164,15 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
                 <div>Problems attempted: <strong>{dbEntry.problems_attempted}</strong></div>
 
                 {/* Review text */}
-                {reviewDatePassed >= 9 && dbEntry.next_star_goal === 4 ?
-                  <div>Review within <strong>{14 - reviewDatePassed}</strong> days! Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div>
-                  : reviewDatePassed >= 0 ?
-                    <div>Review Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div> :
-                    reviewDatePassed && <div>Next review: <strong>
-                      {dbEntry && dbEntry.next_review_date && format_review_date(dbEntry.next_review_date.date)}
-                    </strong>
-                    </div>}
+                {dbEntry.next_star_goal > 1 ?
+                  reviewDatePassed >= 9 && dbEntry.next_star_goal === 4 ?
+                    <div>Review within <strong>{14 - reviewDatePassed}</strong> days! Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div>
+                    : reviewDatePassed >= 0 ?
+                      <div>Review Streak: <strong>{dbEntry.next_review_date.streak}/2</strong></div> :
+                      reviewDatePassed && <div>Next review: <strong>
+                        {dbEntry && dbEntry.next_review_date && format_review_date(dbEntry.next_review_date.date)}
+                      </strong>
+                      </div> : null}
               </> :
               <>
                 {/* No stats shown if user is not logged in */}

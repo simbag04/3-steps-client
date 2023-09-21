@@ -42,19 +42,21 @@ export const FunctionTable = ({ xTitle, yTitle, data }) => {
   }, [width, windowWidth])
 
   return (
-    <table ref={tableRef} className={`function-table flex ${display}`}>
-      <tr>
-        <th>{xTitle}</th>
-        <th>{yTitle}</th>
-      </tr>
-      {data.map((d, i) => {
-        return (
-          <tr key={i} className={i % 2 === 0 ? "table-color-1" : "table-color-2"}>
-            <td>{d.x}</td>
-            <td>{d.y}</td>
-          </tr>
-        )
-      })}
+    <table ref={tableRef} className={`function-table`}>
+      <tbody className={`flex ${display}`}>
+        <tr>
+          <th>{xTitle}</th>
+          <th>{yTitle}</th>
+        </tr>
+        {data.map((d, i) => {
+          return (
+            <tr key={i} className={i % 2 === 0 ? "table-color-1" : "table-color-2"}>
+              <td>{d.x}</td>
+              <td>{d.y}</td>
+            </tr>
+          )
+        })}
+      </tbody>
     </table>
   )
 }

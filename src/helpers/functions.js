@@ -50,6 +50,28 @@ function getRandomWithExclusions(min, max, exclusions) {
 }
 
 /**
+ * @param {Number} n number of values to generate
+ * @param {boolean} increasing true if values should be increasing, false if decreasing
+ * @returns array of n ordered numbers 
+ */
+function generateOrderedValues(n, increasing) {
+  if (n <= 0) {
+    return [];
+  }
+
+  const values = [Math.floor(Math.random() * 10) + 1]; // Initialize with a random value
+
+  while (values.length < n) {
+    // generate a value greater than the last one
+    const nextDiff = getRandomNumber(1, 4) * (increasing ? 1 : -1);
+    const nextValue = values[values.length - 1] + nextDiff; 
+    values.push(nextValue);
+  }
+
+  return values;
+}
+
+/**
  * Compresses polynomial so it fits on 10 by 10 graph
  * @param {string} expression polynomial to compress
  * @param {number} max max (and min) value of local min/max
@@ -202,4 +224,4 @@ function fitPointsToQuadratic(points) {
   return math.parse(`${a === 0 ? `` : `${a}x^2`} + ${b === 0 ? `` : `${b}x`} + ${c}`)
 }
 
-export { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, shuffleArray, generateRandomPolynomialWithPoint, fitPointsToQuadratic }
+export { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, generateRandomPolynomialWithPoint, fitPointsToQuadratic }
