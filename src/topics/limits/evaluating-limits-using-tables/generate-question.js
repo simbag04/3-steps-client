@@ -1,6 +1,6 @@
-import { generateOrderedValues, getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, shuffleArray, sortPolynomialByDegree } from "../../helpers/functions";
-import { FunctionTable } from "../../components/content-components/tables/FunctionTable";
-import Latex from "../../helpers/Latex";
+import { generateOrderedValues, getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, shuffleArray, sortPolynomialByDegree } from "../../../helpers/functions";
+import { FunctionTable } from "../../../components/content-components/tables/FunctionTable";
+import Latex from "../../../helpers/Latex";
 import * as math from 'mathjs'
 
 const nerdamer = require("nerdamer/all.min")

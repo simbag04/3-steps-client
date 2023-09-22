@@ -45,7 +45,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
 
   // dynamically import relevant topic question
   useEffect(() => {
-    import(`../../topics/${name}/generate-question.js`)
+    import(`../../topics/${uname}/${name}/generate-question.js`)
       .then(module => {
         setQFunction(() => module.default);
       })
@@ -53,7 +53,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
         console.error(error);
       })
     setShowHints(false);
-  }, [name])
+  }, [name, uname])
 
   // gets width of question
   useEffect(() => {

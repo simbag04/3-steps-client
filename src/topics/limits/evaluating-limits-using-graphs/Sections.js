@@ -1,9 +1,9 @@
-import Latex from "../../helpers/Latex"
-import JumpGraph from "../../components/content-components/graphs/JumpGraph"
+import Latex from "../../../helpers/Latex"
+import JumpGraph from "../../../components/content-components/graphs/JumpGraph"
 import * as math from 'mathjs'
-import FunctionGraph from "../../components/content-components/graphs/FunctionGraph"
-import AsymptoticGraph from "../../components/content-components/graphs/AsymptoticGraph"
-import { GRAPH_SIZE } from "../../helpers/constants"
+import FunctionGraph from "../../../components/content-components/graphs/FunctionGraph"
+import AsymptoticGraph from "../../../components/content-components/graphs/AsymptoticGraph"
+import { GRAPH_SIZE } from "../../../helpers/constants"
 
 // functions to be used in sections
 const n1 = math.parse("-x")
