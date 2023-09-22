@@ -12,6 +12,15 @@
   margin: auto;
 }
 
+ol {
+  margin: 0;
+}
+
+.important {
+  background-color: lightpink;
+  border-radius: var(--border-radius);
+  padding: var(--padding);
+}
 @media (max-width: 1000px) {
   .learn-section {
     width: 80%;

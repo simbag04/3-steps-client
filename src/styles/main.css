@@ -29,11 +29,21 @@ body {
   text-align: center;
 }
 
-.katex {
+.text-start {
+  text-align: start;
+}
+
+.katex, .katex-display {
   font-size: 1em !important;
-  margin: 0;
+  margin: 0 !important;
   padding: 0;
 }
+
+.text-start .katex-display, .text-start  .katex, .text-start .katex-display > .katex {
+  text-align: start;
+}
+
+.katex-display .base { margin: 0.25em 0 }
 
 .large-font {
   font-size: 18px;
