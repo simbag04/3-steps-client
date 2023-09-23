@@ -1,5 +1,6 @@
 import { COLORS } from "../../../helpers/constants";
-import { generateRandomPolynomial, getRandomNumber, getRandomWithExclusions, generateRandomPolynomialWithPoint, shuffleArray } from "../../../helpers/functions";
+import { getRandomNumber, getRandomWithExclusions, shuffleArray } from "../../../helpers/functions";
+import { generateRandomPolynomial, generateRandomPolynomialWithPoint } from "../../../helpers/expression-generators";
 import Latex from "../../../helpers/Latex";
 import LimitExampleGraph from "../../../components/content-components/graphs/LimitExampleGraph";
 import { GRAPH_SIZE } from "../../../helpers/constants";

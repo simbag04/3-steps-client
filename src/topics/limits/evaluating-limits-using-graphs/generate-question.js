@@ -1,5 +1,6 @@
 import Latex from "../../../helpers/Latex";
-import { fitPointsToQuadratic, generateRandomPolynomialWithPoint, getRandomNumber, getRandomWithExclusions } from "../../../helpers/functions";
+import { getRandomNumber, getRandomWithExclusions } from "../../../helpers/functions";
+import { fitPointsToQuadratic, generateRandomPolynomialWithPoint } from "../../../helpers/expression-generators"
 import * as math from 'mathjs'
 import AsymptoticGraph from "../../../components/content-components/graphs/AsymptoticGraph";
 import { COLORS, GRAPH_SIZE } from "../../../helpers/constants";
