@@ -63,7 +63,7 @@ function generateOrderedValues(n, increasing) {
   while (values.length < n) {
     // generate a value greater than the last one
     const nextDiff = getRandomNumber(1, 4) * (increasing ? 1 : -1);
-    const nextValue = values[values.length - 1] + nextDiff; 
+    const nextValue = values[values.length - 1] + nextDiff;
     values.push(nextValue);
   }
 
@@ -75,12 +75,12 @@ function generateOrderedValues(n, increasing) {
  * @param {String} polynomial string with a polynomial
  * @returns polynomial sorted in order of degree
  */
-function sortPolynomialByDegree (polynomial) {
+function sortPolynomialByDegree(polynomial) {
   // get coefficients with nerdamer
   const coefficients = nerdamer.coeffs(polynomial, 'x');
   let ans = "";
   const coeffs = [];
-  coefficients.each(function(e) {
+  coefficients.each(function (e) {
     coeffs.push(nerdamer(e).toString());
   })
 
@@ -92,7 +92,7 @@ function sortPolynomialByDegree (polynomial) {
     if (i !== coeffs.length - 1) {
       if (Number(coeffs[i]) > 0) {
         ans += "+"
-      } 
+      }
     }
 
     if (coeffs[i] !== "1") {
@@ -113,7 +113,7 @@ function sortPolynomialByDegree (polynomial) {
  * @param {String} xval xvalue from which to create factor
  * @returns String in form (x - p), where p is the xval
  */
-function getStringFactorFromXval (xval) {
+function getStringFactorFromXval(xval) {
   const x = Number(xval);
   if (x < 0) {
     return `(x + ${Math.abs(x)})`
@@ -124,5 +124,56 @@ function getStringFactorFromXval (xval) {
   }
 }
 
+function convertArrayToObject(array) {
+  const obj = {};
+  for (let i = 0; i < array.length; i++) {
+    const currentObj = array[i];
+    if (currentObj.hasOwnProperty('f')) {
+      const key = currentObj['f'];
+      obj[key] = currentObj['value'];
+    }
+  }
+  return obj;
+}
 
-export {getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, sortPolynomialByDegree, getStringFactorFromXval }
+function findLCM(a, b) {
+  // Calculate the greatest common divisor (GCD) using Euclidean algorithm
+  function findGCD(x, y) {
+    if (y === 0) {
+      return x;
+    }
+    return findGCD(y, x % y);
+  }
+
+  // LCM is the product of the two numbers divided by their GCD
+  return (a * b) / findGCD(a, b);
+}
+
+function generateLimitTableData(xVal, values, start, end) {
+  const increasing = values[1] - values[0] >= 0;
+  const data = [];
+  // build table data
+  for (let i = start; i <= end; i++) {
+    const val = values[i - start];
+
+    // zooming in to the left of xVal
+    if (i === xVal && xVal !== start) {
+      data.push({ x: i - 0.1, y: val - (increasing ? 0.1 : -0.1) })
+      data.push({ x: i - 0.01, y: val - (increasing ? 0.01 : -0.01) })
+      data.push({ x: i - 0.001, y: val - (increasing ? 0.001 : -0.001) })
+    }
+
+    data.push({ x: i, y: val });  // other xvalues
+
+    // zooming in to the right of xval
+    if (i === xVal && xVal !== end) {
+      data.push({ x: i + 0.001, y: val + (increasing ? 0.001 : -0.001) })
+      data.push({ x: i + 0.01, y: val + (increasing ? 0.01 : -0.01) })
+      data.push({ x: i + 0.1, y: val + (increasing ? 0.1 : -0.1) })
+    }
+  }
+
+  return {data}
+}
+
+export { getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, sortPolynomialByDegree, getStringFactorFromXval, convertArrayToObject, findLCM, generateLimitTableData }

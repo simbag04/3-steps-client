@@ -1,6 +1,6 @@
 import * as math from 'mathjs'
 import { generateFunctionData } from './graph-helpers';
-import { getRandomWithExclusions, getRandomNumber } from './functions';
+import { getRandomWithExclusions, getRandomNumber, convertArrayToObject, findLCM } from './functions';
 
 /**
  * Compresses polynomial so it fits on 10 by 10 graph
@@ -156,4 +156,53 @@ function fitPointsToQuadratic(points) {
   return math.parse(`${a === 0 ? `` : `${a}x^2`} + ${b === 0 ? `` : `${b}x`} + ${c}`)
 }
 
-export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic }
+function generateLimitPropertyTerm(functions, operators, depth = 2) {
+  if (depth === 0) {
+    const stuff = `(${getRandomNumber(2, 4)}${functions[getRandomNumber(0, functions.length - 1)].f})`;
+    return stuff;
+  } else {
+    const operator = operators[getRandomNumber(0, operators.length - 1)];
+    let leftOperand = generateLimitPropertyTerm(functions, operators, depth - 1);
+
+    if (operator === "^") {
+      const numerator = getRandomNumber(0, 1);
+      if (numerator) {
+        // in case of nth root, make sure result is whole number
+        const val = math.evaluate(leftOperand, convertArrayToObject(functions));
+        const root = val < 0 ? 3 : getRandomNumber(2, 3);
+        const int = Math.round(math.evaluate(`nthRoot(${val}, ${root})`));
+        let add = math.evaluate(`${val} - ${int}^${root}`);
+        add = add > 0 ? ` - ${add}`: `+ ${Math.abs(add)}`;
+        return `nthRoot(${leftOperand}${add}, ${root})`
+      }
+
+      // normal power case
+      let rightOperand = `${getRandomNumber(2, 3)}`;
+      return `(${leftOperand}${operator}${rightOperand})`
+
+    } else {
+      // normal operand
+      let rightOperand = generateLimitPropertyTerm(functions, operators, depth - 1);
+
+      if (operator === "/") {
+        let left = math.evaluate(leftOperand, convertArrayToObject(functions))
+        let right = math.evaluate(rightOperand, convertArrayToObject(functions))
+        if (right === 0) {
+          rightOperand = `(${rightOperand} + 1)`;
+          right = math.evaluate(rightOperand, convertArrayToObject(functions));
+        }
+        if (left === 0) {
+          leftOperand = `(${leftOperand} + 1)`;
+          left = math.evaluate(leftOperand, convertArrayToObject(functions));
+        }
+        const lcm = findLCM(left, right);
+        const l = math.simplify(`${Math.round(lcm / left)}*${leftOperand}`).toString().replaceAll(" * ", "")
+
+        return `((${l})${operator}${rightOperand})`
+      }
+      return `(${leftOperand}${operator}${rightOperand})`
+    }
+  }
+}
+
+export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm }
