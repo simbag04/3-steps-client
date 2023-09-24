@@ -157,7 +157,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                     {currQ.input && currQ.input.map((option, index) => {
                       return (
                         <label key={index}
-                          className={selectedOption === option ? classes : ""}
+                          className={`${selectedOption === option ? classes : ""} ${option.correct && goToNext ? "correct" : ""}`}
                           onClick={() => handleClick(option)}>
                           {option.component}
                         </label>
@@ -170,6 +170,10 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                   <span className="flex horizontal center medium-gap">
                     {currQ.nextToInput}
                     <input type="text" onChange={handleInput} value={textInput} className={classes}></input>
+                    {goToNext && !correctRef.current ? 
+                    <div className="correct ans">
+                      {currQ.ans}
+                    </div> : null}
                   </span>
                 }
               </div>

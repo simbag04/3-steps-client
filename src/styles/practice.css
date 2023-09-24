@@ -83,3 +83,10 @@ input {
   padding: 10px var(--padding);
   background-color: lightpink;
 }
+
+div.correct.ans {
+  padding: 5px;
+  border: none;
+  box-shadow: 0 0 0 4px green;
+  border-radius: var(--border-radius);
+}
