@@ -55,7 +55,7 @@ function limitPropertyQuestion() {
 
   // get expression and answer
   let expression = generateLimitPropertyTerm(functions, ['^', '+', '-', '*', '/']);
-  const ans = String(math.evaluate(expression, convertArrayToObject(functions)));
+  const ans = String(Math.round(math.evaluate(expression, convertArrayToObject(functions))));
 
   // format expression
   expression = math.simplifyCore(expression).toTex({ parenthesis: 'auto' });
