@@ -124,6 +124,10 @@ function getStringFactorFromXval(xval) {
   }
 }
 
+/**
+ * @param {Array} array where each element is in the form {f: String, value: Number}
+ * @returns object with keys as all the f Strings, values as the value of that String
+ */
 function convertArrayToObject(array) {
   const obj = {};
   for (let i = 0; i < array.length; i++) {
@@ -136,6 +140,11 @@ function convertArrayToObject(array) {
   return obj;
 }
 
+/**
+ * @param {Number} a 
+ * @param {Number} b 
+ * @returns least common multiple of a and b
+ */
 function findLCM(a, b) {
   // Calculate the greatest common divisor (GCD) using Euclidean algorithm
   function findGCD(x, y) {
@@ -149,6 +158,13 @@ function findLCM(a, b) {
   return (a * b) / findGCD(a, b);
 }
 
+/**
+ * @param {Number} xVal at which table will "zoom in"
+ * @param {Array} values to use as yvalues in table
+ * @param {Number} start of xs in table
+ * @param {Number} end of xs in table
+ * @returns data array containing x, y pairs for points that could be used in a limit table
+ */
 function generateLimitTableData(xVal, values, start, end) {
   const increasing = values[1] - values[0] >= 0;
   const data = [];

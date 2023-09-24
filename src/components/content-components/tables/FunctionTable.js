@@ -1,14 +1,22 @@
+/**
+ * Creates Table of a funcion. Makes table vertical if screen is not wide enough
+ * Parameters:
+ *  - xTitle: title of x values
+ *  - yTitle: title of y values
+ *  - data: array data to put in table in { x: Number, y: Number } format
+ */
+
 import { useRef, useState, useEffect } from "react"
 import { useWindowSize } from "../../../helpers/useWindowSize";
 import '../../../styles/table.css'
 import Latex from "../../../helpers/Latex";
 
 export const FunctionTable = ({ xTitle, yTitle, data }) => {
-  const tableRef = useRef(null);
-  const [width, setWidth] = useState(0);
-  const originalWidthRef = useRef(null);
-  const windowWidth = useWindowSize()[0];
-  const [display, setDisplay] = useState("horizontal");
+  const tableRef = useRef(null);// ref for table
+  const [width, setWidth] = useState(0); // current width of table
+  const originalWidthRef = useRef(null); // horizontal table width
+  const windowWidth = useWindowSize()[0]; // window size
+  const [display, setDisplay] = useState("horizontal"); // whether table should be horiz or vert
 
   // gets width of table
   useEffect(() => {
@@ -34,6 +42,7 @@ export const FunctionTable = ({ xTitle, yTitle, data }) => {
     };
   }, [tableRef, windowWidth, display]);
 
+  // changes table display to vertical if needed
   useEffect(() => {
     if (width > 0.8 * windowWidth) {
       setDisplay("vertical")
@@ -45,10 +54,12 @@ export const FunctionTable = ({ xTitle, yTitle, data }) => {
   return (
     <table ref={tableRef} className={`function-table`}>
       <tbody className={`flex ${display}`}>
+        {/* Headers */}
         <tr>
           <th><Latex expression={xTitle} /></th>
           <th><Latex expression={yTitle} /></th>
         </tr>
+        {/* Data */}
         {data.map((d, i) => {
           return (
             <tr key={i} className={i % 2 === 0 ? "table-color-1" : "table-color-2"}>

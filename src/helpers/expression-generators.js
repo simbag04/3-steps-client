@@ -156,23 +156,37 @@ function fitPointsToQuadratic(points) {
   return math.parse(`${a === 0 ? `` : `${a}x^2`} + ${b === 0 ? `` : `${b}x`} + ${c}`)
 }
 
+/**
+ * @param {Array} functions: array of variables with their corresponding values to be used in term
+ * @param {Array} operators: possible operators, such as '+', '-', etc.
+ * @param {Number} depth of equation, i.e. how many levels of nesting in terms
+ * @returns random term that uses functions variables and operators
+ */
 function generateLimitPropertyTerm(functions, operators, depth = 2) {
   if (depth === 0) {
-    const stuff = `(${getRandomNumber(2, 3)}${functions[getRandomNumber(0, functions.length - 1)].f})`;
-    return stuff;
+    // base case
+    const coefficient = getRandomNumber(2, 3); // coefficient of variable
+    const f = functions[getRandomNumber(0, functions.length - 1)].f // variable
+    return `(${coefficient}${f})`;
   } else {
-    const operator = operators[getRandomNumber(0, operators.length - 1)];
+    // recursive case
+    const operator = operators[getRandomNumber(0, operators.length - 1)]; // random operator
     let leftOperand = generateLimitPropertyTerm(functions, operators, depth - 1);
+    let rightOperand = generateLimitPropertyTerm(functions, operators, depth - 1);
 
     if (operator === "^") {
-      const numerator = getRandomNumber(0, 1);
+      // exponent operator
+      const numerator = getRandomNumber(0, 1); // whether this will be a fractional exponent
       if (numerator) {
-        // in case of nth root, make sure result is whole number
-        const val = math.evaluate(leftOperand, convertArrayToObject(functions));
-        const root = val < 0 ? 3 : getRandomNumber(2, 3);
-        const int = Math.round(math.evaluate(`nthRoot(${val}, ${root})`));
+        // fractional exponent
+        // make sure result is whole number
+        const val = math.evaluate(leftOperand, convertArrayToObject(functions)); // evaluate
+        const root = val < 0 ? 3 : getRandomNumber(2, 3); // odd root if val < 0
+        const int = Math.round(math.evaluate(`nthRoot(${val}, ${root})`)); // evaluate what root should be
+
+        // constant to add to make whole number result
         let add = math.evaluate(`${val} - ${int}^${root}`);
-        add = add > 0 ? ` - ${add}`: `+ ${Math.abs(add)}`;
+        add = add > 0 ? ` - ${add}` : `+ ${Math.abs(add)}`;
         return `nthRoot(${leftOperand}${add}, ${root})`
       }
 
@@ -180,26 +194,29 @@ function generateLimitPropertyTerm(functions, operators, depth = 2) {
       let rightOperand = `${getRandomNumber(2, 3)}`;
       return `(${leftOperand}${operator}${rightOperand})`
 
+    } else if (operator === "/") {
+      // ensure whole number result 
+      // evaluate operands
+      let left = math.evaluate(leftOperand, convertArrayToObject(functions))
+      let right = math.evaluate(rightOperand, convertArrayToObject(functions))
+
+      // ensure operands aren't 0. this is to make sure no issues with finding lcm
+      if (right === 0) {
+        rightOperand = `(${rightOperand} + 1)`; // add 1 if 0
+        right = math.evaluate(rightOperand, convertArrayToObject(functions));
+      }
+      if (left === 0) {
+        leftOperand = `(${leftOperand} + 1)`; // add 1 if 0
+        left = math.evaluate(leftOperand, convertArrayToObject(functions));
+      }
+
+      // find lcm and simplify node
+      const lcm = findLCM(left, right);
+      const l = math.simplify(`${Math.round(lcm / left)}*${leftOperand}`).toString().replaceAll(" * ", "")
+
+      return `((${l})${operator}${rightOperand})`
     } else {
       // normal operand
-      let rightOperand = generateLimitPropertyTerm(functions, operators, depth - 1);
-
-      if (operator === "/") {
-        let left = math.evaluate(leftOperand, convertArrayToObject(functions))
-        let right = math.evaluate(rightOperand, convertArrayToObject(functions))
-        if (right === 0) {
-          rightOperand = `(${rightOperand} + 1)`;
-          right = math.evaluate(rightOperand, convertArrayToObject(functions));
-        }
-        if (left === 0) {
-          leftOperand = `(${leftOperand} + 1)`;
-          left = math.evaluate(leftOperand, convertArrayToObject(functions));
-        }
-        const lcm = findLCM(left, right);
-        const l = math.simplify(`${Math.round(lcm / left)}*${leftOperand}`).toString().replaceAll(" * ", "")
-
-        return `((${l})${operator}${rightOperand})`
-      }
       return `(${leftOperand}${operator}${rightOperand})`
     }
   }
