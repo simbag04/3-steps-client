@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react"
 import { useWindowSize } from "../../../helpers/useWindowSize";
 import '../../../styles/table.css'
+import Latex from "../../../helpers/Latex";
 
 export const FunctionTable = ({ xTitle, yTitle, data }) => {
   const tableRef = useRef(null);
@@ -45,8 +46,8 @@ export const FunctionTable = ({ xTitle, yTitle, data }) => {
     <table ref={tableRef} className={`function-table`}>
       <tbody className={`flex ${display}`}>
         <tr>
-          <th>{xTitle}</th>
-          <th>{yTitle}</th>
+          <th><Latex expression={xTitle} /></th>
+          <th><Latex expression={yTitle} /></th>
         </tr>
         {data.map((d, i) => {
           return (

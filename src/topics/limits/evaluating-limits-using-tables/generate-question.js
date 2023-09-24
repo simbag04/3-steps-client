@@ -58,12 +58,12 @@ function functionToTable() {
   }
 
   const option1 = {
-    component: <FunctionTable xTitle={<Latex expression={`x`} />} yTitle={<Latex expression={`g(x)`} />} data={data1} />,
+    component: <FunctionTable xTitle={`x`} yTitle={`g(x)`} data={data1} />,
     correct: false
   }
 
   const option2 = {
-    component: <FunctionTable xTitle={<Latex expression={`x`} />} yTitle={<Latex expression={`g(x)`} />} data={data2} />,
+    component: <FunctionTable xTitle={`x`} yTitle={`g(x)`} data={data2} />,
     correct: true
   }
 
@@ -142,7 +142,7 @@ function tableToLimit() {
       <h2>Estimate the limit from the table.</h2>
       <div>Enter "dne" if the limit doesn't exist or cannot be evaluated from the table</div>
     </div>
-    <FunctionTable xTitle={<Latex expression={`x`} />} yTitle={<Latex expression={`g(x)`} />} data={data} />
+    <FunctionTable xTitle={`x`} yTitle={`g(x)`} data={data} />
   </div>
 
   const type = 'frq';
@@ -150,7 +150,7 @@ function tableToLimit() {
   const hints = [
     <div className="flex vertical center small-gap">
       <div>We are focused on evaluating the limit as <Latex expression={`x`} /> approaches {xVal} from {sign === 0 ? "the left" : sign === 1 ? "the right" : "both sides"}. What side(s) do we see in the table?</div>
-      <FunctionTable xTitle={<Latex expression={`x`} />} yTitle={<Latex expression={`g(x)`} />} data={data} />
+      <FunctionTable xTitle={`x`} yTitle={`g(x)`} data={data} />
     </div>,
     <>
       {ans === "dne" ?

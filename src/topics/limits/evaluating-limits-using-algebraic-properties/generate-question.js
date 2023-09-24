@@ -4,9 +4,9 @@ import { generateLimitPropertyTerm, generateRandomPolynomialWithPoint } from "..
 import { convertArrayToObject, generateLimitTableData, generateOrderedValues, getRandomNumber, getRandomWithExclusions } from "../../../helpers/functions";
 import Latex from "../../../helpers/Latex";
 import * as math from "mathjs"
-import { GRAPH_SIZE } from "../../../helpers/constants";
+import { GRAPH_SIZE, COLORS } from "../../../helpers/constants";
 
-function graphToLimit() {
+function limitPropertyQuestion() {
   const functions = [];
   const xVal = getRandomWithExclusions(-9, 9, [-1, 0, 1]);
   const tableValues = generateOrderedValues(5, getRandomNumber(0, 1));
@@ -61,13 +61,11 @@ function graphToLimit() {
 }
 
 function generateRandomQuestion() {
-  // determine type of question to generate
-  const rand = 0
-  let q = null;
-  if (rand == 0) {
-    q = graphToLimit();
-  }
-  return q;
+  // set color of graph
+  document.documentElement.style.setProperty('--random-color',
+    COLORS[getRandomNumber(0, COLORS.length - 1)])
+
+  return limitPropertyQuestion();
 }
 
 export default generateRandomQuestion

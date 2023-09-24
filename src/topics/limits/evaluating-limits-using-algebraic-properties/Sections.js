@@ -37,6 +37,9 @@ const Section2 = () => {
           <li>
             <Latex expression={`{\\lim}_{x \\to a}\\left[\\sqrt[n]{f(x)}\\right] = \\sqrt[n]{{\\lim}_{x \\to a} f(x)}`} display={true} />
           </li>
+          <li>
+            <Latex expression={`{\\lim}_{x \\to a} c = c`} display={true} />
+          </li>
         </ol>
       </div>
     </>
@@ -50,7 +53,7 @@ const Section3 = () => {
 
       </div>
       <div>
-        <Latex expression={`\\lim_{x \\to 5} \\left[3f(x) g(x) + \\frac{f(x)^2}{\\sqrt[2]{g(x)}} \\right]`} display={true} />
+        <Latex expression={`\\lim_{x \\to 5} \\left[3f(x) g(x) + \\frac{f(x)^2}{\\sqrt[2]{g(x)}} + 5 \\right]`} display={true} />
       </div>
     </>
   )
@@ -63,7 +66,7 @@ const Section4 = () => {
         Since we see a sum, we can start by using rule number <strong>2</strong> to split up the limit into:
       </div>
       <div>
-        <Latex expression={`\\lim_{x \\to 5} 3f(x) g(x) + \\lim_{x \\to 5} \\left[\\frac{f(x)^2}{\\sqrt[2]{g(x)}} \\right]`} display={true} />
+        <Latex expression={`\\lim_{x \\to 5} 3f(x) g(x) + \\lim_{x \\to 5} \\left[\\frac{f(x)^2}{\\sqrt[2]{g(x)}} \\right] + \\lim_{x \\to 5} 5`} display={true} />
       </div>
     </>
   )
@@ -73,10 +76,10 @@ const Section5 = () => {
   return (
     <>
       <div>
-        First, let's simplify the first term. We see a product of two functions, so let's use rule number <strong>3</strong> to split those up:
+        Looking at the first term, we see a product of two functions, so let's use rule number <strong>3</strong> to split those up. Also, we can use rule number <strong>7</strong> for the last term: 
       </div>
       <div>
-        <Latex expression={`(\\lim_{x \\to 5} 3f(x) \\cdot \\lim_{x \\to 5} g(x)) + \\lim_{x \\to 5} \\left[\\frac{f(x)^2}{\\sqrt[2]{g(x)}} \\right]`} display={true} />
+        <Latex expression={`(\\lim_{x \\to 5} 3f(x) \\cdot \\lim_{x \\to 5} g(x)) + \\lim_{x \\to 5} \\left[\\frac{f(x)^2}{\\sqrt[2]{g(x)}} \\right] + 5`} display={true} />
       </div>
     </>
   )
@@ -89,7 +92,7 @@ const Section6 = () => {
         Awesome, we see a <Latex expression={`\\lim_{x \\to 5} g(x)`} /> that we can replace with 4! Also, we can apply rule number <strong>1</strong> to <Latex expression={`\\lim_{x \\to 5} 3f(x)`} />:
       </div>
       <div>
-        <Latex expression={`(3 \\lim_{x \\to 5} f(x) \\cdot 4) + \\lim_{x \\to 5} \\left[\\frac{f(x)^2}{\\sqrt[2]{g(x)}} \\right]`} display={true} />
+        <Latex expression={`(3 \\lim_{x \\to 5} f(x) \\cdot 4) + \\lim_{x \\to 5} \\left[\\frac{f(x)^2}{\\sqrt[2]{g(x)}} \\right] + 5`} display={true} />
       </div>
     </>
   )
@@ -102,7 +105,7 @@ const Section7 = () => {
         We see <Latex expression={`\\lim_{x \\to 5} f(x)`} /> which we can replace with 2!
       </div>
       <div>
-        <Latex expression={`(3 \\cdot 2 \\cdot 4) + \\lim_{x \\to 5} \\left[\\frac{f(x)^2}{\\sqrt[2]{g(x)}} \\right]`} display={true} />
+        <Latex expression={`(3 \\cdot 2 \\cdot 4) + \\lim_{x \\to 5} \\left[\\frac{f(x)^2}{\\sqrt[2]{g(x)}} \\right] + 5`} display={true} />
       </div>
     </>
   )
@@ -115,7 +118,7 @@ const Section8 = () => {
         Simplifying, we have evaluated that the first term is 24! Let's continue with the 2nd term: since we see a fraction, we can use rule number <strong>4</strong>.
       </div>
       <div>
-        <Latex expression={`24 + \\left[\\frac{\\lim_{x \\to 5} \\left[f(x)^2\\right]}{\\lim_{x \\to 5} \\sqrt[2]{g(x)}} \\right]`} display={true} />
+        <Latex expression={`24 + \\left[\\frac{\\lim_{x \\to 5} \\left[f(x)^2\\right]}{\\lim_{x \\to 5} \\sqrt[2]{g(x)}} \\right] + 5`} display={true} />
       </div>
     </>
   )
@@ -128,7 +131,7 @@ const Section9 = () => {
         Let's use rule number <strong>5</strong> for the exponent on top. Also, rule number <strong>6</strong> can be applied for the fraction's denominator:
       </div>
       <div>
-        <Latex expression={`24 + \\left[\\frac{\\left[\\lim_{x \\to 5} f(x)\\right]^2}{\\sqrt[2]{\\left[\\lim_{x \\to 5} g(x)\\right]}} \\right]`} display={true} />
+        <Latex expression={`24 + \\left[\\frac{\\left[\\lim_{x \\to 5} f(x)\\right]^2}{\\sqrt[2]{\\left[\\lim_{x \\to 5} g(x)\\right]}} \\right] + 5`} display={true} />
       </div>
     </>
   )
@@ -141,7 +144,7 @@ const Section10 = () => {
         Again, we see <Latex expression={`\\lim_{x \\to 5} f(x)`} /> and <Latex expression={`\\lim_{x \\to 5} g(x)`} /> which we can replace with 2 and 4 respectively!
       </div>
       <div>
-        <Latex expression={`24 + \\left[\\frac{2^2}{\\sqrt[2]{4}} \\right]`} display={true} />
+        <Latex expression={`24 + \\left[\\frac{2^2}{\\sqrt[2]{4}} \\right] + 5`} display={true} />
       </div>
     </>
   )
@@ -151,7 +154,7 @@ const Section11 = () => {
   return (
     <>
       <div>
-        Simplifying, we get down to <Latex expression={`24 + \\frac{4}{2} = 24 + 2 = 26`} />!
+        Simplifying, we get down to <Latex expression={`24 + \\frac{4}{2} + 5 = 24 + 2 + 5 = 31`} />!
       </div>
     </>
   )

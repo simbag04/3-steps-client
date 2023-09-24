@@ -58,7 +58,7 @@ const Section2 = () => {
   return (
     <>
       <div>For example, consider this table. </div>
-      <FunctionTable xTitle={<Latex expression={"x"} />} yTitle={<Latex expression={`f(x)`} />} data={table1Data} />
+      <FunctionTable xTitle={"x"} yTitle={`f(x)`} data={table1Data} />
     </>
   )
 }
@@ -87,7 +87,7 @@ const Section5 = () => {
       <div>
         What about estimating <Latex expression={`{\\lim}_{x \\to 4} g(x)`} /> from this table?
       </div>
-      <FunctionTable xTitle={<Latex expression={`x`} />} yTitle={<Latex expression={`g(x)`} />} data={table2Data} />
+      <FunctionTable xTitle={`x`} yTitle={`g(x)`} data={table2Data} />
     </>
   )
 }
@@ -108,7 +108,7 @@ const Section7 = () => {
       <div>
         Let's look at another table: What can we say about <Latex expression={`{\\lim}_{x \\to 4} h(x)`} />?
       </div>
-      <FunctionTable xTitle={<Latex expression={`x`} />} yTitle={<Latex expression={`h(x)`} />} data={table3Data} />
+      <FunctionTable xTitle={`x`} yTitle={`h(x)`} data={table3Data} />
     </>
   )
 }
@@ -139,7 +139,7 @@ const Section10 = () => {
       <div>
         We don't have a graph of this function, so we cannot visually see the limit. However, what we can do is create a <strong>table of values</strong> for the function, "zooming in" on <Latex expression={`x = 3`} />. This will give us a good estimate of the limit.
       </div>
-      <FunctionTable xTitle={<Latex expression={`x`} />} yTitle={<Latex expression={`k(x)`} />} data={table4Data} />
+      <FunctionTable xTitle={`x`} yTitle={`k(x)`} data={table4Data} />
     </>
   )
 }

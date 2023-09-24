@@ -158,7 +158,7 @@ function fitPointsToQuadratic(points) {
 
 function generateLimitPropertyTerm(functions, operators, depth = 2) {
   if (depth === 0) {
-    const stuff = `(${getRandomNumber(2, 4)}${functions[getRandomNumber(0, functions.length - 1)].f})`;
+    const stuff = `(${getRandomNumber(2, 3)}${functions[getRandomNumber(0, functions.length - 1)].f})`;
     return stuff;
   } else {
     const operator = operators[getRandomNumber(0, operators.length - 1)];
