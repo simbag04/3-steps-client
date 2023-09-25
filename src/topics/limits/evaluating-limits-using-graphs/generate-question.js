@@ -1,4 +1,4 @@
-import Latex from "../../../helpers/Latex";
+import Latex from "../../../components/latex/Latex";
 import { getRandomNumber, getRandomWithExclusions } from "../../../helpers/functions";
 import { fitPointsToQuadratic, generateRandomPolynomialWithPoint } from "../../../helpers/expression-generators"
 import * as math from 'mathjs'

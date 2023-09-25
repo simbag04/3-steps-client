@@ -9,7 +9,7 @@
 import { useRef, useState, useEffect } from "react"
 import { useWindowSize } from "../../../helpers/useWindowSize";
 import '../../../styles/table.css'
-import Latex from "../../../helpers/Latex";
+import Latex from "../../latex/Latex";
 
 export const FunctionTable = ({ xTitle, yTitle, data }) => {
   const tableRef = useRef(null);// ref for table

@@ -2,7 +2,7 @@
  * List of all properties of limits
  */
 
-import Latex from "../../../helpers/Latex"
+import Latex from "../../../components/latex/Latex"
 export const LimitPropertyRules = () => {
   return (
     <div className="important">

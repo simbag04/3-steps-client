@@ -1,4 +1,4 @@
-import Latex from "../../../helpers/Latex"
+import Latex from "../../../components/latex/Latex"
 import JumpGraph from "../../../components/content-components/graphs/JumpGraph"
 import * as math from 'mathjs'
 import FunctionGraph from "../../../components/content-components/graphs/FunctionGraph"

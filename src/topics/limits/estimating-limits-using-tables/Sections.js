@@ -1,5 +1,5 @@
 import { FunctionTable } from "../../../components/content-components/tables/FunctionTable"
-import Latex from "../../../helpers/Latex"
+import Latex from "../../../components/latex/Latex"
 
 const table1Data = [
   { x: 1, y: 3 },

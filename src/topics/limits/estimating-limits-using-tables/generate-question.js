@@ -1,6 +1,6 @@
-import { generateOrderedValues, getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, shuffleArray, sortPolynomialByDegree } from "../../../helpers/functions";
+import { generateLimitTableData, generateOrderedValues, getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, shuffleArray, sortPolynomialByDegree } from "../../../helpers/functions";
 import { FunctionTable } from "../../../components/content-components/tables/FunctionTable";
-import Latex from "../../../helpers/Latex";
+import Latex from "../../../components/latex/Latex";
 import * as math from 'mathjs'
 
 const nerdamer = require("nerdamer/all.min")
@@ -87,7 +87,6 @@ function functionToTable() {
 }
 
 function tableToLimit() {
-  const data = []; // data for table
   const xVal = getRandomNumber(-9, 9); // xval at which to evaluate limit
 
   // 0: left, 1: right, 2: 2-sided
@@ -99,35 +98,16 @@ function tableToLimit() {
 
   const increasing = getRandomNumber(0, 1); // whether table values are increasing or decreasing
   const orderedValues = generateOrderedValues(endX - startX + 1, increasing); // values in table
+
+  // evaluate answer
   let ans = String(orderedValues[xVal === startX ? 0 : 3]); // default answer
-
-  // build table data
-  for (let i = startX; i <= endX; i++) {
-    const val = orderedValues[i - startX];
-
-    // evaluate answer
-    if (i === xVal && (i === startX || i === endX)) {
-      if ((i === startX && sign === 0) || (i === endX && sign === 1) || sign === 2) {
-        ans = "dne";
-      }
-    }
-
-    // zooming in to the left of xVal
-    if (i === xVal && xVal !== startX) {
-      data.push({ x: i - 0.1, y: val - (increasing ? 0.1 : -0.1) })
-      data.push({ x: i - 0.01, y: val - (increasing ? 0.01 : -0.01) })
-      data.push({ x: i - 0.001, y: val - (increasing ? 0.001 : -0.001) })
-    }
-
-    data.push({ x: i, y: val });  // other xvalues
-
-    // zooming in to the right of xval
-    if (i === xVal && xVal !== endX) {
-      data.push({ x: i + 0.001, y: val + (increasing ? 0.001 : -0.001) })
-      data.push({ x: i + 0.01, y: val + (increasing ? 0.01 : -0.01) })
-      data.push({ x: i + 0.1, y: val + (increasing ? 0.1 : -0.1) })
-    }
+  if ((xVal === startX && sign === 0) ||
+    (xVal === endX && sign === 1) ||
+    ((xVal === endX || xVal === startX) && sign === 2)) {
+    ans = "dne";
   }
+
+  const { data } = generateLimitTableData(xVal, orderedValues, startX, endX) // data for table
 
   // other question components
   const title = <></> // no title as title is included in question

@@ -2,7 +2,7 @@ import { FunctionTable } from "../../../components/content-components/tables/Fun
 import FunctionGraph from "../../../components/content-components/graphs/FunctionGraph";
 import { generateLimitPropertyTerm, generateRandomPolynomialWithPoint } from "../../../helpers/expression-generators";
 import { convertArrayToObject, generateLimitTableData, generateOrderedValues, getRandomNumber, getRandomWithExclusions } from "../../../helpers/functions";
-import Latex from "../../../helpers/Latex";
+import Latex from "../../../components/latex/Latex";
 import * as math from "mathjs"
 import { GRAPH_SIZE, COLORS } from "../../../helpers/constants";
 import { LimitPropertyRules } from "./LimitPropertyRules";

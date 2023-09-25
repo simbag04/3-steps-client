@@ -1,4 +1,4 @@
-import Latex from "../../../helpers/Latex"
+import Latex from '../../../components/latex/Latex'
 import '../../../styles/graph.css'
 import { LimitPropertyRules } from "./LimitPropertyRules"
 
