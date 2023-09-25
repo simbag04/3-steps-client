@@ -71,9 +71,10 @@ function generateRandomPolynomial(degree) {
 /**
  * generates random polynomial function with random whole number coefficients 
  * @param {number} degree degree of polynomial to generate
+ * @param {boolean} skipConstant boolean whether to not generate constant 
  * @returns random polynomial function with random coefficients
  */
-function getPolynomialFunction(degree) {
+function getPolynomialFunction(degree, skipConstant = false) {
   const coefficients = [];
   for (let i = 0; i <= degree; i++) {
     coefficients.push(getRandomNumber(-5, 5));
@@ -81,17 +82,40 @@ function getPolynomialFunction(degree) {
 
   let terms = coefficients.map((coef, exp) => {
     if (exp === 0) {
-      return coef === 0 ? "" : `(${coef})`;
+      if (skipConstant || coef === 0) return "";
+      return coef < 0 ? `${coef}` : `+${coef}`;
     } else if (exp === 1) {
-      return coef === 0 ? "" : `(${coef}*x)`;
+      if (coef === 0) return "";
+      let t = `${Math.abs(coef) === 1 ? "" : `${Math.abs(coef)}*`}x`
+      return coef < 0 ? `-${t}` : `+${t}`;
     } else {
-      return coef === 0 ? "" : `(${coef}*(x^${exp}))`;
+      if (coef === 0) return "";
+      let t = `${coef === 1 ? "" : coef === -1 ? "-" : `${Math.abs(coef)}*`}x^${exp}`
+      return (coef < 0 || exp === coefficients.length - 1) ? `-${t}` : `+${t}`;
     }
   });
 
   terms = terms.filter(t => t !== "");
 
-  const expression = terms.reverse().join(' + ').replace(/\s+/g, '');
+  const expression = terms.reverse().join('').replace(/\s+/g, '');
+  if (expression.length < 2) return '(2*x)';
+  return expression;
+}
+
+/**
+ * generates polynomial with point (not necessarily for a graph)
+ * @param {Number} degree of polynomial
+ * @param {Number} x value of point
+ * @param {Number} y value of point
+ * @returns string expression of polynomial
+ */
+function getPolynomialFunctionWithPoint(degree, x, y) {
+  let expression = getPolynomialFunction(degree, true);
+
+  // add constant to function to make (x, y) on graph
+  let currVal = math.evaluate(expression, {x});
+  const diff = y - Math.round(currVal);
+  expression = `${expression} ${diff < 0 ? diff : diff > 0 ? `+ ${diff}` : ''}`;
   return expression;
 }
 
@@ -222,4 +246,4 @@ function generateLimitPropertyTerm(functions, operators, depth = 2) {
   }
 }
 
-export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm }
+export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm, getPolynomialFunctionWithPoint }

@@ -53,16 +53,16 @@ function getRandomWithExclusions(min, max, exclusions) {
  * @param {boolean} increasing true if values should be increasing, false if decreasing
  * @returns array of n ordered numbers 
  */
-function generateOrderedValues(n, increasing) {
+function generateOrderedValues(n, increasing, extreme = 10, increment = 4) {
   if (n <= 0) {
     return [];
   }
 
-  const values = [Math.floor(Math.random() * 10) + 1]; // Initialize with a random value
+  const values = [Math.floor(Math.random() * extreme) + 1]; // Initialize with a random value
 
   while (values.length < n) {
     // generate a value greater than the last one
-    const nextDiff = getRandomNumber(1, 4) * (increasing ? 1 : -1);
+    const nextDiff = getRandomNumber(1, increment) * (increasing ? 1 : -1);
     const nextValue = values[values.length - 1] + nextDiff;
     values.push(nextValue);
   }
