@@ -6,7 +6,7 @@ const Section1 = () => {
   return (
     <>
       <div>There are a variety of properties that can be used to compute limits.</div>
-      <div>Throughout this section, we will be using the fact that <Latex expression={`{\\lim}_{x \\to a} f(x)`} classes={'c1'} /> and <Latex expression={`{\\lim}_{x \\to a} g(x)`} classes={'c2'} /> exist, and <Latex expression={`c`} classes={'c3'} /> is a constant</div>
+      <div>Throughout this section, we will be using the fact that <Latex expression={`{\\lim}_{x \\to a} f(x)`} /> and <Latex expression={`{\\lim}_{x \\to a} g(x)`} /> exist, and <Latex expression={`c`} /> is a constant</div>
     </>
   )
 }
@@ -15,7 +15,7 @@ const Section2 = () => {
   return (
     <>
       <div>
-        This is a list of all the properties we will need. Don't worry about memorizing these yet as we will do an example after this!
+        This is a list of all the properties we will need. Don't worry about memorizing these as you will see that it is not necessary!
       </div>
       <LimitPropertyRules />
     </>
@@ -52,7 +52,7 @@ const Section5 = () => {
   return (
     <>
       <div>
-        Looking at the first term, we see a product of two functions, so let's use rule number <strong>3</strong> to split those up. Also, we can use rule number <strong>7</strong> for the last term: 
+        Looking at the first term, we see a product of two functions, so let's use rule number <strong>3</strong> to split those up. Also, we can use rule number <strong>7</strong> for the last term:
       </div>
       <div>
         <Latex expression={`(\\lim_{x \\to 5} 3f(x) \\cdot \\lim_{x \\to 5} g(x)) + \\lim_{x \\to 5} \\left[\\frac{f(x)^2}{\\sqrt[2]{g(x)}} \\right] + 5`} display={true} />
@@ -130,7 +130,7 @@ const Section11 = () => {
   return (
     <>
       <div>
-        Simplifying, we get down to <Latex expression={`24 + \\frac{4}{2} + 5 = 24 + 2 + 5 = 31`} />!
+        Simplifying, we get down to <Latex expression={`24 + \\frac{4}{2} + 5 = 24 + 2 + 5 = 31`} />
       </div>
     </>
   )
@@ -140,7 +140,20 @@ const Section12 = () => {
   return (
     <>
       <div>
-        Wow, the problem looked so complicated at the beginning, but our limit properties made it so simple! Limit properties are extremely useful for calculating limits.
+        Instead of expanding the limit properties 1 by 1, we could also just have directly substituted in the corresponding limit of each function:
+      </div>
+      <div>
+        <Latex expression={`\\lim_{x \\to 5} \\left[3f(x) g(x) + \\frac{f(x)^2}{\\sqrt[2]{g(x)}} + 5 \\right] = `} display={true} /> <Latex expression={`\\lim_{x \\to 5} \\left[3(2)(4) + \\frac{(2)^2}{\\sqrt[2]{(4)}} + 5 \\right] = 24 + 2 + 5 = 31`} display={true} />
+      </div>
+    </>
+  )
+}
+
+const Section13 = () => {
+  return (
+    <>
+      <div>
+        Wow, the problem looked so complicated at the beginning, but it actually wasn't that hard! The limit properties enable us to use direct substitution to evaluate these limits.
       </div>
       <div>
         In this example, we started with givens: <Latex expression={`\\lim_{x \\to 5} f(x) = 2`} /> and <Latex expression={`\\lim_{x \\to 5} g(x) = 4`} />. Keep in mind that you can also use graphs or tables to find values of limits, as we learned in previous lessons.
@@ -149,4 +162,4 @@ const Section12 = () => {
   )
 }
 
-export { Section1, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9, Section10, Section11, Section12 }
+export { Section1, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9, Section10, Section11, Section12, Section13 }

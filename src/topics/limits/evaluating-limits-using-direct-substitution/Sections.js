@@ -1,5 +1,6 @@
 import Latex from "../../../components/latex/Latex"
 import { Piecewise } from "../../../components/latex/Piecewise"
+/*
 const Section1 = () => {
   return (
     <>
@@ -41,8 +42,9 @@ const Section3 = () => {
     </>
   )
 }
+*/
 
-const Section4 = () => {
+const Section1 = () => {
   return (
     <>
       <div>
@@ -55,11 +57,11 @@ const Section4 = () => {
   )
 }
 
-const Section5 = () => {
+const Section2 = () => {
   return (
     <>
       <div>
-        Due to this, direct substitution also works when finding a limit with just <Latex expression={`x`} /> as a variable.
+        Due to this, we can evaluate limits with just <Latex expression={`x`} /> as a variable.
       </div>
       <div>
         As an example, consider <Latex expression={`\\lim_{x \\to 3} (x^2 + 6x - 3)`} />.
@@ -68,20 +70,20 @@ const Section5 = () => {
   )
 }
 
-const Section6 = () => {
+const Section3 = () => {
   return (
     <>
       <div>
-        We already know <Latex expression={`\\lim_{x \\to 3} x = 3`} />. The expression we are finding the limit for is just a transformation of this function, so we can directly substitute in 3 for <Latex expression={`x`} />.
+        We already know <Latex expression={`\\lim_{x \\to 3} x = 3`} />. Thus, we can directly substitute in 3 for <Latex expression={`x`} />.
       </div>
       <div>
-        This gives us <Latex expression={`\\lim_{x \\to 3} (x^2 + 6x - 3) = `} /> <Latex expression={`(3)^2 + 6(3) - 3 = 24`} />. That was even easier than using the properties!
+        This gives us <Latex expression={`\\lim_{x \\to 3} (x^2 + 6x - 3) = `} /> <Latex expression={`(3)^2 + 6(3) - 3 = 24`} />.
       </div>
     </>
   )
 }
 
-const Section7 = () => {
+const Section4 = () => {
   const functions = [{ f: `2x - 1`, domain: `x < 0` }, { f: `x`, domain: `x \\geq 0` }]
   return (
     <>
@@ -95,7 +97,7 @@ const Section7 = () => {
   )
 }
 
-const Section8 = () => {
+const Section5 = () => {
   return (
     <>
       <div>
@@ -108,7 +110,7 @@ const Section8 = () => {
   )
 }
 
-const Section9 = () => {
+const Section6 = () => {
   return (
     <>
       <div>
@@ -118,7 +120,7 @@ const Section9 = () => {
   )
 }
 
-const Section10 = () => {
+const Section7 = () => {
   return (
     <>
       <div>
@@ -131,7 +133,7 @@ const Section10 = () => {
   )
 }
 
-const Section11 = () => {
+const Section8 = () => {
   return (
     <>
       <div>
@@ -141,7 +143,7 @@ const Section11 = () => {
   )
 }
 
-const Section12 = () => {
+const Section9 = () => {
   return (
     <>
       <div>
@@ -151,7 +153,7 @@ const Section12 = () => {
   )
 }
 
-const Section13 = () => {
+const Section10 = () => {
   return (
     <>
       <div>
@@ -164,7 +166,7 @@ const Section13 = () => {
   )
 }
 
-const Section14 = () => {
+const Section11 = () => {
   const functions = [{ f: '-(x - 3)', domain: 'x < 3' }, { f: `x - 3`, domain: `x \\geq 3` }]
   return (
     <>
@@ -178,7 +180,7 @@ const Section14 = () => {
   )
 }
 
-const Section15 = () => {
+const Section12 = () => {
   return (
     <>
       <div>
@@ -188,11 +190,11 @@ const Section15 = () => {
   )
 }
 
-const Section16 = () => {
+const Section13 = () => {
   return (
     <>
       <div>
-        To summarize, direct substitution is a great first step towards evaluating a limit. However, remember to use the correct functions to substitute into, especially in cases with piecewise and absolute value functions!
+        To summarize, direct substitution is a great first step towards evaluating a limit. However, remember to use the correct functions to substitute into, especially in cases with piecewise and absolute value functions.
       </div>
     </>
   )
@@ -200,4 +202,4 @@ const Section16 = () => {
 
 
 
-export { Section1, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9, Section10, Section11, Section12, Section13, Section14, Section15, Section16 }
+export { Section1, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9, Section10, Section11, Section12, Section13 }

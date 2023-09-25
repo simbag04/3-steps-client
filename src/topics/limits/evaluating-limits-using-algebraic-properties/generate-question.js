@@ -79,7 +79,7 @@ function limitPropertyQuestion() {
       {graph}
     </div>,
     <div className="flex vertical center medium-gap">
-      Now, the limit expression can be evaluated by using this list of properties!
+      Now, what is the easiest way to evaluate the limit, knowing the below list of properties? 
       <LimitPropertyRules />
     </div>
   ]

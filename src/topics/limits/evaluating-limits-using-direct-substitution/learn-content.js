@@ -1,4 +1,4 @@
-import { Section1, Section10, Section11, Section12, Section13, Section14, Section15, Section16, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9 } from "./Sections";
+import { Section1, Section10, Section11, Section12, Section13, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9 } from "./Sections";
 
 const learnContent = [
   <Section1 />,
@@ -13,10 +13,7 @@ const learnContent = [
   <Section10 />,
   <Section11 />,
   <Section12 />,
-  <Section13 />,
-  <Section14 />,
-  <Section15 />,
-  <Section16 />
+  <Section13 />
 ]
 
 export default learnContent
