@@ -246,4 +246,4 @@ function generateLimitPropertyTerm(functions, operators, depth = 2) {
   }
 }
 
-export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm, getPolynomialFunctionWithPoint }
+export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm, getPolynomialFunctionWithPoint, getPolynomialFunction }
