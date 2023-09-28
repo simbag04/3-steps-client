@@ -6,7 +6,6 @@ import { findLCM, getRandomNumber, getStringFactorFromXval, sortPolynomialByDegr
 const nerdamer = require("nerdamer/all.min")
 
 function limitByFactoring() {
-
   const holeX = getRandomNumber(-5, 5); // xvalue to ask about
   const holeFactor = getStringFactorFromXval(holeX);
 
@@ -46,12 +45,40 @@ function limitByFactoring() {
 
   const nextToInput =
     <Latex expression={`\\lim_{x \\to ${holeX}} 
-      \\left(\\frac{${numerator}}{${denominator}}\\right)`} />
+      \\left(\\frac{${numerator}}{${denominator}}\\right) = `} />
 
-  return { type: 'frq', ans, nextToInput }
+  return { type: 'math', ans, nextToInput }
 }
 
 function limitByRationalization() {
+  const holeX = getRandomNumber(-7, 7); // xvalue to ask about
+  const numeratorWithRoot = getRandomNumber(0, 1); // 0 if numerator has root, 1 if denominator
+
+  const holeFactor = getStringFactorFromXval(holeX);
+
+  // generate the other factor(s) on top and bottom
+  let topFactor = getRandomNumber(0, 1) === 0 ? getPolynomialFunction(1) : "1";
+  let bottomFactor = topFactor;
+
+  // evaluate values for top and bottom factor
+  const topValue = math.evaluate(topFactor, { x: holeX });
+  let bottomValue = math.evaluate(bottomFactor, { x: holeX });
+
+  // make sure bottom factor is different from top factor and both top and bottom aren't 0
+  while (bottomFactor === topFactor || (topValue === 0 && topValue === bottomValue)) {
+    bottomFactor = getRandomNumber(0, 1) === 0 || topFactor === "1" ? getPolynomialFunction(1) : "1";
+    bottomValue = math.evaluate(bottomFactor, { x: holeX });
+  }
+
+  let numerator = sortPolynomialByDegree(nerdamer(`${holeFactor}(${topFactor})`).expand());
+  let denominator = sortPolynomialByDegree(nerdamer(`${holeFactor}(${bottomFactor})`).expand());
+  let toModify = numeratorWithRoot ? numerator : denominator;
+  const b = getRandomNumber(1, 3);
+  
+
+}
+
+function modifyToMakeRoot(expression, type) {
 
 }
 

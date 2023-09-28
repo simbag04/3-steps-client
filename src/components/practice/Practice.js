@@ -17,6 +17,10 @@ import { Mastered } from "./Mastered";
 import { Hints } from "./Hints";
 import { Stars } from "../Stars";
 import { useWindowSize } from "../../helpers/useWindowSize";
+import { EditableMathField, addStyles } from "react-mathquill";
+import * as math from 'mathjs'
+
+addStyles()
 
 export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
@@ -42,6 +46,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
   const [moveStatsDown, setMoveStatsDown] = useState("horizontal"); // whether stats should move down
   const windowWidth = useWindowSize()[0]; // width of window
   const originalWidthRef = useRef(null); // width of question without wrapping
+  const mathRef = useRef(null);
 
   // dynamically import relevant topic question
   useEffect(() => {
@@ -104,6 +109,9 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     setHintsIndex(0)
     setHintsUsed(false);
     setTextInput("")
+    if (mathRef && mathRef.current) {
+      mathRef.current.latex('')
+    }
   }, [newQ, qFunction])
 
   // handler for mc input
@@ -120,6 +128,31 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     if (!goToNext) {
       setTextInput(e.target.value);
       correctRef.current = String(currQ.ans) === e.target.value;
+    }
+  }
+
+  // handler for math input
+  const handleMathInput = (e) => {
+    if (!goToNext) {
+      if (currQ.ans !== 'dne') {
+        try {
+          let n1 = math.parse(String(currQ.ans));
+          let n2 = math.parse(e.text() ? e.text() : "0");
+          correctRef.current = math.symbolicEqual(n1, n2);
+        } catch (e) {
+          console.log(e.message)
+        }
+      } else {
+        correctRef.current = e.text() === 'dne'
+      }
+    }
+  }
+
+  // handler for sqrt button click
+  const sqrt = () => {
+    if (mathRef.current) {
+      mathRef.current.cmd(`\\sqrt`)
+      mathRef.current.focus();
     }
   }
 
@@ -170,10 +203,19 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                   <span className="flex horizontal center medium-gap">
                     {currQ.nextToInput}
                     <input type="text" onChange={handleInput} value={textInput} className={classes}></input>
-                    {goToNext && !correctRef.current ? 
-                    <div className="correct ans">
-                      {currQ.ans}
-                    </div> : null}
+                    {goToNext && !correctRef.current ?
+                      <div className="correct ans">
+                        {currQ.ans}
+                      </div> : null}
+                  </span>
+                }
+                {/* Math Input */}
+                {currQ && currQ.type === 'math' &&
+                  <span className="flex horizontal center medium-gap">
+                    {currQ.nextToInput}
+                    <EditableMathField className='mathquill' latex={textInput} onChange={handleMathInput}
+                      mathquillDidMount={(mathField) => (mathRef.current = mathField)} />
+                    <button onClick={sqrt}>sqrt</button>
                   </span>
                 }
               </div>
