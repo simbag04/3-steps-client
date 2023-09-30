@@ -23,22 +23,44 @@ function limitByFactoring() {
     bottomValue = math.evaluate(bottomFactor, { x: holeX });
   }
 
-  // evaluate ans
-  let ans;
-  if (topValue === 0) {
-    ans = 0;
-  } else if (bottomValue === 0) {
-    ans = 'dne'
-  } else {
-    ans = math.simplify(`(${topFactor})/${bottomValue}`, { x: holeX }).toString();
-  }
-
   // find numerator and denominator for limit function
   let numerator = sortPolynomialByDegree(nerdamer(`${holeFactor}(${topFactor})`).expand());
-  numerator = nerdamer(numerator).toTeX().replaceAll(`\\cdot`, '')
-
   let denominator = sortPolynomialByDegree(nerdamer(`${holeFactor}(${bottomFactor})`).expand());
-  denominator = nerdamer(denominator).toTeX().replaceAll(`\\cdot`, '')
+
+  // evaluate ans
+  let ans = 0;
+  let radical = getRandomNumber(0, 1);
+  if (radical) {
+    const numeratorWithRoot = getRandomNumber(0, 1); // 0 if numerator has root, 1 if denominator
+    // add root to either numerator or denominator
+    if (numeratorWithRoot) {
+      const modified = modifyToMakeRoot(numerator, holeX)
+      numerator = formatPolynomialToLatex(`sqrt(${modified.root})${modified.b}`)
+      ans = math.simplify(
+        `(${topFactor})/((${bottomFactor})(sqrt(${modified.root}) - (${modified.b})))`,
+        { x: holeX });
+    } else {
+      const modified = modifyToMakeRoot(denominator, holeX)
+      denominator = formatPolynomialToLatex(`sqrt(${modified.root})${modified.b}`)
+      ans = math.simplify(
+        `(${topFactor})(sqrt(${modified.root}) - (${modified.b}))/(${bottomFactor})`,
+        { x: holeX });
+    }
+
+    // fix ans if it should be dne
+    ans = ans.toString() === "Infinity" || ans.toString() === "-Infinity" ? "dne" : ans.toString();
+  } else {
+    if (topValue === 0) {
+      ans = 0;
+    } else if (bottomValue === 0) {
+      ans = 'dne'
+    } else {
+      ans = math.simplify(`(${topFactor})/${bottomValue}`, { x: holeX }).toString();
+    }
+
+    numerator = nerdamer(numerator).toTeX().replaceAll(`\\cdot`, '')
+    denominator = nerdamer(denominator).toTeX().replaceAll(`\\cdot`, '')
+  }
 
   const nextToInput =
     <Latex expression={`\\lim_{x \\to ${holeX}} 
@@ -47,67 +69,16 @@ function limitByFactoring() {
   return { type: 'math', ans, nextToInput }
 }
 
-function limitByRationalization() {
-  const holeX = getRandomNumber(-7, 7); // xvalue to ask about
-  const numeratorWithRoot = getRandomNumber(0, 1); // 0 if numerator has root, 1 if denominator
-
-  const holeFactor = getStringFactorFromXval(holeX);
-
-  // generate the other factor(s) on top and bottom
-  let topFactor = getRandomNumber(0, 1) === 0 ? getPolynomialFunction(1) : "1";
-  let bottomFactor = topFactor;
-
-  // evaluate values for top and bottom factor
-  const topValue = math.evaluate(topFactor, { x: holeX });
-  let bottomValue = math.evaluate(bottomFactor, { x: holeX });
-
-  // make sure bottom factor is different from top factor and both top and bottom aren't 0
-  while (bottomFactor === topFactor || (topValue === 0 && topValue === bottomValue)) {
-    bottomFactor = getRandomNumber(0, 1) === 0 || topFactor === "1" ? getPolynomialFunction(1) : "1";
-    bottomValue = math.evaluate(bottomFactor, { x: holeX });
-  }
-
-  // get numerator/denominator
-  let numerator = sortPolynomialByDegree(nerdamer(`${holeFactor}(${topFactor})`).expand());
-  let denominator = sortPolynomialByDegree(nerdamer(`${holeFactor}(${bottomFactor})`).expand());
-  let ans = 0;
-
-  // add root to either numerator or denominator
-  if (numeratorWithRoot) {
-    const modified = modifyToMakeRoot(numerator, holeX)
-    numerator = formatPolynomialToLatex(`sqrt(${modified.root})${modified.b}`)
-    ans = math.simplify(
-      `(${topFactor})/((${bottomFactor})(sqrt(${modified.root}) - (${modified.b})))`,
-      { x: holeX });
-  } else {
-    const modified = modifyToMakeRoot(denominator, holeX)
-    denominator = formatPolynomialToLatex(`sqrt(${modified.root})${modified.b}`)
-    ans = math.simplify(
-      `(${topFactor})(sqrt(${modified.root}) - (${modified.b}))/(${bottomFactor})`,
-      { x: holeX });
-  }
-
-  // fix ans if it should be dne
-  ans = ans.toString() === "Infinity" || ans.toString() === "-Infinity" ? "dne" : ans.toString();
-
-  const nextToInput =
-    <Latex classes={'xl-font'} expression={`\\lim_{x \\to ${holeX}}\\left(\\frac{${numerator}}{${denominator}}\\right) =`} display={true} />
-
-  return { ans, nextToInput, type: 'math' }
-}
-
 function limitByTrig() {
 
 }
 
 function generateRandomQuestion() {
   // determine type of question to generate
-  const rand = getRandomNumber(1, 8);
+  const rand = 2;
   let q = null;
-  if (rand <= 3) {
+  if (rand <= 8) {
     q = limitByFactoring();
-  } else if (rand <= 8) {
-    q = limitByRationalization();
   } else {
     q = limitByTrig();
   }
@@ -139,7 +110,7 @@ function modifyToMakeRoot(expression, x) {
   const node = math.simplify(`${expression} + (${b})^2`); // evaluate node
   return {
     root: sortPolynomialByDegree(nerdamer(`(${node.toString()})`).expand()), // expand and format
-    b: b.charAt(0) !== '-' ? `+${b}` : b 
+    b: b.charAt(0) !== '-' ? `+${b}` : b
   }
 }
 
