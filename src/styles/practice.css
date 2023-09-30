@@ -48,26 +48,41 @@ input[type="radio"] {
   display: none;
 }
 
-input {
+input, .input {
   padding: 5px;
   box-shadow: 0 0 0 2px lightgray;
   border: none;
   border-radius: var(--border-radius);
 }
 
-.practice .selected {
+.input.selected {
   box-shadow: 0 0 0 2px #007bff;
-  border-radius: var(--border-radius);
 }
 
-.practice .correct {
+.input.correct {
   box-shadow: 0 0 0 4px green;
-  border-radius: var(--border-radius);
 }
 
-.practice .incorrect {
+.input.incorrect {
   box-shadow: 0 0 0 4px red;
-  border-radius: var(--border-radius);
+}
+
+.mathquill {
+  padding: 3px;
+}
+
+.mathquill:focus-within {
+  box-shadow: 0 0 0 2px black;
+}
+
+.mq-editable-field {
+  min-width: 5em;
+  text-align: start;
+  border: none !important;
+}
+
+.mq-editable-field.mq-focused {
+  box-shadow: none !important;
 }
 
 .feedback {

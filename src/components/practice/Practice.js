@@ -145,6 +145,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
       } else {
         correctRef.current = e.text() === 'd*n*e'
       }
+      setTextInput(e.latex())
     }
   }
 
@@ -193,7 +194,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                     {currQ.input && currQ.input.map((option, index) => {
                       return (
                         <label key={index}
-                          className={`${selectedOption === option ? classes : ""} ${option.correct && goToNext ? "correct" : ""}`}
+                          className={`input ${selectedOption === option ? classes : ""} ${option.correct && goToNext ? "correct" : ""}`}
                           onClick={() => handleClick(option)}>
                           {option.component}
                         </label>
@@ -206,7 +207,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                 {currQ && currQ.type === 'frq' &&
                   <span className="flex horizontal center medium-gap">
                     {currQ.nextToInput}
-                    <input type="text" onChange={handleInput} value={textInput} className={classes}></input>
+                    <input type="text" onChange={handleInput} value={textInput} className={`input ${classes}`}></input>
                     {goToNext && !correctRef.current ?
                       <div className="correct ans">
                         {currQ.ans}
@@ -218,8 +219,14 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                 {currQ && currQ.type === 'math' &&
                   <span className="flex horizontal center medium-gap">
                     {currQ.nextToInput}
-                    <EditableMathField className={`mathquill`} latex={textInput} onChange={handleMathInput}
-                      mathquillDidMount={(mathField) => (mathRef.current = mathField)} />
+                    <div className={`mathquill input ${classes}`}>
+                      <EditableMathField 
+                        latex={textInput}
+                        onChange={handleMathInput}
+                        mathquillDidMount={(mathField) => (mathRef.current = mathField)} 
+                        editable={!goToNext}/>
+                    </div>
+
                     {/* <button onClick={sqrt}>sqrt</button> */}
                     {goToNext && !correctRef.current ?
                       <div className="correct ans">
