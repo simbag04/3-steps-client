@@ -143,11 +143,12 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
           console.log(e.message)
         }
       } else {
-        correctRef.current = e.text() === 'dne'
+        correctRef.current = e.text() === 'd*n*e'
       }
     }
   }
 
+  /*
   // handler for sqrt button click
   const sqrt = () => {
     if (mathRef.current) {
@@ -155,6 +156,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
       mathRef.current.focus();
     }
   }
+  */
 
   // sets classes based on whether answer is correct
   useEffect(() => {
@@ -184,6 +186,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
             <div className={"practice-section " + moveStatsDown}>
               <div className="question flex vertical center medium-gap" ref={questionRef}>
                 {currQ && currQ.question}
+
                 {/* Multiple choice input */}
                 {currQ && currQ.type === 'mc' &&
                   <div className={`options ` + wrap}>
@@ -198,6 +201,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                     })}
                   </div>
                 }
+
                 {/* FRQ Input */}
                 {currQ && currQ.type === 'frq' &&
                   <span className="flex horizontal center medium-gap">
@@ -209,13 +213,18 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                       </div> : null}
                   </span>
                 }
+
                 {/* Math Input */}
                 {currQ && currQ.type === 'math' &&
                   <span className="flex horizontal center medium-gap">
                     {currQ.nextToInput}
-                    <EditableMathField className='mathquill' latex={textInput} onChange={handleMathInput}
+                    <EditableMathField className={`mathquill`} latex={textInput} onChange={handleMathInput}
                       mathquillDidMount={(mathField) => (mathRef.current = mathField)} />
-                    <button onClick={sqrt}>sqrt</button>
+                    {/* <button onClick={sqrt}>sqrt</button> */}
+                    {goToNext && !correctRef.current ?
+                      <div className="correct ans">
+                        {currQ.ans}
+                      </div> : null}
                   </span>
                 }
               </div>

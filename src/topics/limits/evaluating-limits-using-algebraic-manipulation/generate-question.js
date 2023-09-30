@@ -1,7 +1,7 @@
 import * as math from "mathjs";
 import Latex from "../../../components/latex/Latex";
 import { getPolynomialFunction } from "../../../helpers/expression-generators";
-import { findLCM, getRandomNumber, getStringFactorFromXval, sortPolynomialByDegree } from "../../../helpers/functions";
+import { formatPolynomialToLatex, getRandomNumber, getStringFactorFromXval, sortPolynomialByDegree } from "../../../helpers/functions";
 
 const nerdamer = require("nerdamer/all.min")
 
@@ -30,10 +30,7 @@ function limitByFactoring() {
   } else if (bottomValue === 0) {
     ans = 'dne'
   } else {
-    // ensure answer is a whole number by multiplying top to evaluate to lcm
-    let lcm = findLCM(Math.abs(topValue), Math.abs(bottomValue));
-    topFactor = sortPolynomialByDegree(nerdamer(`(${Math.round(lcm / topValue)})(${topFactor})`).expand());
-    ans = Math.round(math.evaluate(topFactor, { x: holeX }) / bottomValue);
+    ans = math.simplify(`(${topFactor})/${bottomValue}`, { x: holeX }).toString();
   }
 
   // find numerator and denominator for limit function
@@ -45,7 +42,7 @@ function limitByFactoring() {
 
   const nextToInput =
     <Latex expression={`\\lim_{x \\to ${holeX}} 
-      \\left(\\frac{${numerator}}{${denominator}}\\right) = `} />
+      \\left(\\frac{${numerator}}{${denominator}}\\right) = `} display={true} />
 
   return { type: 'math', ans, nextToInput }
 }
@@ -70,16 +67,33 @@ function limitByRationalization() {
     bottomValue = math.evaluate(bottomFactor, { x: holeX });
   }
 
+  // get numerator/denominator
   let numerator = sortPolynomialByDegree(nerdamer(`${holeFactor}(${topFactor})`).expand());
   let denominator = sortPolynomialByDegree(nerdamer(`${holeFactor}(${bottomFactor})`).expand());
-  let toModify = numeratorWithRoot ? numerator : denominator;
-  const b = getRandomNumber(1, 3);
-  
+  let ans = 0;
 
-}
+  // add root to either numerator or denominator
+  if (numeratorWithRoot) {
+    const modified = modifyToMakeRoot(numerator, holeX)
+    numerator = formatPolynomialToLatex(`sqrt(${modified.root})${modified.b}`)
+    ans = math.simplify(
+      `(${topFactor})/((${bottomFactor})(sqrt(${modified.root}) - (${modified.b})))`,
+      { x: holeX });
+  } else {
+    const modified = modifyToMakeRoot(denominator, holeX)
+    denominator = formatPolynomialToLatex(`sqrt(${modified.root})${modified.b}`)
+    ans = math.simplify(
+      `(${topFactor})(sqrt(${modified.root}) - (${modified.b}))/(${bottomFactor})`,
+      { x: holeX });
+  }
 
-function modifyToMakeRoot(expression, type) {
+  // fix ans if it should be dne
+  ans = ans.toString() === "Infinity" || ans.toString() === "-Infinity" ? "dne" : ans.toString();
 
+  const nextToInput =
+    <Latex classes={'xl-font'} expression={`\\lim_{x \\to ${holeX}}\\left(\\frac{${numerator}}{${denominator}}\\right) =`} display={true} />
+
+  return { ans, nextToInput, type: 'math' }
 }
 
 function limitByTrig() {
@@ -88,8 +102,7 @@ function limitByTrig() {
 
 function generateRandomQuestion() {
   // determine type of question to generate
-  //const rand = getRandomNumber(1, 10);
-  const rand = 2;
+  const rand = getRandomNumber(1, 8);
   let q = null;
   if (rand <= 3) {
     q = limitByFactoring();
@@ -107,6 +120,27 @@ function generateRandomQuestion() {
   </div>
 
   return q;
+}
+
+/**
+ * @param {String} expression to modify
+ * @param {Number} x value at which root should be 0
+ * @returns 
+ */
+function modifyToMakeRoot(expression, x) {
+  // generate random linear function
+  let b = sortPolynomialByDegree(nerdamer(getPolynomialFunction(getRandomNumber(0, 1))).expand())
+
+  // make b negative to ensure root evaluates to 0
+  if (math.evaluate(b, { x }) > 0) {
+    b = sortPolynomialByDegree(nerdamer(`-1(${b})`).expand())
+  }
+
+  const node = math.simplify(`${expression} + (${b})^2`); // evaluate node
+  return {
+    root: sortPolynomialByDegree(nerdamer(`(${node.toString()})`).expand()), // expand and format
+    b: b.charAt(0) !== '-' ? `+${b}` : b 
+  }
 }
 
 export default generateRandomQuestion

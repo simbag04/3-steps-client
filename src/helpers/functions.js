@@ -1,3 +1,4 @@
+import * as math from "mathjs"
 const nerdamer = require("nerdamer/all.min")
 
 /**
@@ -95,8 +96,8 @@ function sortPolynomialByDegree(polynomial) {
       }
     }
 
-    if (coeffs[i] !== "1") {
-      ans += coeffs[i];
+    if (coeffs[i] !== "1" || (coeffs[i] === "1" && i === 0)) {
+      ans += coeffs[i] === "-1" ? i === 0 ? "-1" : "-" : coeffs[i];
     }
 
     if (i > 1) {
@@ -192,4 +193,12 @@ function generateLimitTableData(xVal, values, start, end) {
   return {data}
 }
 
-export { getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, sortPolynomialByDegree, getStringFactorFromXval, convertArrayToObject, findLCM, generateLimitTableData }
+/**
+ * @param {String} polynomial to format
+ * @returns formatted latex polynomial
+ */
+function formatPolynomialToLatex(polynomial) {
+  return math.simplifyCore(polynomial).toTex().replaceAll('\\cdot', '').replaceAll('~', '');
+}
+
+export { getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, sortPolynomialByDegree, getStringFactorFromXval, convertArrayToObject, findLCM, generateLimitTableData, formatPolynomialToLatex }
