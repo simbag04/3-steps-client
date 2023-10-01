@@ -33,17 +33,18 @@ function limitByFactoring() {
   // evaluate ans
   let ans = 0;
   let radical = getRandomNumber(0, 1);
+  let modified;
   if (radical) {
     const numeratorWithRoot = getRandomNumber(0, 1); // 0 if numerator has root, 1 if denominator
     // add root to either numerator or denominator
     if (numeratorWithRoot) {
-      const modified = modifyToMakeRoot(numerator, holeX)
+      modified = modifyToMakeRoot(numerator, holeX)
       numerator = formatPolynomialToLatex(`sqrt(${modified.root})${modified.b}`)
       ans = math.simplify(
         `(${topFactor})/((${bottomFactor})(sqrt(${modified.root}) - (${modified.b})))`,
         { x: holeX });
     } else {
-      const modified = modifyToMakeRoot(denominator, holeX)
+      modified = modifyToMakeRoot(denominator, holeX)
       denominator = formatPolynomialToLatex(`sqrt(${modified.root})${modified.b}`)
       ans = math.simplify(
         `(${topFactor})(sqrt(${modified.root}) - (${modified.b}))/(${bottomFactor})`,
@@ -65,29 +66,69 @@ function limitByFactoring() {
     denominator = nerdamer(denominator).toTeX().replaceAll(`\\cdot`, '')
   }
 
-  const nextToInput =
-    <Latex expression={`\\lim_{x \\to ${holeX}} 
-      \\left(\\frac{${numerator}}{${denominator}}\\right) = `} display={true} />
+  const expression = `\\lim_{x \\to ${holeX}}\\left(\\frac{${numerator}}{${denominator}}\\right)`
 
-  return { type: 'math', ans, nextToInput }
+  const nextToInput =
+    <Latex expression={`${expression} = `} display={true} />
+
+  const hints = [
+    <div>
+      First, evaluate the limit: <Latex expression={expression} /> with direct substitution. Do you get <Latex expression={`\\frac{0}{0}`} /> ?
+    </div>
+  ]
+  if (radical) {
+    hints.push(
+      <div>
+        This is a question with a radical, so the first thing we should do is get rid of the radical! We can rewrite the radical as <Latex expression={`${formatPolynomialToLatex(`sqrt(${modified.root})`)} + (${formatPolynomialToLatex(`${modified.b}`)})`} />, which gives us an expression in the form <Latex expression={`a + b`} />
+      </div>
+    )
+    hints.push(
+      <div>
+        Remember <Latex expression={`(a + b)(a - b) = a^2 - b^2`} />? We can multiply top and bottom by <Latex expression={`(a - b)`} />, and that will remove the radical!
+      </div>
+    )
+    hints.push(
+      <div>
+        Try evaluating the limit again. Do you still get <Latex expression={`\\frac{0}{0}`} />?
+      </div>
+    )
+  }
+
+  hints.push(
+    <div>
+      That's ok! There is a hole in the function that we need to remove. The next logical step is to factor both the top and bottom of the fraction.
+    </div>
+  )
+
+  hints.push(
+    <div>
+      You should see where the hole is coming from now! Cancel these factors, and now try evaluating the limit. What do you get now?
+    </div>
+  )
+
+  return { type: 'math', ans, nextToInput, hints }
 }
 
 function limitByTrig() {
   const topVar = getRandomNumber(0, 1); // what the top is (cos^2x or sin^2x)
   const bottomVar = !topVar ? 1 : 0;
-  const toExpand = getRandomNumber(0, 1);
+  const toExpand = getRandomNumber(0, 1); // whether top should be in 1 - form or just trig^2
   let ans = 0;
   let numerator;
 
   const plus = getRandomNumber(0, 1);
   let denominator = `1 ${plus ? '+' : '-'} ${normalTrig[bottomVar]}`
-  let xVal = math.parse(xvals[topVar][plus]).toTex();
+  let xVal = math.parse(xvals[topVar][plus]).toTex(); // decide xval so top/bottom are 0/0
+
+  // constants to multiply by
   const nconstant = getRandomWithExclusions(-4, 4, [0]);
   const dconstant = getRandomWithExclusions(-4, 4, [0]);
 
+  let toMultiply;
+  let first;
   if (toExpand) { // it will be 1 - bottomVar^2
-    const toMultiply = getRandomNumber(0, 1); // multiply inverses or tans
-    let first = otherTrig[toMultiply][bottomVar] // pick something that cancels with bottomvar
+    toMultiply = getRandomNumber(0, 1); // multiply inverses or tans
+    first = otherTrig[toMultiply][bottomVar] // pick something that cancels with bottomvar
     if (toMultiply) { // multiplying tans
       numerator = `(${makeSquaredForLatex(first)} - 
       ${makeSquaredForLatex(normalTrig[topVar])})`;
@@ -97,27 +138,58 @@ function limitByTrig() {
       ans = 2;
     }
   } else {
-    numerator = `${makeSquaredForLatex(normalTrig[topVar])}`
+    numerator = `${makeSquaredForLatex(normalTrig[topVar])}` // no change as top will be trig^2
     ans = 2
   }
 
-  numerator = nerdamer(`${nconstant}${numerator}`).expand();
+  // format numerator/denominator
+  numerator = nerdamer(`${nconstant}(${numerator})`).expand();
   numerator = nerdamerFormatToLatex(numerator);
   denominator = nerdamer(`${dconstant}(${denominator})`).expand();
   denominator = nerdamerFormatToLatex(denominator);
 
+  // fix ans
   ans = math.simplify(`${nconstant}(${ans})/${dconstant}`).toString()
 
-  const nextToInput =
-    <Latex expression={`\\lim_{x \\to ${xVal}} 
-      \\left(\\frac{${numerator}}{${denominator}}\\right) = `} display={true} />
+  const expression = `\\lim_{x \\to ${xVal}} 
+  \\left(\\frac{${numerator}}{${denominator}}\\right)`
 
-  return { nextToInput, type: 'math', ans }
+  const nextToInput =
+    <Latex expression={`${expression} = `} display={true} />
+
+  const hints = [
+    <div>
+      First, evaluate the limit: <Latex expression={expression} /> with direct substitution. Do you get <Latex expression={`\\frac{0}{0}`} /> ?
+    </div>
+  ]
+
+  if (toExpand) {
+    hints.push(
+      <div>
+        Try factoring out <Latex expression={nerdamerFormatToLatex(makeSquaredForLatex(first))} /> on the top.
+      </div>
+    )
+  } else {
+    hints.push(
+      <div>
+        Remember <Latex expression={`sin^2(x) + cos^2(x) = 1`} />? How can we use that to rewrite the top?
+      </div>
+    )
+  }
+
+  hints.push(
+    <div>
+      Can you factor the numerator now, and cancel a factor from top and bottom? Once you do that, try evaluating the limit again!
+    </div>
+  )
+
+  return { nextToInput, type: 'math', ans, hints }
 }
 
 function generateRandomQuestion() {
   // determine type of question to generate
-  const rand = getRandomNumber(1, 10);
+  // const rand = getRandomNumber(1, 10);
+  const rand = 9;
   let q = null;
   if (rand <= 8) {
     q = limitByFactoring();

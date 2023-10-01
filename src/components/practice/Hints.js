@@ -11,7 +11,7 @@ export const Hints = ({ currQ, setShowHints, hintsIndex, setHintsIndex }) => {
   const backToProblem = () => setShowHints(false);
 
   return (
-    <div className="flex vertical center medium-gap text-center">
+    <div className="learn-section flex vertical center medium-gap text-center">
       <h1>Hints</h1>
       {/* render all hints the user is currently on */}
       {currQ.hints.map((hint, index) => {
