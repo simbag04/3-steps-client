@@ -223,8 +223,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                       <EditableMathField 
                         latex={textInput}
                         onChange={handleMathInput}
-                        mathquillDidMount={(mathField) => (mathRef.current = mathField)} 
-                        editable={!goToNext}/>
+                        mathquillDidMount={(mathField) => (mathRef.current = mathField)} />
                     </div>
 
                     {/* <button onClick={sqrt}>sqrt</button> */}

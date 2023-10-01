@@ -1,9 +1,12 @@
 import * as math from "mathjs";
 import Latex from "../../../components/latex/Latex";
 import { getPolynomialFunction } from "../../../helpers/expression-generators";
-import { formatPolynomialToLatex, getRandomNumber, getStringFactorFromXval, sortPolynomialByDegree } from "../../../helpers/functions";
+import { formatPolynomialToLatex, getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, nerdamerFormatToLatex, sortPolynomialByDegree } from "../../../helpers/functions";
 
 const nerdamer = require("nerdamer/all.min")
+const normalTrig = ["sin(x)", "cos(x)"]
+const otherTrig = [["csc(x)", "sec(x)"], ["cot(x)", "tan(x)"]]
+const xvals = [["0", "pi"], ["pi/2", "3pi/2"]];
 
 function limitByFactoring() {
   const holeX = getRandomNumber(-5, 5); // xvalue to ask about
@@ -70,12 +73,51 @@ function limitByFactoring() {
 }
 
 function limitByTrig() {
+  const topVar = getRandomNumber(0, 1); // what the top is (cos^2x or sin^2x)
+  const bottomVar = !topVar ? 1 : 0;
+  const toExpand = getRandomNumber(0, 1);
+  let ans = 0;
+  let numerator;
 
+  const plus = getRandomNumber(0, 1);
+  let denominator = `1 ${plus ? '+' : '-'} ${normalTrig[bottomVar]}`
+  let xVal = math.parse(xvals[topVar][plus]).toTex();
+  const nconstant = getRandomWithExclusions(-4, 4, [0]);
+  const dconstant = getRandomWithExclusions(-4, 4, [0]);
+
+  if (toExpand) { // it will be 1 - bottomVar^2
+    const toMultiply = getRandomNumber(0, 1); // multiply inverses or tans
+    let first = otherTrig[toMultiply][bottomVar] // pick something that cancels with bottomvar
+    if (toMultiply) { // multiplying tans
+      numerator = `(${makeSquaredForLatex(first)} - 
+      ${makeSquaredForLatex(normalTrig[topVar])})`;
+      ans = 0;
+    } else {
+      numerator = `(${makeSquaredForLatex(first)} - 1)`;
+      ans = 2;
+    }
+  } else {
+    numerator = `${makeSquaredForLatex(normalTrig[topVar])}`
+    ans = 2
+  }
+
+  numerator = nerdamer(`${nconstant}${numerator}`).expand();
+  numerator = nerdamerFormatToLatex(numerator);
+  denominator = nerdamer(`${dconstant}(${denominator})`).expand();
+  denominator = nerdamerFormatToLatex(denominator);
+
+  ans = math.simplify(`${nconstant}(${ans})/${dconstant}`).toString()
+
+  const nextToInput =
+    <Latex expression={`\\lim_{x \\to ${xVal}} 
+      \\left(\\frac{${numerator}}{${denominator}}\\right) = `} display={true} />
+
+  return { nextToInput, type: 'math', ans }
 }
 
 function generateRandomQuestion() {
   // determine type of question to generate
-  const rand = 2;
+  const rand = getRandomNumber(1, 10);
   let q = null;
   if (rand <= 8) {
     q = limitByFactoring();
@@ -91,6 +133,10 @@ function generateRandomQuestion() {
   </div>
 
   return q;
+}
+
+function makeSquaredForLatex(trigFunction) {
+  return `${trigFunction.substring(0, 3)}^2${trigFunction.substring(3)}`
 }
 
 /**

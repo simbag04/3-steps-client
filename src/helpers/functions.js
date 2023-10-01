@@ -201,4 +201,8 @@ function formatPolynomialToLatex(polynomial) {
   return math.simplifyCore(polynomial).toTex().replaceAll('\\cdot', '').replaceAll('~', '');
 }
 
-export { getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, sortPolynomialByDegree, getStringFactorFromXval, convertArrayToObject, findLCM, generateLimitTableData, formatPolynomialToLatex }
+function nerdamerFormatToLatex(expression) {
+  return nerdamer(expression).toTeX().replaceAll('\\cdot', '').replaceAll('~', '')
+}
+
+export { getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, sortPolynomialByDegree, getStringFactorFromXval, convertArrayToObject, findLCM, generateLimitTableData, formatPolynomialToLatex, nerdamerFormatToLatex }
