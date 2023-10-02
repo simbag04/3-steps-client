@@ -51,6 +51,8 @@ export const Unit = () => {
             const topic = user ? t.topic_id : t;
             const date = user && t && t.next_review_date ? t.next_review_date.date : null;
             const rdp = review_date_passed(date);
+            console.log(topic ? topic.name: null + " " + date)
+            console.log(date)
             return (
               <div key={topic ? topic._id : i}
                 className={"element topic-el center small-gap " + (date && rdp >= 0 ? "review" : "ok")}>
@@ -59,7 +61,7 @@ export const Unit = () => {
                 <div className="buttons">
                   <Link to={`/${cname}/${uname}/${topic && topic.slug}/learn`}>Learn</Link>
                   <Link to={`/${cname}/${uname}/${topic && topic.slug}/practice`}>
-                    {rdp && rdp >= 0 ? "Review" : "Practice"}</Link>
+                    {rdp >= 0 ? "Review" : "Practice"}</Link>
                 </div>
                 {/* Progress line with stars */}
                 {user && t && topic &&

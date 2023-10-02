@@ -104,7 +104,8 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
         if (user) {
           try {
             // create http req
-            const body = { result: correctRef.current }
+            const d = new Date();
+            const body = { result: correctRef.current, date: d }
             const apiRes = await fetch(`${apiLink}/topic/${name}/question`, {
               method: 'put',
               body: JSON.stringify(body),
