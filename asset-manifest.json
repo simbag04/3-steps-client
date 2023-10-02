@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/3-steps-client/static/css/main.69851090.css",
-    "main.js": "/3-steps-client/static/js/main.18685522.js",
+    "main.js": "/3-steps-client/static/js/main.b8676615.js",
     "static/css/594.b8b5514d.chunk.css": "/3-steps-client/static/css/594.b8b5514d.chunk.css",
     "static/js/594.23770106.chunk.js": "/3-steps-client/static/js/594.23770106.chunk.js",
     "static/js/10.79a4be0a.chunk.js": "/3-steps-client/static/js/10.79a4be0a.chunk.js",
@@ -96,7 +96,7 @@
     "static/media/silver-star.svg": "/3-steps-client/static/media/silver-star.e0d537619bc63760ecd2723c08b9ec40.svg",
     "static/media/menu.svg": "/3-steps-client/static/media/menu.b9a94dd3eb2dfd2c337e094db425be51.svg",
     "main.69851090.css.map": "/3-steps-client/static/css/main.69851090.css.map",
-    "main.18685522.js.map": "/3-steps-client/static/js/main.18685522.js.map",
+    "main.b8676615.js.map": "/3-steps-client/static/js/main.b8676615.js.map",
     "594.b8b5514d.chunk.css.map": "/3-steps-client/static/css/594.b8b5514d.chunk.css.map",
     "594.23770106.chunk.js.map": "/3-steps-client/static/js/594.23770106.chunk.js.map",
     "10.79a4be0a.chunk.js.map": "/3-steps-client/static/js/10.79a4be0a.chunk.js.map",
@@ -125,6 +125,6 @@
   },
   "entrypoints": [
     "static/css/main.69851090.css",
-    "static/js/main.18685522.js"
+    "static/js/main.b8676615.js"
   ]
 }
