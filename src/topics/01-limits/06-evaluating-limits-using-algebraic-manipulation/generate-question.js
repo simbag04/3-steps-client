@@ -188,8 +188,7 @@ function limitByTrig() {
 
 function generateRandomQuestion() {
   // determine type of question to generate
-  // const rand = getRandomNumber(1, 10);
-  const rand = 9;
+  const rand = getRandomNumber(1, 10);
   let q = null;
   if (rand <= 8) {
     q = limitByFactoring();
