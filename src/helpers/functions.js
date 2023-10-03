@@ -195,12 +195,16 @@ function generateLimitTableData(xVal, values, start, end) {
 
 /**
  * @param {String} polynomial to format
- * @returns formatted latex polynomial
+ * @returns formatted latex polynomial formatted with mathjs
  */
 function formatPolynomialToLatex(polynomial) {
   return math.simplifyCore(polynomial).toTex().replaceAll('\\cdot', '').replaceAll('~', '');
 }
 
+/**
+ * @param {String} polynomial to format
+ * @returns formatted latex polynomial formatted with nerdamer
+ */
 function nerdamerFormatToLatex(expression) {
   return nerdamer(expression).toTeX().replaceAll('\\cdot', '').replaceAll('~', '')
 }

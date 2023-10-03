@@ -21,12 +21,16 @@ import { UserContext } from "../../App";
 import { ApiContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { format_review_date, review_date_passed } from "../../helpers/format-helpers";
+import { useRef } from "react";
 
 export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed, setTitleWord, moveStatsDown }) => {
   const [text, setText] = useState(""); // feedback text, such as "Incorrect"
   const [feedback, setFeedback] = useState(""); // added to feedback element classes for styling
   const [dbEntry, setDbEntry] = useState({}); // entry for this user for this topic in DB
-  const [reviewDatePassed, setReviewDatePassed] = useState(-1);
+  const [reviewDatePassed, setReviewDatePassed] = useState(-1); // How many days ago review date was
+  const [showHintsInfo, setShowHintsInfo] = useState(false);
+  const hintsButtonRef = useRef(null);
+  const [hintsInfoPos, setHintsInfoPos] = useState({ x: 0, y: 0 })
 
   const { user } = useContext(UserContext);
   const apiLink = useContext(ApiContext);
@@ -146,6 +150,23 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
 
   const login = () => nav('/login');
   const register = () => nav('/register');
+
+  const handleMouseEnter = () => {
+    if (hintsButtonRef.current) {
+      setShowHintsInfo(true);
+      setHintsInfoPos({ x: hintsButtonRef.current.offsetLeft, y: hintsButtonRef.current.offsetTop });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setShowHintsInfo(false);
+  };
+
+  const hintsInfoStyle = {
+    display: showHintsInfo ? 'block' : 'none',
+    bottom: `${window.innerHeight - hintsInfoPos.y + 10}px`,
+  };
+
   const style = {
     width: moveStatsDown === "horizontal" ? "200px" : `${Math.min(window.outerWidth * 0.8, 350)}px`
   }
@@ -188,11 +209,15 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
             {/* Buttons shown based on state variables */}
             {!goToNext && <button onClick={checkAnswer}><strong>Check</strong></button>}
             {goToNext && <button onClick={nextQuestion}><strong>Next</strong></button>}
-            {!goToNext && <button onClick={showHints}><strong>I Need a Hint!</strong></button>}
+            {!goToNext && <button onClick={showHints} ref={hintsButtonRef} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}><strong>I Need a Hint!</strong></button>}
             <button onClick={backToTopicsButtonHandler}><strong>Back to Topics</strong></button>
           </div>
 
+
         </div>
+      </div>
+      <div style={hintsInfoStyle} className="hints-info text-center">
+        This problem won't count towards your progress if you use a hint.
       </div>
       {/* Feedback text */}
       {text !== "" ?
