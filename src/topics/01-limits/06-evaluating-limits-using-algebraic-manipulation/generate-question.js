@@ -4,10 +4,16 @@ import { getPolynomialFunction } from "../../../helpers/expression-generators";
 import { formatPolynomialToLatex, getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, nerdamerFormatToLatex, sortPolynomialByDegree } from "../../../helpers/functions";
 
 const nerdamer = require("nerdamer/all.min")
+
+// helpful constants for trig questions
 const normalTrig = ["sin(x)", "cos(x)"]
 const otherTrig = [["csc(x)", "sec(x)"], ["cot(x)", "tan(x)"]]
 const xvals = [["0", "pi"], ["pi/2", "3pi/2"]];
 
+/**
+ * generates random 0/0 limit question involving factoring and removing roots.
+ * @returns relevant question components
+ */
 function limitByFactoring() {
   const holeX = getRandomNumber(-5, 5); // xvalue to ask about
   const holeFactor = getStringFactorFromXval(holeX);
@@ -46,7 +52,7 @@ function limitByFactoring() {
     } else {
       modified = modifyToMakeRoot(denominator, holeX)
       denominator = formatPolynomialToLatex(`sqrt(${modified.root})${modified.b}`)
-      ans = math.simplify(
+      ans = math.simplify( // evaluate ans
         `(${topFactor})(sqrt(${modified.root}) - (${modified.b}))/(${bottomFactor})`,
         { x: holeX });
     }
@@ -109,6 +115,10 @@ function limitByFactoring() {
   return { type: 'math', ans, nextToInput, hints }
 }
 
+/**
+ * generates 0/0 limit problems involving trig functions. User is asked to evaluate limit.
+ * @returns relevant question components
+ */
 function limitByTrig() {
   const topVar = getRandomNumber(0, 1); // what the top is (cos^2x or sin^2x)
   const bottomVar = !topVar ? 1 : 0;
@@ -116,7 +126,7 @@ function limitByTrig() {
   let ans = 0;
   let numerator;
 
-  const plus = getRandomNumber(0, 1);
+  const plus = getRandomNumber(0, 1); // whether factor is 1 + [trig] or 1 - trig
   let denominator = `1 ${plus ? '+' : '-'} ${normalTrig[bottomVar]}`
   let xVal = math.parse(xvals[topVar][plus]).toTex(); // decide xval so top/bottom are 0/0
 
@@ -126,7 +136,7 @@ function limitByTrig() {
 
   let toMultiply;
   let first;
-  if (toExpand) { // it will be 1 - bottomVar^2
+  if (toExpand) { // numerator will be 1 - bottomVar^2
     toMultiply = getRandomNumber(0, 1); // multiply inverses or tans
     first = otherTrig[toMultiply][bottomVar] // pick something that cancels with bottomvar
     if (toMultiply) { // multiplying tans
@@ -157,6 +167,7 @@ function limitByTrig() {
   const nextToInput =
     <Latex expression={`${expression} = `} display={true} />
 
+  // generate hints
   const hints = [
     <div>
       First, evaluate the limit: <Latex expression={expression} /> with direct substitution. Do you get <Latex expression={`\\frac{0}{0}`} /> ?
@@ -206,6 +217,10 @@ function generateRandomQuestion() {
   return q;
 }
 
+/**
+ * @param {String} trigFunction like "sin(x)"
+ * @returns squared notation, ex. sin^2(x)
+ */
 function makeSquaredForLatex(trigFunction) {
   return `${trigFunction.substring(0, 3)}^2${trigFunction.substring(3)}`
 }
