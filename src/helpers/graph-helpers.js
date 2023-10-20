@@ -7,12 +7,13 @@ import { FAR_DIST, CLOSE_DIST, AXIS_OFFSET } from "./constants";
  * @param {function} f function for which to generate data
  * @param {int} min domain minimum value
  * @param {int} max domain maximum value
+ * @param {number} dataGap how close to generate function data
  * @returns array of data with generated values
  */
-const generateFunctionData = (f, min, max) => {
+const generateFunctionData = (f, min, max, dataGap = 0.01) => {
   let data = [];
 
-  for (let i = min; i <= max; i += 0.01) {
+  for (let i = min; i <= max; i += dataGap) {
     const x = i;
     const y = f(i)
     data.push({ x, y });
@@ -36,10 +37,11 @@ const generateFunctionData = (f, min, max) => {
  * @param {boolean} leftArrow whether there should be an arrow on the left of the graph
  * @param {boolean} rightArrow whether there should be an arrow on the right of the graph
  * @param {String} type can be "asymptotic"
+ * @param {number} dataGap how close to generate function data
  * @returns data that was used to graph function, id of svg path of function
  */
-const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, classes, min, max, leftArrow, rightArrow, type) => {
-  let data = generateFunctionData(f, min, max); // generate data
+const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, classes, min, max, leftArrow, rightArrow, type, dataGap) => {
+  let data = generateFunctionData(f, min, max, dataGap); // generate data
 
   // filter data
   data = data.filter((d) => d.x > Math.min(xScale.invert(0), max) &&
@@ -53,7 +55,7 @@ const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, class
       // get data point of intersection with top/bottom of graph
       const y = data[0].y > 0 ? yScale.invert(0) : yScale.invert(height)
       let d = findIntersections(f, y, min + 0.00001, data[0].x, 0.01);
-      if (d) data.unshift({x: d, y: f(d)}); // add point to beginning of data
+      if (d) data.unshift({ x: d, y: f(d) }); // add point to beginning of data
     }
 
     // make right part of graph go to edge
@@ -61,7 +63,7 @@ const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, class
       // data point of intersection with top/bottom
       const y = data[data.length - 1].y > 0 ? yScale.invert(0) : yScale.invert(height)
       let d = findIntersections(f, y, data[data.length - 1].x, max - 0.00001, 0.01);
-      if (d) data.push({x: d, y: f(d)}); // add point to end of data
+      if (d) data.push({ x: d, y: f(d) }); // add point to end of data
     }
   }
 
@@ -71,7 +73,7 @@ const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, class
 
   // arrow markers for graph
   const markerSize = 5;
-  const name = 'function-arrow'
+  const name = `${uuidv4()}function-arrow`
   createArrowMarker(name, svg, markerSize, color, classes)
 
   // create graph
@@ -88,6 +90,7 @@ const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, class
     .attr('d', line);
 
   svg.select(".tick-text").raise(); // raise tickmarks on top
+  svg.select(".tick-marks").raise(); // raise tickmarks on top
 
   return { data, id };
 }
@@ -104,19 +107,19 @@ const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, class
 function findIntersections(func, y, xMin, xMax, tolerance) {
   var a = xMin;
   var b = xMax;
-  
+
   // binary search
   while (b - a > 0.00001) {
     var xMid = (a + b) / 2;
     var yMid = func(xMid);
-    
+
     if (y > 0 && yMid <= y && y - yMid < tolerance) {
       return xMid;
     }
     if (y < 0 && yMid >= y && yMid - y < tolerance) {
       return xMid;
     }
-    
+
     // update based on graph behavior
     if (func(xMin) < func(xMax) && yMid < y) {
       // increasing graph, y too low
@@ -152,7 +155,7 @@ const createMultipleFunctionsGraph = (svg, functions, width, height, xScale, ySc
   for (let i = 0; i < functions.length; i++) {
     // add graph for each function
     const func = functions[i];
-    const { data, id } = createFunctionGraph(svg, func.f, width, height, null, xScale, yScale, func.classes, func.min, func.max, func.leftArrow, func.rightArrow, func.type);
+    const { data, id } = createFunctionGraph(svg, func.f, width, height, null, xScale, yScale, func.classes, func.min, func.max, func.leftArrow, func.rightArrow, func.type, func.dataGap);
 
     dataArray[dataArray.length] = { data, id }; // save return values
 
@@ -180,14 +183,18 @@ const createMultipleFunctionsGraph = (svg, functions, width, height, xScale, ySc
 }
 
 /**
- * creates -10 by 10 blank canvas on top of which graphs can be drawn 
+ * creates -10 by 10 (default, diff dimensions can be specified) blank canvas on top of which graphs can be drawn 
  * @param {number} width width of graph
  * @param {number} height height of graph
  * @param {Ref} svgRef reference to svg where graph should be drawn
  * @param {number} textSize size of text of graph labels
+ * @param {number} minx minimum domain value
+ * @param {number} maxx maximum domain value
+ * @param {number} miny minimum range value
+ * @param {number} maxy maximum range value
  * @returns width, height, xscale, and yscale of graph
  */
-const createBlankCanvas = (width, height, svgRef, textSize) => {
+const createBlankCanvas = (width, height, svgRef, textSize, minx = -10, maxx = 10, miny = -10, maxy = 10) => {
   const numCells = 20;
   const half = (width / 2) / numCells;
   const color = "#707070"
@@ -202,35 +209,12 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
 
   // scales
   const xScale = d3.scaleLinear()
-    .domain([-1 * numCells / 2, numCells / 2])
+    .domain([minx, maxx])
     .range([half, width - half]);
 
   const yScale = d3.scaleLinear()
-    .domain([-1 * numCells / 2, numCells / 2])
+    .domain([miny, maxy])
     .range([-1 * half + height, half]);
-
-  // build grid lines
-  svg
-    .selectAll(".x-grid-line")
-    .data(d3.range(-1 * numCells / 2, numCells / 2 + 1))
-    .enter().append("line")
-    .attr("class", "x-grid-line")
-    .attr("x1", d => xScale(d))
-    .attr("x2", d => xScale(d))
-    .attr("y1", 0)
-    .attr("y2", height)
-    .attr("stroke", "lightgray");
-
-  svg
-    .selectAll(".y-grid-line")
-    .data(d3.range(-1 * numCells / 2, numCells / 2 + 1))
-    .enter().append("line")
-    .attr("class", "y-grid-line")
-    .attr("x1", 0)
-    .attr("x2", width)
-    .attr("y1", d => yScale(d))
-    .attr("y2", d => yScale(d))
-    .attr("stroke", "lightgray");
 
   // build tick marks on axes
   const tickMarks = svg.append('g')
@@ -239,8 +223,30 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
   const tickText = svg.append('g')
     .attr('class', 'tick-text')
 
+  const xGrid = svg.append('g')
+    .attr('class', 'x-grid-line')
+
+  const yGrid = svg.append('g')
+    .attr('class', 'y-grid-line')
+
+
+  const tickCount = 20;
+  const tickCount2 = tickCount / 2;
+
+  const ticks = d3.range(tickCount + 1).map((d, i) => minx + (i * ((maxx - minx) / tickCount)));
+  const ticks2 = d3.range(tickCount2 + 1).map((d, i) => minx + (i * ((maxx - minx) / tickCount2)));
+
+  ticks.forEach(tick => {
+    xGrid.append("line")
+      .attr("x1", xScale(tick))
+      .attr("x2", xScale(tick))
+      .attr("y1", 0)
+      .attr("y2", height)
+      .attr("stroke", "lightgray");
+  })
+  
   // add marks and text to xaxis
-  xScale.ticks().forEach(tick => {
+  ticks2.forEach(tick => {
     tickMarks.append("line")
       .attr("x1", xScale(tick))
       .attr("x2", xScale(tick))
@@ -257,11 +263,21 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
       .style('color', 'black')
       .style('font-size', tick === 0 ? 0 : textSize - 4)
       .attr('font-weight', 'bold')
-      .text(tick)
+      .text(Math.round(tick * 100) / 100)
+  })
+
+  ticks.forEach(tick => {
+    yGrid.append("line")
+      .attr("class", "y-grid-line")
+      .attr("x1", 0)
+      .attr("x2", width)
+      .attr("y1", yScale(tick))
+      .attr("y2", yScale(tick))
+      .attr("stroke", "lightgray");
   })
 
   // add marks and text to y axis
-  yScale.ticks().forEach(tick => {
+  ticks2.forEach(tick => {
     tickMarks.append("line")
       .attr("x1", xScale(0) - 4)
       .attr("x2", xScale(0) + 4)
@@ -278,7 +294,7 @@ const createBlankCanvas = (width, height, svgRef, textSize) => {
       .style('color', 'black')
       .style('font-size', tick === 0 ? 0 : textSize - 4)
       .attr('font-weight', 'bold')
-      .text(tick)
+      .text(Math.round(tick * 100) / 100)
   })
 
   // draw actual x and y axes

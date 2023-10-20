@@ -26,6 +26,14 @@
   fill: var(--random-color);
 }
 
+.stroke.c1 {
+  stroke: var(--color1);
+}
+
+.fill.c1 {
+  fill: var(--color1);
+}
+
 .stroke.c2 {
   stroke: var(--color2);
 }
