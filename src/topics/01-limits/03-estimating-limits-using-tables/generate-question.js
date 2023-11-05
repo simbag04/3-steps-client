@@ -125,7 +125,7 @@ function tableToLimit() {
     <FunctionTable xTitle={`x`} yTitle={`g(x)`} data={data} />
   </div>
 
-  const type = 'frq';
+  const type = 'math';
 
   const hints = [
     <div className="flex vertical center small-gap">

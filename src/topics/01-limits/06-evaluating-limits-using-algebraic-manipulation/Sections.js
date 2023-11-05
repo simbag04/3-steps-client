@@ -170,14 +170,61 @@ const Section15 =
 const Section16 =
   <>
     <div>
-      There can be other trig identities that are needed to simplify a limit, but the idea is the same.
+      We can also use some other limit identities: <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1, \\lim_{x \\to 0} \\frac{x}{\\sin x} = 1, \\lim_{x \\to 0} \\frac{1 - \\cos x}{x} = 1`} display={true} />
     </div>
     <div>
-      Like factoring and rationalization, we need to simplify the limit so that we remove the hole in the function. Then, we can use direct substitution to evaluate the limit.
+      These are also extremely useful for solving problems!
     </div>
   </>
 
 const Section17 =
+  <>
+    <div>
+      For example, consider <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin 3x }{\\sin 5x}`} />
+    </div>
+    <div>
+      In order to use our identities, it would be convenient to have an <Latex expression={`x`} /> on the top and bottom. In order to do this, we can multiply the fraction by <Latex expression={`\\frac{x}{x}`} /> to get <Latex expression={`\\lim_{x \\to 0} \\frac{x \\sin 3x}{x \\sin 5x}`} />
+    </div>
+  </>
+
+const Section18 =
+  <>
+    <div>
+      Now, let's start with the <Latex expression={`\\sin 3x`} /> on the top. To apply the identity, we need a <Latex expression={`3x`} /> on the bottom to simplify the limit.
+    </div>
+    <div>
+      We can do this by multiplying the whole fraction by <Latex expression={`\\frac{3}{3}`} /> to get <Latex expression={`\\lim_{x \\to 0} \\frac{3x \\sin 3x}{3x \\sin 5x}`} />
+    </div>
+  </>
+
+const Section19 =
+  <>
+    <div>
+      Now, we can apply our identity <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1`} /> to the <Latex expression={`\\frac{\\sin 3x}{3x}`} />, and simplify it to just 1. This gives us <Latex expression={`\\lim_{x \\to 0} \\frac{3x}{\\sin 5x}`} />.
+    </div>
+    <div>
+      Notice how we did not need just <Latex expression={`x`} /> on the top and bottom to simplify this - as long as we have the same thing inside the <Latex expression={`\\sin`} /> and the other side of the fraction, we can simplify it.
+    </div>
+  </>
+
+const Section20 =
+  <>
+    <div>
+      Repeating this process for the <Latex expression={`\\sin 5x`} /> on the bottom, we can multiply the whole fraction by <Latex expression={`\\frac{5}{5}`} /> to get <Latex expression={`5x`} /> on the top, and simplify that with <Latex expression={`\\lim_{x \\to 0} \\frac{x}{\\sin x} = 1`} />
+    </div>
+    <div>
+      This gives us <Latex expression={`\\lim_{x \\to 0} \\frac{3x}{\\sin 5x} = \\lim_{x \\to 0} \\frac{3 \\cdot 5x}{5 \\sin 5x} = \\frac{3}{5}`} />.
+    </div>
+  </>
+
+const Section21 =
+  <>
+    <div>
+      These are very commonly used trig identities to simplify limits. The idea is always to simplify the function enough to remove the <Latex expression={`\\frac{0}{0}`} /> and then evaluate the limit with direct substitution.
+    </div>
+  </>
+
+const Section22 =
   <>
     <div>
       The last thing to keep in mind is that these techniques are helpful when the limit is initially <Latex expression={`\\frac{0}{0}`} />. In cases where the limit evaluates to <Latex expression={`\\frac{c}{0}`} />, where <Latex expression={`c`} /> is a non-zero constant, the limit <strong>does not exist</strong>
@@ -190,7 +237,7 @@ const Section17 =
     </div>
   </>
 
-const Section18 =
+const Section23 =
   <>
     <div>
       To summarize, there are 3 ways we can evaluate a limit if we get <Latex expression={`\\frac{0}{0}`} />:
@@ -210,4 +257,4 @@ const Section18 =
       In cases where the limit evaluates to <Latex expression={`\\frac{c}{0}`} />, where <Latex expression={`c`} /> is a non-zero constant, the limit <strong>does not exist</strong>.
     </div>
   </>
-export { Section1, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9, Section10, Section11, Section12, Section13, Section14, Section15, Section16, Section17, Section18 }
+export { Section1, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9, Section10, Section11, Section12, Section13, Section14, Section15, Section16, Section17, Section18, Section19, Section20, Section21, Section22, Section23 }

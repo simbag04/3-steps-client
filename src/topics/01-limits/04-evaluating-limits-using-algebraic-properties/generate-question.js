@@ -84,7 +84,7 @@ function limitPropertyQuestion() {
     </div>
   ]
   
-  return { question, title, ans, type: 'frq', nextToInput, hints }
+  return { question, title, ans, type: 'math', nextToInput, hints }
 
 }
 

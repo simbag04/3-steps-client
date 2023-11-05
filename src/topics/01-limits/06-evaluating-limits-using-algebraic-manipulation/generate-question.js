@@ -197,14 +197,93 @@ function limitByTrig() {
   return { nextToInput, type: 'math', ans, hints }
 }
 
+function limitByTrigSpecialCases() {
+  const numeratorDegree = getRandomNumber(0, 3); // total degree for numerator
+  const hints = []
+
+  // initialization
+  let numerator = "1"; 
+  let denominator = "1";
+  let ans = "dne";
+
+  let multipliedAns = "1)/(1"; // expanded ans based on coeffs of problem
+  let denDegree = numeratorDegree;
+  
+  // generate random denominator degree occasionally
+  const same = getRandomNumber(0, 9); // whether degree is the same
+  if (numeratorDegree === 0 || same < 1) { 
+    denDegree = getRandomNumber(1, 3);
+  }
+
+  hints.push(
+    <div>
+      <div>
+        Evaluating this with direct substitution, we get <Latex expression={`\\frac{0}{0}`} />. However, this doesn't look like factoring or rationalization. What is another technique that we learned?
+      </div>
+    </div>
+  )
+
+  hints.push(
+    <div>
+      Remember <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1, \\lim_{x \\to 0} \\frac{x}{\\sin x} = 1, \\lim_{x \\to 0} \\frac{1 - \\cos x}{x} = 1?`} display={true} />
+    </div>
+  )
+
+  hints.push(
+    <div>
+      In order to use these, rememember that the <Latex expression={`x`} /> in the equations can be anything. Also rememember that we can manipulate the fractions to apply these limits.
+    </div>
+  )
+
+  hints.push(
+    <div>
+      For example, we can multiply the fraction by <Latex expression={`\\frac{x}{x}`} /> or <Latex expression={`\\frac{2}{2}`} /> to try to fit the formulas we have!
+    </div>
+  )
+
+  hints.push(
+    <div>
+      After simplifying the whole thing, what is left? If there is still an expression left, try using direct substitution, and see if it still gives <Latex expression={`\\frac{0}{0}`} />. If not, you should have an answer! Otherwise, keep simplifying. 
+    </div>
+  )
+
+  // generate terms based on degree
+  let obj = generateSpecialTrig(numeratorDegree, multipliedAns)
+  numerator = obj.term
+  multipliedAns = obj.multipliedAns
+
+  obj = generateSpecialTrig(denDegree, multipliedAns, true)
+  denominator = obj.term
+  multipliedAns = obj.multipliedAns
+
+  // decide ans
+  if (denDegree < numeratorDegree) {
+    ans = "0"
+  } else if (denDegree > numeratorDegree) {
+    ans = "dne"
+  } else {
+    multipliedAns = "(" + multipliedAns + ")"
+    ans = math.simplify(multipliedAns).toString()
+  }
+
+  const expression = `\\lim_{x \\to ${0}}\\left(\\frac{${numerator}}{${denominator}}\\right)`
+
+  const nextToInput =
+    <Latex expression={`${expression} = `} display={true} />
+
+  return { ans, type: 'math', nextToInput, hints }
+}
+
 function generateRandomQuestion() {
   // determine type of question to generate
   const rand = getRandomNumber(1, 10);
   let q = null;
-  if (rand <= 8) {
+  if (rand <= 7) {
     q = limitByFactoring();
+  } else if (rand <= 9) {
+    q = limitByTrigSpecialCases();
   } else {
-    q = limitByTrig();
+    q = limitByTrig()
   }
 
   // set title and question as they are the same for everything
@@ -215,6 +294,57 @@ function generateRandomQuestion() {
   </div>
 
   return q;
+}
+
+/**
+ * Generates one side of the fraction in trig limit problem involving sinx/x, x/sinx, (1 - cos x)/x
+ * @param {number} degree of side (ex. 3 could mean x^2 sin x)
+ * @param {string} multipliedAns used to keep trace of the current answer in generation process
+ * @param {boolean} denominator whether we are generating a denminator (important since we can't have (1 - cos x) in the denominator and denominator will have 1 trig term or 1 poly term and at least another trig term)
+ * @returns generated term and updated multipliedAns
+ */
+function generateSpecialTrig(degree, multipliedAns, denominator) {
+  let term = "1"; // initialize term
+  let exclusions = []; // coeffs that have already been used
+
+  // iterate over degree
+  for (let i = 0; i < degree;) {
+    // while we are less than degree, generate random term
+    const trig = getRandomNumber(0, 9) > 7 || i > 0; // whether term is poly or trig
+    const exp = getRandomNumber(1, denominator ? degree - i - 1 : degree - i) // exp of term
+    const expText = exp > 1 ? `^${exp}` : "";
+
+    // coeff of x in term, ex. 3 in sin(3x)
+    const coeff = getRandomWithExclusions(1, 4, exclusions); 
+    const coeffText = coeff !== 1 ? coeff : "";
+
+    exclusions.push(coeff); // update coeff exclusions
+
+    if (trig === true) {
+      // update ans
+      const add = `(${Math.pow(coeff, exp)})`
+      multipliedAns = (denominator ? multipliedAns + add : add + multipliedAns)
+
+      // term to generate
+      if (getRandomNumber(0, 1) === 0 || denominator) {
+        term += `\\sin${expText}(${coeffText}x)`
+      } else {
+        term += `(1 - \\cos(${coeffText}x))${expText}`
+      }
+    } else {
+      // poly term
+      multipliedAns = denominator ? multipliedAns + `(${coeff})` : `(${coeff})` + multipliedAns 
+      term += `${coeffText}x${expText}`
+    }
+    // increment i by degree that we added
+    i += exp;
+  }
+
+  // remove beginning 1 from term
+  if (term.length > 1) {
+    term = term.substring(1)
+  }
+  return { term, multipliedAns }
 }
 
 /**
@@ -245,5 +375,6 @@ function modifyToMakeRoot(expression, x) {
     b: b.charAt(0) !== '-' ? `+${b}` : b
   }
 }
+
 
 export default generateRandomQuestion

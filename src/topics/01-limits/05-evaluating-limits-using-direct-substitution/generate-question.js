@@ -106,7 +106,7 @@ function piecewiseToLimit() {
     </div>
   ]
 
-  return { title, question, ans, type: 'frq', nextToInput, hints }
+  return { title, question, ans, type: 'math', nextToInput, hints }
 }
 
 /**

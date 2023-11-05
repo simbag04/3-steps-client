@@ -51,7 +51,7 @@ function asymptoticGraphQuestion() {
 
   // set all other question stuff
   const ans = "dne";
-  const type = 'frq';
+  const type = 'math';
 
   // random x value to ask about
   const val = xValues[getRandomNumber(0, xValues.length - 1)];
@@ -186,7 +186,7 @@ function jumpGraphQuestion() {
   }
 
   // set all other question stuff
-  const type = 'frq'
+  const type = 'math'
   ans = String(ans);
 
   const question = <div className="flex vertical center medium-gap">
@@ -252,7 +252,7 @@ function oscillatingGraphQuestion() {
   </div>
 
   const ans = 'dne'
-  const type = 'frq'
+  const type = 'math'
 
   const nextToInput = <span>
     <Latex expression={`\\lim_{x \\to ${horizShift}} g(x)`} inline={true} /> =
