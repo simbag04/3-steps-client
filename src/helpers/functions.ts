@@ -6,7 +6,7 @@ const nerdamer = require("nerdamer/all.min")
  * @param {array} array array to be shuffled
  * @returns shuffled array
  */
-function shuffleArray(array) {
+const shuffleArray =  (array: Array<any>): Array<any> => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1)); // Generate a random index from 0 to i
 
@@ -22,7 +22,7 @@ function shuffleArray(array) {
  * @param {number} max maximum value of random number
  * @returns random number in the range [min, max]
  */
-function getRandomNumber(min, max) {
+const getRandomNumber = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -33,7 +33,8 @@ function getRandomNumber(min, max) {
  * @param {array} exclusions numbers to be excluded from generation
  * @returns random number in the range [min, max] excluding exclusions
  */
-function getRandomWithExclusions(min, max, exclusions) {
+const getRandomWithExclusions = 
+  (min: number, max: number, exclusions: Array<number>): number => {
   const validValues = [];
   for (let i = min; i <= max; i++) {
     if (!exclusions.includes(i)) {
@@ -54,7 +55,9 @@ function getRandomWithExclusions(min, max, exclusions) {
  * @param {boolean} increasing true if values should be increasing, false if decreasing
  * @returns array of n ordered numbers 
  */
-function generateOrderedValues(n, increasing, extreme = 10, increment = 4) {
+const generateOrderedValues = 
+  (n: number, increasing: boolean, extreme: number = 10, 
+    increment: number = 4): Array<number> => {
   if (n <= 0) {
     return [];
   }
@@ -76,7 +79,7 @@ function generateOrderedValues(n, increasing, extreme = 10, increment = 4) {
  * @param {String} polynomial string with a polynomial
  * @returns polynomial sorted in order of degree
  */
-function sortPolynomialByDegree(polynomial) {
+const sortPolynomialByDegree = (polynomial: string): string => {
   // get coefficients with nerdamer
   const coefficients = nerdamer.coeffs(polynomial, 'x');
   let ans = "";
@@ -114,12 +117,11 @@ function sortPolynomialByDegree(polynomial) {
  * @param {String} xval xvalue from which to create factor
  * @returns String in form (x - p), where p is the xval
  */
-function getStringFactorFromXval(xval) {
-  const x = Number(xval);
-  if (x < 0) {
-    return `(x + ${Math.abs(x)})`
-  } else if (x > 0) {
-    return `(x - ${x})`
+const getStringFactorFromXval = (xval: number): string => {
+  if (xval < 0) {
+    return `(x + ${Math.abs(xval)})`
+  } else if (xval > 0) {
+    return `(x - ${xval})`
   } else {
     return `(x)`
   }
@@ -129,7 +131,7 @@ function getStringFactorFromXval(xval) {
  * @param {Array} array where each element is in the form {f: String, value: Number}
  * @returns object with keys as all the f Strings, values as the value of that String
  */
-function convertArrayToObject(array) {
+const convertArrayToObject = (array: Array<any>): any => {
   const obj = {};
   for (let i = 0; i < array.length; i++) {
     const currentObj = array[i];
@@ -146,7 +148,7 @@ function convertArrayToObject(array) {
  * @param {Number} b 
  * @returns least common multiple of a and b
  */
-function findLCM(a, b) {
+const findLCM = (a: number, b: number): number => {
   // Calculate the greatest common divisor (GCD) using Euclidean algorithm
   function findGCD(x, y) {
     if (y === 0) {
@@ -166,7 +168,8 @@ function findLCM(a, b) {
  * @param {Number} end of xs in table
  * @returns data array containing x, y pairs for points that could be used in a limit table
  */
-function generateLimitTableData(xVal, values, start, end) {
+const generateLimitTableData = 
+  (xVal: number, values: Array<number>, start: number, end: number): any => {
   const increasing = values[1] - values[0] >= 0;
   const data = [];
   // build table data
@@ -197,15 +200,16 @@ function generateLimitTableData(xVal, values, start, end) {
  * @param {String} polynomial to format
  * @returns formatted latex polynomial formatted with mathjs
  */
-function formatPolynomialToLatex(polynomial) {
-  return math.simplifyCore(polynomial).toTex().replaceAll('\\cdot', '').replaceAll('~', '');
+const formatPolynomialToLatex = (polynomial: string): any => {
+  const str: String = math.simplifyCore(polynomial).toTex()
+  return str.replaceAll('\\cdot', '').replaceAll('~', '');
 }
 
 /**
  * @param {String} polynomial to format
  * @returns formatted latex polynomial formatted with nerdamer
  */
-function nerdamerFormatToLatex(expression) {
+const nerdamerFormatToLatex = (expression: string): string => {
   return nerdamer(expression).toTeX().replaceAll('\\cdot', '').replaceAll('~', '')
 }
 

@@ -2,10 +2,12 @@ import { generateLimitTableData, generateOrderedValues, getRandomNumber, getRand
 import { FunctionTable } from "../../../components/content-components/tables/FunctionTable";
 import Latex from "../../../components/latex/Latex";
 import * as math from 'mathjs'
+import React from "react";
+import { Question } from "../../../types/Question";
 
 const nerdamer = require("nerdamer/all.min")
 
-function functionToTable() {
+const functionToTable = (): Question => {
   const title = <></>
 
   // generate random function
@@ -32,7 +34,7 @@ function functionToTable() {
   </div>
 
   const node = math.parse(`${factor2}${factor3}`);
-  const f = (x) => node.evaluate({ x });
+  const f = (x: number) => node.evaluate({ x });
 
   // create options
   // first option
@@ -86,7 +88,7 @@ function functionToTable() {
   return { title, question, input, type, hints }
 }
 
-function tableToLimit() {
+const tableToLimit = (): Question => {
   const xVal = getRandomNumber(-9, 9); // xval at which to evaluate limit
 
   // 0: left, 1: right, 2: 2-sided
@@ -96,7 +98,7 @@ function tableToLimit() {
   const startX = xVal - (getRandomNumber(0, 1) === 0 ? 3 : 0);
   const endX = xVal + ((getRandomNumber(0, 1) === 0 || xVal === startX) ? 3 : 0);
 
-  const increasing = getRandomNumber(0, 1); // whether table values are increasing or decreasing
+  const increasing = Boolean(getRandomNumber(0, 1)); // whether table values are increasing or decreasing
   const orderedValues = generateOrderedValues(endX - startX + 1, increasing); // values in table
 
   // evaluate answer
@@ -146,7 +148,7 @@ function tableToLimit() {
   return { title, question, ans, type, nextToInput, hints }
 }
 
-function generateRandomQuestion() {
+const generateRandomQuestion = (): Question => {
   // determine type of question to generate
   const rand = getRandomNumber(1, 10)
   let q = null;
@@ -164,8 +166,7 @@ function generateRandomQuestion() {
  * @param {Number} degree of places to round to: ex. if you want to round to the tenths place, this should be 10
  * @returns rounded value
  */
-function fixRounding(val, degree) {
-  console.log(val)
+const fixRounding = (val: number, degree: number): number => {
   return Math.floor(val * degree * 10) / (degree * 10);
 }
 

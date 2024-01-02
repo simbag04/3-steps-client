@@ -5,12 +5,15 @@ import * as math from 'mathjs'
 import AsymptoticGraph from "../../../components/content-components/graphs/AsymptoticGraph";
 import { COLORS, GRAPH_SIZE } from "../../../helpers/constants";
 import FunctionGraph from "../../../components/content-components/graphs/FunctionGraph";
+import React from "react";
+import { Question } from "../../../types/Question";
+import { GraphFunction } from "../../../types/GraphFunction";
 
 /**
  * generates random question that shows a graph with asymptote(s) and asks users to find the limit at an asymptotic point
  * @returns question, answer, text next to input, hints
  */
-function asymptoticGraphQuestion() {
+const asymptoticGraphQuestion = (): any => {
   const randomNumbers = getRandomNumber(1, 2); // number of asymptotes
   const xValues = []; // values at which there will be an asymptote
   let f = `(${getRandomNumber(0, 1) === 0 ? "-" : ""}1/`; // function
@@ -30,10 +33,10 @@ function asymptoticGraphQuestion() {
 
   // generate functions array
   // this generates an array that doesn't include the x values as the function is undefined at those points
-  const functions = [];
+  const functions: GraphFunction[] = [];
   for (let i = 0; i <= xValues.length; i++) {
     let curr = {
-      f: x => node.evaluate({ x }),
+      f: (x: number) => node.evaluate({ x }),
       min: i === 0 ? -11 : xValues[i - 1],
       max: i === xValues.length ? 11 : xValues[i],
       includeLeft: false,
@@ -84,10 +87,10 @@ function asymptoticGraphQuestion() {
  * Asks users to find limit from left, right, or both sides of a random point in graph
  * @returns question, answer, text next to input, hints
  */
-function jumpGraphQuestion() {
+const jumpGraphQuestion = (): any => {
   const numFunctions = getRandomNumber(2, 3); // number of functions in graph
-  const xValues = []; // xvalues where there is a potential jump
-  const exclusions = []; // xvalues that should not be a jump
+  const xValues: number[] = []; // xvalues where there is a potential jump
+  const exclusions: number[] = []; // xvalues that should not be a jump
 
   // generate random xvalues
   for (let i = 1; i < numFunctions; i++) {
@@ -139,7 +142,7 @@ function jumpGraphQuestion() {
 
     max = xValues[i] !== undefined ? xValues[i] : 11; // update max
     let curr = {
-      f: x => node.evaluate({ x }),
+      f: (x: number) => node.evaluate({ x }),
       min,
       max,
       includeLeft: i !== 0 ? !functions[i - 1].includeRight : false, // opposite of prev f right
@@ -156,7 +159,7 @@ function jumpGraphQuestion() {
   }
 
   const qX = possibleXs[getRandomNumber(0, possibleXs.length - 1)]; // x to ask about
-  let ans;
+  let ans: number | string;
 
   // 0: left, 1: right, 2: 2-sided
   const sign = getRandomNumber(0, 2);
@@ -224,7 +227,7 @@ function jumpGraphQuestion() {
  * asks users to find limit where graph is oscillating
  * @returns question, answer, text next to input, hints
  */
-function oscillatingGraphQuestion() {
+const oscillatingGraphQuestion = (): any => {
   // transformation variables
   const horizShift = getRandomNumber(-8, 8);
   const verticalShift = getRandomNumber(-7, 7)
@@ -232,8 +235,8 @@ function oscillatingGraphQuestion() {
 
   // set function
   const node = math.parse(f);
-  const functions = [{
-    f: x => node.evaluate({ x }),
+  const functions: GraphFunction[] = [{
+    f: (x: number) => node.evaluate({ x }),
     min: -11,
     max: 11,
     includeLeft: false,
@@ -272,7 +275,7 @@ function oscillatingGraphQuestion() {
   return { question, ans, type, nextToInput, hints }
 }
 
-function generateRandomQuestion() {
+const generateRandomQuestion = (): Question => {
   // determine type of question to generate
   const rand = getRandomNumber(1, 10)
   let q = null;

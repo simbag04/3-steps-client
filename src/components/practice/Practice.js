@@ -50,7 +50,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
 
   // dynamically import relevant topic question
   useEffect(() => {
-    import(`../../topics/${uname}/${name}/generate-question.js`)
+    import(`../../topics/${uname}/${name}/generate-question.tsx`)
       .then(module => {
         setQFunction(() => module.default);
       })

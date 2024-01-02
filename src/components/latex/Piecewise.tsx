@@ -1,7 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Latex from "./Latex";
+import { PiecewiseFunction } from "../../types/PiecewiseFunction";
 
-export const Piecewise = ({ title, functions, display }) => {
+interface PiecewiseProps {
+  title: string,
+  functions: PiecewiseFunction[],
+  display?: string
+}
+
+export const Piecewise: React.FC<PiecewiseProps> = ({ title, functions, display }) => {
   const [expression, setExpression] = useState(``);
   useEffect(() => {
     if (functions) {

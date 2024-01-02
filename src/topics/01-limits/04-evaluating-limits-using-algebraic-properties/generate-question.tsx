@@ -6,16 +6,19 @@ import Latex from "../../../components/latex/Latex";
 import * as math from "mathjs"
 import { GRAPH_SIZE, COLORS } from "../../../helpers/constants";
 import { LimitPropertyRules } from "./LimitPropertyRules";
+import React from "react";
+import { Question } from "../../../types/Question";
+import { GraphFunction } from "../../../types/GraphFunction";
 
 /**
  * generates random question that presents a table and a graph from which some limits can be evaluated, then generates expression with limit properties and asks user to solve
  */
-function limitPropertyQuestion() {
+const limitPropertyQuestion = (): Question => {
   const functions = []; // functions in expression, ex: {f: f(x), value: 2}
   const xVal = getRandomWithExclusions(-9, 9, [-1, 0, 1]); // where to eval limit
 
   // generate table
-  const tableValues = generateOrderedValues(5, getRandomNumber(0, 1)); // values in table
+  const tableValues = generateOrderedValues(5, Boolean(getRandomNumber(0, 1))); // values in table
   const { data } = generateLimitTableData(xVal, tableValues, xVal - 2, xVal + 2);
   const table = <FunctionTable xTitle={'x'} yTitle={'f(x)'} data={data} />
 
@@ -24,8 +27,8 @@ function limitPropertyQuestion() {
     generateRandomPolynomialWithPoint(3, xVal, getRandomWithExclusions(-7, 7, [-1, 0, 1]));
 
   // function to graph
-  let f = [{
-    f: x => graphFunction.evaluate({ x }),
+  let f: GraphFunction[] = [{
+    f: (x: number) => graphFunction.evaluate({ x }),
     min: -11,
     max: 11,
     includeLeft: false,
@@ -88,7 +91,7 @@ function limitPropertyQuestion() {
 
 }
 
-function generateRandomQuestion() {
+const generateRandomQuestion = (): Question => {
   // set color of graph
   document.documentElement.style.setProperty('--random-color',
     COLORS[getRandomNumber(0, COLORS.length - 1)])

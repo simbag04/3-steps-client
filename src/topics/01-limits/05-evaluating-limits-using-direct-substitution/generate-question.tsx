@@ -3,19 +3,23 @@ import { generateOrderedValues, getRandomNumber, getRandomWithExclusions, getStr
 import * as math from "mathjs"
 import Latex from "../../../components/latex/Latex";
 import { Piecewise } from "../../../components/latex/Piecewise"
+import React from "react";
+import { PiecewiseFunction } from "../../../types/PiecewiseFunction";
+import { Option } from "../../../types/Option";
+import { Question } from "../../../types/Question";
 const nerdamer = require("nerdamer/all.min")
 
 /**
  * generates random question with piecewise function, user is asked to find a limit using that function
  * @returns relevant question components
  */
-function piecewiseToLimit() {
-  const title = <div className="flex vertical center">
+const piecewiseToLimit = (): Question => {
+  const title: React.JSX.Element = <div className="flex vertical center">
     <h2>Evaluate the limit.</h2>
     <div>Enter "dne" if the limit doesn't exist</div>
   </div>
 
-  const functions = []; // array for piecewise
+  const functions: PiecewiseFunction[] = []; // array for piecewise
   const mathFs = []; // array of mathjs functions
   const xValues = generateOrderedValues(2, true, -3, 2); // random xvalues
   let yValues = [getRandomNumber(-7, 7), getRandomNumber(-7, 7)]; // random y values
@@ -24,10 +28,10 @@ function piecewiseToLimit() {
   // generate functions
   for (let i = 0; i <= xValues.length; i++) {
     // figure out domain of values and functions
-    let domain; // latex domain
-    let f; // function for domain
-    let xVal; // xval to have point at
-    let yVal; // yval to have point at
+    let domain: string; // latex domain
+    let f: string; // function for domain
+    let xVal: number; // xval to have point at
+    let yVal: number; // yval to have point at
     if (i === 0) {
       domain = `x ${includes ? "\\leq" : "<"} ${xValues[i]}`
       xVal = xValues[i];
@@ -55,7 +59,7 @@ function piecewiseToLimit() {
 
     // store function to evaluate f
     const node = math.parse(f);
-    mathFs.push((x) => node.evaluate({ x }));
+    mathFs.push((x: number) => node.evaluate({ x }));
 
     // format f
     f = math.simplifyCore(f).toTex({ parenthesis: 'auto' }).replaceAll('\\cdot', "");
@@ -68,7 +72,7 @@ function piecewiseToLimit() {
   // 0: left, 1: right, 2: 2-sided
   const sign = getRandomNumber(0, 2);
   const x = xValues[getRandomNumber(0, xValues.length - 1)];
-  let ans;
+  let ans: number | string;
   for (let i = 0; i < xValues.length; i++) {
     if (x === xValues[i]) {
       let f1 = Math.round(mathFs[i](x));
@@ -113,7 +117,7 @@ function piecewiseToLimit() {
  * generates random absolute value quadratic and user is asked to select which piecewise function corresponds to it.
  * @returns relevant question components
  */
-function absValueToPiecewise() {
+const absValueToPiecewise = (): Question => {
   const title = <></>
 
   // get two factors
@@ -138,7 +142,7 @@ function absValueToPiecewise() {
   </>
 
   // function arrays for each option
-  const piecewise1 = [
+  const piecewise1: PiecewiseFunction[] = [
     {
       f: expanded,
       domain: `x \\leq ${xvalues[0]}`
@@ -153,7 +157,7 @@ function absValueToPiecewise() {
     }
   ]
 
-  const piecewise2 = [
+  const piecewise2: PiecewiseFunction[] = [
     {
       f: negExpanded,
       domain: `x \\leq ${xvalues[0]}`
@@ -168,7 +172,7 @@ function absValueToPiecewise() {
     }
   ]
 
-  const piecewise3 = [
+  const piecewise3: PiecewiseFunction[] = [
     {
       f: expanded,
       domain: `x \\leq 0`
@@ -180,7 +184,7 @@ function absValueToPiecewise() {
   ]
 
   // create options array
-  const options = [
+  const options: Option[] = [
     {
       component: <Piecewise functions={piecewise1} title={`g(x)`} />,
       correct: true
@@ -216,7 +220,7 @@ function absValueToPiecewise() {
   return { title, question, type: 'mc', input: shuffleArray(options), hints }
 }
 
-function generateRandomQuestion() {
+const generateRandomQuestion = (): Question => {
   // determine type of question to generate
   const rand = getRandomNumber(1, 10)
   let q = null;

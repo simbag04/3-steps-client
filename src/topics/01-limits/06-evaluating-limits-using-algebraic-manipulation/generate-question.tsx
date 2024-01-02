@@ -1,7 +1,9 @@
 import * as math from "mathjs";
 import Latex from "../../../components/latex/Latex";
 import { getPolynomialFunction } from "../../../helpers/expression-generators";
-import { formatPolynomialToLatex, getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, nerdamerFormatToLatex, sortPolynomialByDegree } from "../../../helpers/functions";
+import { formatPolynomialToLatex, getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, nerdamerFormatToLatex, sortPolynomialByDegree } from "../../../helpers/functions"; 
+import React from "react"
+import { Question } from "../../../types/Question"
 
 const nerdamer = require("nerdamer/all.min")
 
@@ -14,39 +16,43 @@ const xvals = [["0", "pi"], ["pi/2", "3pi/2"]];
  * generates random 0/0 limit question involving factoring and removing roots.
  * @returns relevant question components
  */
-function limitByFactoring() {
-  const holeX = getRandomNumber(-5, 5); // xvalue to ask about
-  const holeFactor = getStringFactorFromXval(holeX);
+const limitByFactoring = () => {
+  const holeX: number = getRandomNumber(-5, 5); // xvalue to ask about
+  const holeFactor: string = getStringFactorFromXval(holeX); // xval hole factor
 
   // generate the other factor(s) on top and bottom
-  let topFactor = getRandomNumber(0, 1) === 0 ? getPolynomialFunction(1) : "1";
-  let bottomFactor = topFactor;
+  let topFactor: string = getRandomNumber(0, 1) === 0 ? getPolynomialFunction(1) : "1";
+  let bottomFactor: string = topFactor;
 
   // evaluate values for top and bottom factor
-  const topValue = math.evaluate(topFactor, { x: holeX });
-  let bottomValue = math.evaluate(bottomFactor, { x: holeX });
+  const topValue: number = math.evaluate(topFactor, { x: holeX });
+  let bottomValue: number = math.evaluate(bottomFactor, { x: holeX });
 
   // make sure bottom factor is different from top factor and both top and bottom aren't 0
   while (bottomFactor === topFactor || (topValue === 0 && topValue === bottomValue)) {
-    bottomFactor = getRandomNumber(0, 1) === 0 || topFactor === "1" ? getPolynomialFunction(1) : "1";
+    bottomFactor = (getRandomNumber(0, 1) === 0 || topFactor === "1") ? getPolynomialFunction(1) : "1";
     bottomValue = math.evaluate(bottomFactor, { x: holeX });
   }
 
   // find numerator and denominator for limit function
-  let numerator = sortPolynomialByDegree(nerdamer(`${holeFactor}(${topFactor})`).expand());
-  let denominator = sortPolynomialByDegree(nerdamer(`${holeFactor}(${bottomFactor})`).expand());
+  let numerator: string = 
+    sortPolynomialByDegree(nerdamer(`${holeFactor}(${topFactor})`).expand());
+  let denominator: string = 
+    sortPolynomialByDegree(nerdamer(`${holeFactor}(${bottomFactor})`).expand());
 
   // evaluate ans
-  let ans = 0;
+  let ans: any = 0;
   let radical = getRandomNumber(0, 1);
-  let modified;
+  let modified: any = null;
   if (radical) {
-    const numeratorWithRoot = getRandomNumber(0, 1); // 0 if numerator has root, 1 if denominator
+    const numeratorWithRoot: number = 
+      getRandomNumber(0, 1); // 0 if numerator has root, 1 if denominator
+
     // add root to either numerator or denominator
     if (numeratorWithRoot) {
       modified = modifyToMakeRoot(numerator, holeX)
       numerator = formatPolynomialToLatex(`sqrt(${modified.root})${modified.b}`)
-      ans = math.simplify(
+      ans = math.simplify( // evaluate ans
         `(${topFactor})/((${bottomFactor})(sqrt(${modified.root}) - (${modified.b})))`,
         { x: holeX });
     } else {
@@ -58,7 +64,8 @@ function limitByFactoring() {
     }
 
     // fix ans if it should be dne
-    ans = ans.toString() === "Infinity" || ans.toString() === "-Infinity" ? "dne" : ans.toString();
+    ans = (ans.toString() === "Infinity" || ans.toString() === "-Infinity") 
+      ? "dne" : ans.toString();
   } else {
     if (topValue === 0) {
       ans = 0;
@@ -72,16 +79,18 @@ function limitByFactoring() {
     denominator = nerdamer(denominator).toTeX().replaceAll(`\\cdot`, '')
   }
 
-  const expression = `\\lim_{x \\to ${holeX}}\\left(\\frac{${numerator}}{${denominator}}\\right)`
+  const expression: string = 
+    `\\lim_{x \\to ${holeX}}\\left(\\frac{${numerator}}{${denominator}}\\right)`
 
-  const nextToInput =
+  const nextToInput: React.JSX.Element =
     <Latex expression={`${expression} = `} display={true} />
 
-  const hints = [
+  const hints: React.JSX.Element[] = [
     <div>
       First, evaluate the limit: <Latex expression={expression} /> with direct substitution. Do you get <Latex expression={`\\frac{0}{0}`} /> ?
     </div>
   ]
+
   if (radical) {
     hints.push(
       <div>
@@ -119,23 +128,25 @@ function limitByFactoring() {
  * generates 0/0 limit problems involving trig functions. User is asked to evaluate limit.
  * @returns relevant question components
  */
-function limitByTrig() {
-  const topVar = getRandomNumber(0, 1); // what the top is (cos^2x or sin^2x)
-  const bottomVar = !topVar ? 1 : 0;
-  const toExpand = getRandomNumber(0, 1); // whether top should be in 1 - form or just trig^2
-  let ans = 0;
-  let numerator;
+const limitByTrig = (): any => {
+  const topVar: number = getRandomNumber(0, 1); // what the top is (cos^2x or sin^2x)
+  const bottomVar: number = !topVar ? 1 : 0;
+  const toExpand: number = getRandomNumber(0, 1); // whether top should be in 1 - form or trig^2
+  let ans: any = 0;
+  let numerator: string = "";
 
   const plus = getRandomNumber(0, 1); // whether factor is 1 + [trig] or 1 - trig
-  let denominator = `1 ${plus ? '+' : '-'} ${normalTrig[bottomVar]}`
-  let xVal = math.parse(xvals[topVar][plus]).toTex(); // decide xval so top/bottom are 0/0
+  let denominator: string = `1 ${plus ? '+' : '-'} ${normalTrig[bottomVar]}`
+
+  // decide xval so top/bottom are 0/0
+  let xVal: string = math.parse(xvals[topVar][plus]).toTex(); 
 
   // constants to multiply by
   const nconstant = getRandomWithExclusions(-4, 4, [0]);
   const dconstant = getRandomWithExclusions(-4, 4, [0]);
 
-  let toMultiply;
-  let first;
+  let toMultiply: number;
+  let first: string;
   if (toExpand) { // numerator will be 1 - bottomVar^2
     toMultiply = getRandomNumber(0, 1); // multiply inverses or tans
     first = otherTrig[toMultiply][bottomVar] // pick something that cancels with bottomvar
@@ -161,14 +172,14 @@ function limitByTrig() {
   // fix ans
   ans = math.simplify(`${nconstant}(${ans})/${dconstant}`).toString()
 
-  const expression = `\\lim_{x \\to ${xVal}} 
+  const expression: string = `\\lim_{x \\to ${xVal}} 
   \\left(\\frac{${numerator}}{${denominator}}\\right)`
 
-  const nextToInput =
+  const nextToInput: React.JSX.Element =
     <Latex expression={`${expression} = `} display={true} />
 
   // generate hints
-  const hints = [
+  const hints: React.JSX.Element[] = [
     <div>
       First, evaluate the limit: <Latex expression={expression} /> with direct substitution. Do you get <Latex expression={`\\frac{0}{0}`} /> ?
     </div>
@@ -197,13 +208,13 @@ function limitByTrig() {
   return { nextToInput, type: 'math', ans, hints }
 }
 
-function limitByTrigSpecialCases() {
-  const numeratorDegree = getRandomNumber(0, 3); // total degree for numerator
-  const hints = []
+const limitByTrigSpecialCases = (): any => {
+  const numeratorDegree: number = getRandomNumber(0, 3); // total degree for numerator
+  const hints: React.JSX.Element[] = []
 
   // initialization
-  let numerator = "1"; 
-  let denominator = "1";
+  let numerator: string = "1"; 
+  let denominator: string = "1";
   let ans = "dne";
 
   let multipliedAns = "1)/(1"; // expanded ans based on coeffs of problem
@@ -248,7 +259,7 @@ function limitByTrigSpecialCases() {
   )
 
   // generate terms based on degree
-  let obj = generateSpecialTrig(numeratorDegree, multipliedAns)
+  let obj = generateSpecialTrig(numeratorDegree, multipliedAns, false)
   numerator = obj.term
   multipliedAns = obj.multipliedAns
 
@@ -274,7 +285,7 @@ function limitByTrigSpecialCases() {
   return { ans, type: 'math', nextToInput, hints }
 }
 
-function generateRandomQuestion() {
+const generateRandomQuestion = (): Question => {
   // determine type of question to generate
   const rand = getRandomNumber(1, 10);
   let q = null;
@@ -303,7 +314,8 @@ function generateRandomQuestion() {
  * @param {boolean} denominator whether we are generating a denminator (important since we can't have (1 - cos x) in the denominator and denominator will have 1 trig term or 1 poly term and at least another trig term)
  * @returns generated term and updated multipliedAns
  */
-function generateSpecialTrig(degree, multipliedAns, denominator) {
+const generateSpecialTrig = 
+  (degree: number, multipliedAns: string, denominator: boolean): any => {
   let term = "1"; // initialize term
   let exclusions = []; // coeffs that have already been used
 
@@ -351,18 +363,19 @@ function generateSpecialTrig(degree, multipliedAns, denominator) {
  * @param {String} trigFunction like "sin(x)"
  * @returns squared notation, ex. sin^2(x)
  */
-function makeSquaredForLatex(trigFunction) {
+const makeSquaredForLatex = (trigFunction: string): string => {
   return `${trigFunction.substring(0, 3)}^2${trigFunction.substring(3)}`
 }
 
 /**
  * @param {String} expression to modify
  * @param {Number} x value at which root should be 0
- * @returns 
+ * @returns object containing both root and b value in (a - b)
  */
-function modifyToMakeRoot(expression, x) {
+const modifyToMakeRoot = (expression: string, x: number): any => {
   // generate random linear function
-  let b = sortPolynomialByDegree(nerdamer(getPolynomialFunction(getRandomNumber(0, 1))).expand())
+  let b: string = 
+    sortPolynomialByDegree(nerdamer(getPolynomialFunction(getRandomNumber(0, 1))).expand())
 
   // make b negative to ensure root evaluates to 0
   if (math.evaluate(b, { x }) > 0) {
@@ -375,6 +388,5 @@ function modifyToMakeRoot(expression, x) {
     b: b.charAt(0) !== '-' ? `+${b}` : b
   }
 }
-
 
 export default generateRandomQuestion
