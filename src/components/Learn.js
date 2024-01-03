@@ -24,6 +24,16 @@ const Learn = ({ learnContent, title, cname, uname, name }) => {
     }
   }
 
+  const addAllItems = () => {
+    let currStep = step;
+    while (currStep < learnContent.length) {
+      items.push(learnContent[currStep]);
+      currStep += 1;
+    }
+    setRemaining(false)
+    setStep(currStep)
+  }
+
   const practiceButtonHandler = () => {
     nav(`/${cname}/${uname}/${name}/practice`)
   }
@@ -46,6 +56,7 @@ const Learn = ({ learnContent, title, cname, uname, name }) => {
         return <div key={index} className="flex vertical center medium-gap">{content}</div>
       })}
       {remaining ? <button onClick={addItem}>Next</button> : null}
+      {!remaining ? null : <button onClick={addAllItems}>Show All</button>}
       {remaining ? null : <button onClick={practiceButtonHandler}>Let's Practice!</button>}
       <button onClick={backToTopicsButtonHandler}>Back to Topics</button>
 
