@@ -147,34 +147,66 @@ const Section10 = <>
   </div>
 </>
 
+
 const Section11 = <>
   <div>
-    The Squeeze Theorem can also be used to show that <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1`} /> and <Latex expression={`\\lim_{x \\to 0} \\frac{1 - \\cos x}{x} = 0`} />
-  </div>
-  <div>
-    These can be used to evaluate limits very easily!
+    Let's look at another example: <Latex expression={`\\lim_{x \\to 0} -x^2 \\sin(\\frac{1}{x}) + 1`} />. Similar to before, we can start with the inequality <Latex expression={`-1 \\leq \\sin(\\frac{1}{x}) \\leq 1`} />.
   </div>
 </>
 
 const Section12 = <>
   <div>
-    For example, what is <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin(7x)}{x}`} />?
+    The next logical step is to multiply both sides by <Latex expression={`-x^2`} />. However, we have to be careful here - since <Latex expression={`-x^2`} /> is always negative, we have to also flip the inequalities to get: <Latex expression={`x^2 \\geq -x^2\\sin(\\frac{1}{x}) \\geq -x^2`} />.
   </div>
 </>
 
 const Section13 = <>
   <div>
-    Multiplying the fraction by <Latex expression={`\\frac{7}{7}`} />, <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin(7x)}{x} = \\lim_{x \\to 0} \\frac{7\\sin(7x)}{7x} = 7 \\lim_{x \\to 0} \\frac{\\sin(7x)}{7x}`} display={true} />
+    Rewriting this inequality from least to greatest, we get <Latex expression={`-x^2 \\leq -x^2\\sin(\\frac{1}{x}) \\leq x^2`} />
+  </div>
+  <div>
+    Next, we can add 1 to all sides of the inequality to get <Latex expression={`-x^2 + 1 \\leq -x^2\\sin(\\frac{1}{x}) + 1 \\leq x^2 + 1`} />
   </div>
 </>
 
 const Section14 = <>
   <div>
-    Now, we can apply the rule that <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin x}{x} = 0`} /> to say that <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin(7x)}{7x} = 1`} />
+    Finally, taking <Latex expression={`\\lim_{x \\to 0}`} /> of all 3 expressions in the inequality, we get
+    <Latex expression={`\\lim_{x \\to 0} -x^2 + 1 \\leq \\lim_{x \\to 0} -x^2\\sin(\\frac{1}{x}) + 1 \\leq \\lim_{x \\to 0} x^2 + 1`} display={true} />
+    <Latex expression={`1 \\leq \\lim_{x \\to 0} -x^2\\sin(\\frac{1}{x}) + 1 \\leq 1`} display={true} />
   </div>
   <div>
-    Notice how it is not necessary that we have <Latex expression={`\\frac{\\sin(x)}{x}`} /> - as long as we have the same expression for both <Latex expression={`x`} /> in <Latex expression={`\\frac{\\sin(x)}{x}`} />, we can use this property.
+    Therefore: <Latex expression={`\\lim_{x \\to 0} -x^2\\sin(\\frac{1}{x}) + 1 = 1`} display={true} />
   </div>
 </>
+// const Section11 = <>
+//   <div>
+//     The Squeeze Theorem can also be used to show that <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1`} /> and <Latex expression={`\\lim_{x \\to 0} \\frac{1 - \\cos x}{x} = 0`} />
+//   </div>
+//   <div>
+//     These can be used to evaluate limits very easily!
+//   </div>
+// </>
+
+// const Section12 = <>
+//   <div>
+//     For example, what is <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin(7x)}{x}`} />?
+//   </div>
+// </>
+
+// const Section13 = <>
+//   <div>
+//     Multiplying the fraction by <Latex expression={`\\frac{7}{7}`} />, <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin(7x)}{x} = \\lim_{x \\to 0} \\frac{7\\sin(7x)}{7x} = 7 \\lim_{x \\to 0} \\frac{\\sin(7x)}{7x}`} display={true} />
+//   </div>
+// </>
+
+// const Section14 = <>
+//   <div>
+//     Now, we can apply the rule that <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin x}{x} = 0`} /> to say that <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin(7x)}{7x} = 1`} />
+//   </div>
+//   <div>
+//     Notice how it is not necessary that we have <Latex expression={`\\frac{\\sin(x)}{x}`} /> - as long as we have the same expression for both <Latex expression={`x`} /> in <Latex expression={`\\frac{\\sin(x)}{x}`} />, we can use this property.
+//   </div>
+// </>
 
 export { Section1, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9, Section10, Section11, Section12, Section13, Section14 }
