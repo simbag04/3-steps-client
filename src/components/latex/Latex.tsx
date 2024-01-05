@@ -8,8 +8,15 @@
 
 import 'katex/dist/katex.min.css';  // Import KaTeX styles
 import { BlockMath, InlineMath } from 'react-katex';
+import React from 'react';
 
-const Latex = ({classes, expression, display}) => {
+interface LatexProps {
+  classes? : string,
+  expression: string,
+  display?: string | boolean,
+  inline?: any
+}
+const Latex: React.FC<LatexProps> = ({classes, expression, display}) => {
   return (
     <span className={classes}>
       {!display ? 
