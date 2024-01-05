@@ -109,6 +109,7 @@ button, a {
   border: none;
   border-radius: var(--border-radius);
   padding: 10px var(--padding);
+  font-weight: bold;
 }
 
 button:hover, a:hover, .hover:hover {

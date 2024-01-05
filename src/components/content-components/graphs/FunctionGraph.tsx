@@ -9,6 +9,7 @@ import { useEffect, useRef } from "react"
 import { createBlankCanvas, createMultipleFunctionsGraph } from "../../../helpers/graph-helpers";
 import '../../../styles/graph.css'
 import * as d3 from 'd3';
+import React from "react";
 
 const FunctionGraph = ({ functions, size, minx, maxx, miny, maxy}) => {
   const svgRef = useRef(null);

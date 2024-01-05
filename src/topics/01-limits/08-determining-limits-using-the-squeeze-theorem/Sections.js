@@ -68,7 +68,7 @@ const Section1 = <>
     This theorem says that <strong>if</strong> <Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} /> <strong>near</strong> <Latex expression={`x = a`} /> (but not necessarily <strong><em>at</em></strong> <Latex expression={`x = a`} />),
   </div>
   <div>
-    and <Latex classes={'c1'} expression={`\\lim_{x \\to a} f(x)`} /> <Latex expression={`=`} /> <Latex classes={'c2'} expression={`\\lim_{x \\to a} h(x)`} /> <Latex classes={'c4'} expression={'=L'} />, then <Latex classes={'c3'} expression={`\\lim_{x \\to a} g(x)`} /> <Latex classes={'c4'} expression={'=L'} />.
+    and <Latex classes={'c1'} expression={`\\lim_{x \\to a} f(x)`} /> <Latex expression={`=`} /> <Latex classes={'c3'} expression={`\\lim_{x \\to a} h(x)`} /> <Latex classes={'c4'} expression={'=L'} />, then <Latex classes={'c2'} expression={`\\lim_{x \\to a} g(x)`} /> <Latex classes={'c4'} expression={'=L'} />.
   </div>
 </>
 
