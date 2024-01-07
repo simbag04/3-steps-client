@@ -3,6 +3,7 @@ import Latex from "../../../components/latex/Latex";
 import { GRAPH_SIZE } from "../../../helpers/constants";
 import '../../../styles/graph.css'
 import * as math from 'mathjs'
+import React from "react";
 
 const n1 = math.parse('x^2* sin(1/x)');
 const n2 = math.parse('x^2');

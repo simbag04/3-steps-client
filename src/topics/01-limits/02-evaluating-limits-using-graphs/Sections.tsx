@@ -4,6 +4,7 @@ import * as math from 'mathjs'
 import FunctionGraph from "../../../components/content-components/graphs/FunctionGraph"
 import AsymptoticGraph from "../../../components/content-components/graphs/AsymptoticGraph"
 import { GRAPH_SIZE } from "../../../helpers/constants"
+import React from "react"
 
 // functions to be used in sections
 const n1 = math.parse("-x")

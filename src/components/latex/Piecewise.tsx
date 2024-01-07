@@ -5,7 +5,7 @@ import { PiecewiseFunction } from "../../types/PiecewiseFunction";
 interface PiecewiseProps {
   title: string,
   functions: PiecewiseFunction[],
-  display?: string
+  display?: string | boolean
 }
 
 export const Piecewise: React.FC<PiecewiseProps> = ({ title, functions, display }) => {

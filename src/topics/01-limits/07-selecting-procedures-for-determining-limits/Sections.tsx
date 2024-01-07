@@ -1,4 +1,5 @@
 import Latex from "../../../components/latex/Latex"
+import React from "react"
 
 const Section1 = <>
   <div>

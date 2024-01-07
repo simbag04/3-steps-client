@@ -3,6 +3,8 @@
  */
 
 import Latex from "../../../components/latex/Latex"
+import React from "react"
+
 export const LimitPropertyRules = () => {
   return (
     <div className="important">

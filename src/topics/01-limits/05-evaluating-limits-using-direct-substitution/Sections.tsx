@@ -1,5 +1,7 @@
 import Latex from "../../../components/latex/Latex"
 import { Piecewise } from "../../../components/latex/Piecewise"
+import React from "react"
+
 /*
 const Section1 = () => {
   return (

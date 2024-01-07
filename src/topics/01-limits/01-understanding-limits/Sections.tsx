@@ -2,6 +2,7 @@ import LimitExampleGraph from "../../../components/content-components/graphs/Lim
 import Latex from "../../../components/latex/Latex"
 import * as math from 'mathjs'
 import { GRAPH_SIZE } from "../../../helpers/constants"
+import React from "react"
 
 /**
  * All content for this topic's learn section

@@ -14,7 +14,7 @@ export const RenderLearnComponent = () => {
   const apiLink = useContext(ApiContext)
 
   useEffect(() => {
-    import(`./topics/${uname}/${name}/learn-content.js`)
+    import(`./topics/${uname}/${name}/learn-content.tsx`)
       .then(module => {
         setLearnContent(module.default)
       })

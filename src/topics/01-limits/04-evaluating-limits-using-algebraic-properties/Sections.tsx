@@ -1,6 +1,7 @@
 import Latex from '../../../components/latex/Latex'
 import '../../../styles/graph.css'
 import { LimitPropertyRules } from "./LimitPropertyRules"
+import React from 'react'
 
 const Section1 = () => {
   return (
