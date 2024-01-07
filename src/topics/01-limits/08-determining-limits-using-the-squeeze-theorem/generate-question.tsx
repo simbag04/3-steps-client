@@ -85,6 +85,9 @@ const optionsForLimitSteps = (): Question => {
     <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction}`}></Latex>.
   </div>
   const hints: JSX.Element[] = []
+  hints.push(<div>
+    Focus on the step where the inequality is multiplied. When we multiply by a {multiplyByNegative ? "negative" : "positive"} quantity, do we flip the inequality?
+  </div>)
   return { type: 'mc', title, question, input: shuffleArray([o1, o2]), hints }
 }
 
@@ -102,6 +105,27 @@ const evaluateLimit = (): Question => {
   </div>
   const nextToInput = <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction} =`}></Latex>
   const hints: JSX.Element[] = []
+  hints.push(<div>
+    We need to solve <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction}`}></Latex>. Here, we see a <Latex expression={trig}/> function. What do we know about the bounds of this function?
+  </div>)
+
+  hints.push(<div>
+    Using these bounds, what can you multiply all 3 sides of the inequality by to make the middle of the inequality closer to the limit?
+  </div>)
+
+  if (toAdd !== 0) {
+    hints.push(<div>
+      You should be getting closer to the actual limit function now! What can you add to all sides of the inequality to make the middle inequality exactly the same as the limit function?
+    </div>)
+  }
+
+  hints.push(<div>
+    Now, the middle inequality should be exactly like the limit function. The next step is to take the limit of all 3 sides of the inequality.
+  </div>)
+
+  hints.push(<div>
+    Now, you can directly apply the Squeeze Theorem to find the limit!
+  </div>)
 
   return { type: 'math', title, question, ans: toAdd, hints, nextToInput }
 
@@ -175,7 +199,6 @@ const checkTheoremApplication = (): Question => {
       <FunctionGraph functions={functions} size={GRAPH_SIZE} minx={-0.3} maxx={0.3} miny={-0.3} maxy={0.3} />
     </div>
   </div>
-  const hints: JSX.Element[] = []
 
   const o1: Option = {
     component: <div>
@@ -205,6 +228,33 @@ const checkTheoremApplication = (): Question => {
     </div>,
     correct: constant2 !== 0
   }
+
+  const hints: JSX.Element[] = []
+  hints.push(<div className="flex vertical center">
+    <div>
+      Recall that there are two conditions that need to be satisified to apply the Squeeze Theorem for a function <Latex classes={'c2'} expression={`g(x)`} />:
+    </div>
+    <div>
+      <ul className="text-start">
+        <li>
+          <Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} />
+        </li>
+        <li>
+          <Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="f(x)" classes="c1" /><Latex expression={`=`} /><Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="h(x)" classes="c3" />
+        </li>
+      </ul>
+    </div>
+  </div>)
+
+  hints.push(<div className="flex vertical center medium-gap">
+    <div>
+      Are both of these conditions satisfied in the graph?
+    </div>
+    <div>
+      <h3>Graph of <Latex expression="f(x)" classes="c1" />, <Latex expression="g(x)" classes="c2" />, <Latex expression="h(x)" classes="c3" /></h3>
+      <FunctionGraph functions={functions} size={GRAPH_SIZE} minx={-0.3} maxx={0.3} miny={-0.3} maxy={0.3} />
+    </div>
+  </div>)
 
   return { type: 'mc', title, question, input: [o1, o2, o3, o4], hints }
 

@@ -10,8 +10,18 @@ import { createBlankCanvas, createMultipleFunctionsGraph } from "../../../helper
 import '../../../styles/graph.css'
 import * as d3 from 'd3';
 import React from "react";
+import { GraphFunction } from "../../../types/GraphFunction";
 
-const FunctionGraph = ({ functions, size, minx, maxx, miny, maxy}) => {
+interface FunctionGraphProps {
+  functions: GraphFunction[],
+  size: number,
+  minx?: number,
+  maxx?: number,
+  miny?: number,
+  maxy?: number
+}
+
+const FunctionGraph: React.FC<FunctionGraphProps> = ({ functions, size, minx, maxx, miny, maxy}) => {
   const svgRef = useRef(null);
 
   useEffect(() => {
@@ -23,8 +33,8 @@ const FunctionGraph = ({ functions, size, minx, maxx, miny, maxy}) => {
       createMultipleFunctionsGraph(svg, functions, width, height, xScale, yScale)
       svg.select(".tick-text").raise();
     }
-  }, [functions, size, minx, maxx])
-
+  }, [functions, size, minx, maxx, maxy, miny])
+  
   return (
     <svg ref={svgRef} />
   )
