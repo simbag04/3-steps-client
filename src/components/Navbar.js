@@ -6,9 +6,14 @@ import '../styles/navbar.css'
 import { NavLinks } from "./NavLinks";
 import menu from '../svgs/menu.svg'
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 export const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState("");
+  const nav = useNavigate();
+
+  const goHome = () => nav("/")
   const clickHandler = () => {
     setShowDropdown(showDropdown === "" ? " active" : "");
   }
@@ -30,7 +35,7 @@ export const Navbar = () => {
   return (
     <>
       <span className="navbar flex horizontal center">
-        <h1 className="logo">3 Steps</h1>
+        <h1 className="logo" onClick={goHome}>3 Steps</h1>
         <div className="links flex horizontal center">
           <NavLinks></NavLinks>
         </div>
