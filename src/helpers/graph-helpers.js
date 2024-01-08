@@ -183,6 +183,25 @@ const createMultipleFunctionsGraph = (svg, functions, width, height, xScale, ySc
 }
 
 /**
+ * Adds points to svg 
+ * @param {svg} svg svg on which to add points
+ * @param {Array} points to add
+ * @param {scale} xScale of svg
+ * @param {scale} yScale of svg
+ */
+const addPointsToGraph = (svg, points, xScale, yScale) => {
+  for (let i = 0; i < points.length; i++) {
+    svg
+    .append('circle')
+    .attr('class', 'fill stroke ' + points[i].classes)
+    .attr('cx', xScale(points[i].x))
+    .attr('cy', yScale(points[i].y))
+    .attr('r', 3)
+  } 
+
+}
+
+/**
  * creates -10 by 10 (default, diff dimensions can be specified) blank canvas on top of which graphs can be drawn 
  * @param {number} width width of graph
  * @param {number} height height of graph
@@ -466,4 +485,4 @@ function createFunctionLimitLine(svg, functionLine, pathLength, xScale, yScale, 
   return { closePoint, farPoint }
 }
 
-export { createFunctionGraph, createBlankCanvas, createArrowMarker, generateFunctionData, createLimitLine, findHypotenusefromSlope, convertScale, findSlope, findOffsets, createMultipleFunctionsGraph, createFunctionLimitLine }
+export { createFunctionGraph, createBlankCanvas, createArrowMarker, generateFunctionData, createLimitLine, findHypotenusefromSlope, convertScale, findSlope, findOffsets, createMultipleFunctionsGraph, createFunctionLimitLine, addPointsToGraph }

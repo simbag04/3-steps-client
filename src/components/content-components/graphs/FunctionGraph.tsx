@@ -6,11 +6,12 @@
  */
 
 import { useEffect, useRef } from "react"
-import { createBlankCanvas, createMultipleFunctionsGraph } from "../../../helpers/graph-helpers";
+import { createBlankCanvas, createMultipleFunctionsGraph, addPointsToGraph } from "../../../helpers/graph-helpers";
 import '../../../styles/graph.css'
 import * as d3 from 'd3';
 import React from "react";
 import { GraphFunction } from "../../../types/GraphFunction";
+import { GraphPoint } from "../../../types/GraphPoint";
 
 interface FunctionGraphProps {
   functions: GraphFunction[],
@@ -18,10 +19,11 @@ interface FunctionGraphProps {
   minx?: number,
   maxx?: number,
   miny?: number,
-  maxy?: number
+  maxy?: number,
+  points?: GraphPoint[]
 }
 
-const FunctionGraph: React.FC<FunctionGraphProps> = ({ functions, size, minx, maxx, miny, maxy}) => {
+const FunctionGraph: React.FC<FunctionGraphProps> = ({ functions, size, minx, maxx, miny, maxy, points}) => {
   const svgRef = useRef(null);
 
   useEffect(() => {
@@ -31,10 +33,12 @@ const FunctionGraph: React.FC<FunctionGraphProps> = ({ functions, size, minx, ma
       const svg = d3.select(svgRef.current)
 
       createMultipleFunctionsGraph(svg, functions, width, height, xScale, yScale)
+      if (points) addPointsToGraph(svg, points, xScale, yScale)
+      
       svg.select(".tick-text").raise();
     }
-  }, [functions, size, minx, maxx, maxy, miny])
-  
+  }, [functions, size, minx, maxx, maxy, miny, points])
+
   return (
     <svg ref={svgRef} />
   )
