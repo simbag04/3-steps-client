@@ -8,5 +8,6 @@ export type GraphFunction = {
   rightArrow: boolean,
   classes: string,
   leftCircle: boolean,
-  rightCircle: boolean
+  rightCircle: boolean,
+  type?: string
 }
