@@ -1,5 +1,5 @@
-import { getRandomNumber, getRandomWithExclusions, shuffleArray } from "../../../helpers/functions";
-import { fitPointsToQuadratic, generateRandomPolynomialWithPoint } from "../../../helpers/expression-generators"
+import { getRandomNumber, getRandomWithExclusions } from "../../../helpers/functions";
+import { generateRandomPolynomialWithPoint } from "../../../helpers/expression-generators"
 import { GraphFunction } from "../../../types/GraphFunction";
 import React from "react";
 import Latex from "../../../components/latex/Latex";
@@ -13,7 +13,7 @@ import { COLORS } from "../../../helpers/constants";
 import { GraphPoint } from "../../../types/GraphPoint";
 
 
-const generateRandomJumpQuestion = (): any => {
+const jumpGraphQuestion = (): any => {
   const xVal: number = getRandomNumber(-8, 8); // xval where there is a jump
   const y1 = getRandomNumber(-7, 7);
   const y2 = getRandomNumber(0, 10) <= 2 ? y1 : getRandomWithExclusions(-7, 7, [y1])
@@ -37,7 +37,7 @@ const generateRandomJumpQuestion = (): any => {
       f: (x: number) => f2.evaluate({ x }),
       min: xVal,
       max: 11,
-      includeLeft: !includeLeft,
+      includeLeft: y1 === y2 || !includeLeft,
       includeRight: false,
       leftArrow: false,
       rightArrow: true,
@@ -52,53 +52,15 @@ const generateRandomJumpQuestion = (): any => {
     <FunctionGraph functions={functions} size={GRAPH_SIZE} />
   </div>
 
-  let title: React.JSX.Element;
-  let options: Option[];
+  const { title, options, hints } = generateOptionsAndHints("jump", question, y1 === y2)
 
-  if (y1 === y2 || getRandomNumber(0, 1) === 0) {
-    title = <h3>
-      Is the graph below continuous?
-    </h3>
-
-    options = [
-      {
-        component: <div>Yes</div>,
-        correct: y1 === y2
-      },
-      {
-        component: <div>No</div>,
-        correct: y1 !== y2
-      },
-    ]
-  } else {
-    title = <h3>
-      What type  of discontinuity is shown in the graph below?
-    </h3>
-
-    options = [
-      {
-        component: <div>Jump Discontinuity</div>,
-        correct: true
-      },
-      {
-        component: <div>Infinite Discontinuity</div>,
-        correct: false
-      },
-      {
-        component: <div>Removable Discontinuity</div>,
-        correct: false
-      }
-    ]
-  }
-
-  const hints = []
   return { question, title, input: options, hints }
 }
 
 const infiniteGraphQuestion = () => {
   const xVal = getRandomNumber(-7, 7); // values at which there will be an asymptote
   let f = `(${getRandomNumber(0, 1) === 0 ? "-" : ""}1/
-    (x ${xVal > 0 ? `-${xVal}`: `+${Math.abs(xVal)}`})`; // function
+    (x ${xVal > 0 ? `-${xVal}` : `+${Math.abs(xVal)}`})`; // function
 
   const verticalShift = getRandomNumber(-5, 5)
   f = f + `) ${verticalShift > 0 ? '+' : '-'} ${Math.abs(verticalShift)}`
@@ -138,52 +100,15 @@ const infiniteGraphQuestion = () => {
     <AsymptoticGraph functions={functions} size={GRAPH_SIZE} x={[xVal]} y={[verticalShift]} />
   </div>
 
-  let title: React.JSX.Element;
-  let options: Option[];
+  const { title, options, hints } = generateOptionsAndHints("infinite", question, false)
 
-  if (getRandomNumber(0, 1) === 0) {
-    title = <h3>
-      Is the graph below continuous?
-    </h3>
-
-    options = [
-      {
-        component: <div>Yes</div>,
-        correct: false
-      },
-      {
-        component: <div>No</div>,
-        correct: true
-      },
-    ]
-  } else {
-    title = <h3>
-      What type  of discontinuity is shown in the graph below?
-    </h3>
-    options = [
-      {
-        component: <div>Jump Discontinuity</div>,
-        correct: false
-      },
-      {
-        component: <div>Infinite Discontinuity</div>,
-        correct: true
-      },
-      {
-        component: <div>Removable Discontinuity</div>,
-        correct: false
-      }
-    ]
-  }
-
-  const hints = []
   return { question, title, input: options, hints }
 }
 
 const removableGraphQuestion = (): any => {
   const xVal: number = getRandomNumber(-8, 8); // xval where there is a potential discontinuity
   const y1 = getRandomNumber(-7, 7);
-  const y2 = getRandomNumber(0, 10) <= 5 ? y1 : getRandomWithExclusions(-7, 7, [y1])
+  const y2 = getRandomNumber(0, 10) <= 3 ? y1 : getRandomWithExclusions(-7, 7, [y1])
   const f1 = generateRandomPolynomialWithPoint(getRandomNumber(1, 4), xVal, y1)
   const f2 = generateRandomPolynomialWithPoint(getRandomNumber(1, 4), xVal, y1)
   const functions: GraphFunction[] = [
@@ -226,60 +151,99 @@ const removableGraphQuestion = (): any => {
     <FunctionGraph functions={functions} size={GRAPH_SIZE} points={points} />
   </div>
 
+  const { title, options, hints } = generateOptionsAndHints("removable", question, y1 === y2)
+
+  return { question, title, input: options, hints }
+}
+
+const generateOptionsAndHints = 
+  (graphType: string, question: React.JSX.Element, continuous?: boolean): any => {
   let title: React.JSX.Element;
   let options: Option[];
+  const hints = []
+  hints.push(<>
+    <div>
+      Recall our 3 types of discontinuities:
+      <ul className="text-start">
+        <li>
+          a <strong>jump</strong> discontinuity - when there is a jump in the graph
+        </li>
+        <li>
+          an <strong>infinite</strong> discontinuity - when a graph has asymptotes
+        </li>
+        <li>
+          a <strong>removable</strong> discontinuity - when only the value of the function is inconsistent with the rest of the graph
+        </li>
+      </ul>
+    </div>
+  </>)
 
-  if (y1 === y2 || getRandomNumber(0, 1) === 0) {
+  if (continuous || getRandomNumber(0, 1) === 0) {
     title = <h3>
       Is the graph below continuous?
     </h3>
+    hints.push(<div className="flex vertical center medium-gap">
+      <div>
+        Are any of these discontinuities present in this graph?
+      </div>
+      {question}
+    </div>)
 
     options = [
       {
         component: <div>Yes</div>,
-        correct: y1 === y2
+        correct: continuous
       },
       {
         component: <div>No</div>,
-        correct: y1 !== y2
+        correct: !continuous
       },
     ]
   } else {
     title = <h3>
       What type  of discontinuity is shown in the graph below?
     </h3>
+    hints.push(<div className="flex vertical center medium-gap">
+      <div>
+        What type of discontinuity is shown here?
+      </div>
+      {question}
+    </div>)
 
     options = [
       {
         component: <div>Jump Discontinuity</div>,
-        correct: false
+        correct: graphType === "jump"
       },
       {
         component: <div>Infinite Discontinuity</div>,
-        correct: false
+        correct: graphType === "infinite"
       },
       {
         component: <div>Removable Discontinuity</div>,
-        correct: true
+        correct: graphType === "removable"
       }
     ]
   }
 
-  const hints = []
-  return { question, title, input: options, hints }
+  return { title, options, hints }
 }
 
 const generateRandomQuestion = (): Question => {
   let question: any;
-  const rand = getRandomNumber(0, 9);
-  if (rand <= 9) {
+  const rand = getRandomNumber(0, 11);
+  if (rand <= 3) {
     question = removableGraphQuestion();
+  } else if (rand <= 7) {
+    question = infiniteGraphQuestion();
+  } else {
+    question = jumpGraphQuestion();
   }
 
   question.type = 'mc'
 
   document.documentElement.style.setProperty('--random-color',
-  COLORS[getRandomNumber(0, COLORS.length - 1)])
+    COLORS[getRandomNumber(0, COLORS.length - 1)])
 
   return question
 }
