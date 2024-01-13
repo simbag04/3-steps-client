@@ -45,6 +45,9 @@ body {
 
 .katex-display .base { margin: 0.25em 0 }
 
+.bold .katex .base {
+  font-weight: bold;
+}
 .large-font {
   font-size: 18px;
 }
