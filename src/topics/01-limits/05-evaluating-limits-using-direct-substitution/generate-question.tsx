@@ -88,7 +88,7 @@ const piecewiseToLimit = (): Question => {
   }
 
   // other relevant components
-  const signText = sign === 0 ? `^\\textbf{-}` : sign === 1 ? `^\\textbf{+}` : ``;
+  const signText = sign === 0 ? `^{\\footnotesize\\texttt{-}}` : sign === 1 ? `^{\\footnotesize\\texttt{+}}` : ``;
   const nextToInput = <span>
     <Latex expression={`\\lim_{x \\to ${x + signText}}g(x)`} inline={true} /> =
   </span>
