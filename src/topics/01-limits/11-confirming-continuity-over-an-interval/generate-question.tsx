@@ -101,7 +101,9 @@ const piecewiseQuestion = () => {
     if (functionTypes[2] === "root") {
       xYPairs[0][1] = firstYAtContX
       // corrner case where srF accidentally has same endpoint val
-      if ((ans === 2) && Math.round(math.evaluate(srF, { x: endpoint2 })) === defaultEpY) {
+      if ((ans === 0) && Math.round(math.evaluate(srF, { x: endpoint2 })) !== otherEpY) {
+        ans = 2
+      } else if (ans === 2 && Math.round(math.evaluate(srF, { x: endpoint2 })) === defaultEpY) {
         ans = 0
       }
     } else {
@@ -112,7 +114,9 @@ const piecewiseQuestion = () => {
     if (functionTypes[0] === "root") {
       xYPairs[2][1] = firstYAtContX
       // corrner case where srF accidentally has same endpoint val
-      if ((ans === 2) && Math.round(math.evaluate(srF, { x: endpoint1 })) === defaultEpY) {
+      if ((ans === 0) && Math.round(math.evaluate(srF, { x: endpoint1 })) !== otherEpY) {
+        ans = 2
+      } else if (ans === 2 && Math.round(math.evaluate(srF, { x: endpoint1 })) === defaultEpY) {
         ans = 0
       }
     } else {
