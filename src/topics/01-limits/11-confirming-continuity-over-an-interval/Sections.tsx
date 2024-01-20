@@ -53,44 +53,60 @@ const Section4 = <>
 
 const Section5 = <>
   <div>
-    Next, let's look at logarithmic functions: consider <Latex expression={`g(x) = \\ln{(x^2 - 4)}`} />.
+    Next, let's look at logarithmic functions: consider <Latex expression={`g(x) = \\ln{(x - 4)}`} />.
   </div>
   <div>
-    For logarithmic functions, the main constraint is that we can only take logs of positive numbers. Thus, <Latex expression={`x^2 - 4 > 0`} />.
+    For logarithmic functions, the main constraint is that we can only take logs of positive numbers.
   </div>
   <div>
-    We can solve this:
-    <Latex expression="x^2 - 4 > 0" display={true} />
-    <Latex expression="(x - 2)(x + 2) > 0" display={true} />
-    <Latex expression="x > 2" /> or <Latex expression="x < -2" />.
+    This gives us <Latex expression={`x - 4 > 0`} />.
+    Solving this, we get <Latex expression="x > 4" />.
   </div>
   <div>
-    Thus, <Latex expression="g(x)" /> is continuous on <Latex expression={`(-\\infty, -2) \\cup (2, \\infty)`} />.
+    Thus, <Latex expression="g(x)" /> is continuous on <Latex expression={`(4, \\infty)`} />.
   </div>
 </>
 
 const Section6 = <>
   <div>
-    Lastly, for square root functions, consider: <Latex expression={`h(x) = \\sqrt{x + 4}`} />.
+    Lastly, for square root functions, consider: <Latex expression={`h(x) = \\sqrt{2x^2 + 12x + 10}`} />.
   </div>
   <div>
     For this one, we cannot take the square root of negative numbers. Therefore, we need to make sure
   </div>
   <div>
-    <Latex expression={`x + 4 \\geq 0`} />, meaning <Latex expression={`x \\geq -4`} />
+    <Latex expression={`2x^2 + 12x + 10 \\geq 0`} />. We can find the roots by completing the square, and from there we can find the domain:
+    <Latex expression={`2x^2 + 12x + 10 \\geq 0`} display={true} />
+    <Latex expression={`2(x^2 + 6x + 9) - 8 \\geq 0`} display={true} />
+    <Latex expression={`2(x + 3)^2 - 8 \\geq 0`} display={true} />
   </div>
   <div>
-    Thus, <Latex expression="h(x)" /> is continuous on <Latex expression={`[4, \\infty)`} />
+    Solving for the roots, we get: <Latex expression="x = -5" /> and <Latex expression="x = -1" />.
+  </div>
+  <div>
+
   </div>
 </>
 
 const Section7 = <>
   <div>
-    Earlier, we discussed continuity on the open interval <Latex expression="(a, b)" />. However, what if we want to talk about the closed interval <Latex expression="[a, b]" />?
+    We know the parabola is right side up because of the positive <Latex expression="x^2" /> coefficient, so this quadratic function is <Latex expression={`\\geq 0`} /> on <Latex expression={`(-\\infty, -5] \\cup [-1, \\infty)`} />
+  </div>
+  <div>
+    Thus, <Latex expression="h(x)" /> is continuous on <Latex expression={`(-\\infty, -5] \\cup [-1, \\infty)`} />
+  </div>
+  <div>
+    In the above case, there was a positive <Latex expression="x^2" /> coefficient, so the domain was to the left and right of the roots. If the coefficient had been negative and the parabola were facing down, it would be above 0 <strong>between</strong> the roots. This is a very easy way to find where quadratic functions are above 0!
   </div>
 </>
 
 const Section8 = <>
+  <div>
+    Earlier, we discussed continuity on the open interval <Latex expression="(a, b)" />. However, what if we want to talk about the closed interval <Latex expression="[a, b]" />?
+  </div>
+</>
+
+const Section9 = <>
   <div>
     In order for <Latex expression="f(x)" /> to be continuous on <Latex expression="[a, b]" />, 2 conditions must be satisfied:
     <ul className="text-start">
@@ -104,7 +120,7 @@ const Section8 = <>
   </div>
 </>
 
-const Section9 = <>
+const Section10 = <>
   <div>
     Basically, when considering a closed interval <Latex expression="[a, b]" />, in order to include <Latex expression="a" /> in the interval we only care about the right-sided limit - the left-sided limit does not matter.
   </div>
@@ -115,7 +131,7 @@ const Section9 = <>
 
 const piecewise: PiecewiseFunction[] = [{ f: `\\frac{8x}{x - 3}`, domain: `x \\leq -1` }, { f: `\\sqrt{-2x + 2}`, domain: `-1 < x < 1` }, { f: `\\ln(x + 1)`, domain: `x \\geq 1` }]
 
-const Section10 = <>
+const Section11 = <>
   <div>
     Let's look at a comprehensive example:
     <Piecewise title="f(x)" functions={piecewise} />
@@ -125,7 +141,7 @@ const Section10 = <>
   </div>
 </>
 
-const Section11 = <>
+const Section12 = <>
   <div>
     First, we need to check that <Latex expression="f(x)" /> is continuous on <Latex expression="(-2, 1)" />.
   </div>
@@ -134,7 +150,7 @@ const Section11 = <>
   </div>
 </>
 
-const Section12 = <>
+const Section13 = <>
   <div>
     For <Latex expression="(-2, -1)" />, we need to look at the first function: <Latex expression={`\\frac{8x}{x - 3}`} />. Using the domain of this function, we know that it is continuous on <Latex expression={`(-\\infty, 3) \\cup (3, \\infty)`} />.
   </div>
@@ -143,14 +159,14 @@ const Section12 = <>
   </div>
 </>
 
-const Section13 = <>
+const Section14 = <>
   <div>
     Similarly analyzing <Latex expression="(-1, 1)" />, we can look at <Latex expression={`\\sqrt{-2x + 2}`} />, which is continuous on <Latex expression={`(-\\infty, 1]`} />. Once again, this means that <Latex expression="f(x)" /> is continuous on <Latex expression="(-1, 1)" />.
   </div>
 </>
 
 
-const Section14 = <>
+const Section15 = <>
   <div>
     We also need to check <Latex expression="x = -1" />. To do this, we can use what we learned in the last section:
   </div>
@@ -167,7 +183,7 @@ const Section14 = <>
   </div>
 </>
 
-const Section15 = <>
+const Section16 = <>
   <div>
     So far, we have established that <Latex expression="f(x)" /> is continuous on <Latex expression="(-2, -1)" />, at <Latex expression="x = -1" />, and <Latex expression="(-1, 1)" />. In other words, <Latex expression="f(x)" /> is continuous on <Latex expression="(-2, 1)" />.
   </div>
@@ -176,7 +192,7 @@ const Section15 = <>
   </div>
 </>
 
-const Section16 = <>
+const Section17 = <>
   <div>
     Evaluating the first endpoint of <Latex expression="x = -2" />:
     <Latex expression={`\\lim_{x \\to -2^{\\footnotesize\\texttt{+}}} f(x) = \\frac{8(-2)}{-2 - 3} = \\frac{16}{5}`} display={true} />
@@ -191,11 +207,11 @@ const Section16 = <>
   </div>
 </>
 
-const Section17 = <>
+const Section18 = <>
   <div>
     All in all, <Latex expression="f(x)" /> is continuous on <Latex expression="[-2, 1)" />, not <Latex expression="[-2, 1]" />. Keep in mind how we only had to check the limits from one side to determine if <Latex expression="-2" /> or <Latex expression="1" /> would be included in the interval, but we had to check both sides for <Latex expression="x = -1" />!
   </div>
 </>
 
 
-export { Section1, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9, Section10, Section11, Section12, Section13, Section14, Section15, Section16, Section17 }
+export { Section1, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9, Section10, Section11, Section12, Section13, Section14, Section15, Section16, Section17, Section18 }

@@ -5,10 +5,11 @@ import { PiecewiseFunction } from "../../types/PiecewiseFunction";
 interface PiecewiseProps {
   title: string,
   functions: PiecewiseFunction[],
-  display?: string | boolean
+  display?: string | boolean,
+  classes?: string
 }
 
-export const Piecewise: React.FC<PiecewiseProps> = ({ title, functions, display }) => {
+export const Piecewise: React.FC<PiecewiseProps> = ({ title, functions, display, classes }) => {
   const [expression, setExpression] = useState(``);
   useEffect(() => {
     if (functions) {
@@ -27,7 +28,7 @@ export const Piecewise: React.FC<PiecewiseProps> = ({ title, functions, display 
   
   return (
     <>
-      <Latex expression={`${title ? `${title} = ` : ''} ${expression}`} display={display} />
+      <Latex classes={classes ? classes : ""} expression={`${title ? `${title} = ` : ''} ${expression}`} display={display} />
     </>
   )
 }

@@ -1,6 +1,6 @@
 import * as math from 'mathjs'
 import { generateFunctionData } from './graph-helpers';
-import { getRandomWithExclusions, getRandomNumber, convertArrayToObject, findLCM } from './functions';
+import { getRandomWithExclusions, getRandomNumber, convertArrayToObject, findLCM, convertToDecimal } from './functions';
 
 /**
  * Compresses polynomial so it fits on 10 by 10 graph
@@ -72,12 +72,17 @@ function generateRandomPolynomial(degree) {
  * generates random polynomial function with random whole number coefficients 
  * @param {number} degree degree of polynomial to generate
  * @param {boolean} skipConstant boolean whether to not generate constant 
+ * @param {boolean} [guaranteedTermAtDegree=false] whether there must be a term at the specified degree (eg. if degree is 2, there must be an x^2 term)
  * @returns random polynomial function with random coefficients
  */
-function getPolynomialFunction(degree, skipConstant = false) {
+function getPolynomialFunction(degree, skipConstant = false, guaranteedTermAtDegree = false) {
   const coefficients = [];
   for (let i = 0; i <= degree; i++) {
-    coefficients.push(getRandomNumber(-5, 5));
+    if (guaranteedTermAtDegree && degree === i) {
+      coefficients.push(getRandomWithExclusions(-5, 5, [0]));
+    } else {
+      coefficients.push(getRandomNumber(-5, 5));
+    }
   }
 
   let terms = coefficients.map((coef, exp) => {
@@ -107,13 +112,14 @@ function getPolynomialFunction(degree, skipConstant = false) {
  * @param {Number} degree of polynomial
  * @param {Number} x value of point
  * @param {Number} y value of point
+ * @param {boolean} [guaranteedTermAtDegree=false] whether there must be a term at the specified degree (eg. if degree is 2, there must be an x^2 term)
  * @returns string expression of polynomial
  */
-function getPolynomialFunctionWithPoint(degree, x, y) {
-  let expression = getPolynomialFunction(degree, true);
+function getPolynomialFunctionWithPoint(degree, x, y, guaranteedTermAtDegree = false) {
+  let expression = getPolynomialFunction(degree, true, guaranteedTermAtDegree);
 
   // add constant to function to make (x, y) on graph
-  let currVal = math.evaluate(expression, {x});
+  let currVal = math.evaluate(expression, { x });
   const diff = y - Math.round(currVal);
   expression = `${expression} ${diff < 0 ? diff : diff > 0 ? `+ ${diff}` : ''}`;
   return expression;
@@ -172,12 +178,72 @@ function fitPointsToQuadratic(points) {
 
   // formula
   const det = (x1 - x2) * (x1 - x3) * (x2 - x3);
-  const a = ((x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / det);
+  const a = math.simplify((x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / det);
   const b = ((x3 * x3 * (y1 - y2) + x2 * x2 * (y3 - y1) + x1 * x1 * (y2 - y3)) / det);
   const c = ((x2 * x3 * (x2 - x3) * y1 + x3 * x1 * (x3 - x1) * y2 + x1 * x2 * (x1 - x2) * y3) / det);
 
   // Return math.js node
   return math.parse(`${a === 0 ? `` : `${a}x^2`} + ${b === 0 ? `` : `${b}x`} + ${c}`)
+}
+
+/**
+ * 
+ * @param {Array} points array of 3 points ({x, y}) to fit quadratic to
+ * @returns math.js node representing polynomial expression with fractional coefficients
+ */
+function fitPointsToQuadraticFractions(points) {
+  // Ensure we have at least 3 points
+  if (points.length < 3) {
+    console.error('At least 3 points are required for quadratic regression.');
+    return null;
+  }
+
+  // get points
+  const x1 = points[0].x;
+  const y1 = points[0].y;
+  const x2 = points[1].x;
+  const y2 = points[1].y;
+  const x3 = points[2].x;
+  const y3 = points[2].y;
+
+  // Calculating coefficients a, b, and c
+  const denominatorA = (x1 - x2) * (x1 - x3);
+  const denominatorB = (x2 - x1) * (x2 - x3);
+  const denominatorC = (x3 - x1) * (x3 - x2);
+
+  const a = math.string(math.simplify(`(${y1} / ${denominatorA}) + (${y2} / ${denominatorB}) + (${y3} / ${denominatorC})`));
+
+  const b = math.string(math.simplify(`-(
+    (${y1 * (x2 + x3)} / ${denominatorA}) +
+    (${y2 * (x1 + x3)} / ${denominatorB}) +
+    (${y3 * (x1 + x2)} / ${denominatorC})
+  )`));
+
+  const c = math.string(math.simplify(`(
+    (${y1 * x2 * x3} / ${denominatorA}) +
+    (${y2 * x1 * x3} / ${denominatorB}) +
+    (${y3 * x1 * x2} / ${denominatorC})
+  )`));
+  // Return math.js node
+  return createPolynomialFromCoefficients(a, b, c)
+}
+
+/**
+ * creates formatted polynomial math.js node from potentially fractional coefficients
+ * @param {Number} a coefficient of quadratic
+ * @param {Number} b coefficient of quadratic
+ * @param {Number} c coefficient of quadratic
+ * @returns math.js formatted polynomial node
+ */
+const createPolynomialFromCoefficients = (a, b, c) => {
+  const newA = Number(convertToDecimal(a))
+  const newB = Number(convertToDecimal(b))
+  const newC = Number(convertToDecimal(c))
+  const expression = `${newA === 0 ? `` : `${a}x^2`} 
+    ${newB === 0 ? ``: `${newB < 0 ? `${b}` : `+${b}`}x`} 
+    ${newC === 0 ? `` : `${newC < 0 ? `${c}` : `+${c}`}`}`
+
+  return math.parse(expression)
 }
 
 /**
@@ -246,4 +312,4 @@ function generateLimitPropertyTerm(functions, operators, depth = 2) {
   }
 }
 
-export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm, getPolynomialFunctionWithPoint, getPolynomialFunction }
+export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm, getPolynomialFunctionWithPoint, getPolynomialFunction, fitPointsToQuadraticFractions }

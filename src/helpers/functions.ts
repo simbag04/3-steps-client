@@ -113,6 +113,44 @@ const sortPolynomialByDegree = (polynomial: string): string => {
 }
 
 /**
+ * Extracts coefficients of polynomial in increasing order of degree
+ * @param polynomial string with polynomial expression
+ * @returns Coefficients of polynomial in increasing order of degree
+ */
+const getCoeffsOfPolynomial = (polynomial: string): number[] => {
+  const coefficients = nerdamer.coeffs(polynomial, 'x');
+  const coeffs = [];
+  coefficients.each(function (e) {
+    coeffs.push(Number(nerdamer(e).toString()));
+  })
+
+  return coeffs
+}
+
+/**
+ * Finds roots of given polynomial expression (works only with polynomials of degree 2)
+ * @param polynomial string wth polynomial expression to find roots
+ * @returns vector of roots of polynomial as decimals
+ * if there is only 1 root, it will return a vector of length 2 with both values the same root
+ */
+const getRootsOfPolynomial = (polynomial: string): string[] => {
+  const roots = nerdamer(`roots(${polynomial})`)
+  const elements = roots.symbol.elements
+  const r1 = convertToDecimal(elements[0].toString())
+  const r2 = elements[1] === undefined ? r1 : convertToDecimal(elements[1].toString())
+  return [r1, r2]
+}
+
+/**
+ * converts provided number (potentially a fraction) to a decimal
+ * @param number string of number to convert to decimal
+ * @returns decimal equivalent of number
+ */
+const convertToDecimal = (number: string): string => {
+  return nerdamer(number).text(`decimals`)
+}
+
+/**
  * 
  * @param {String} xval xvalue from which to create factor
  * @returns String in form (x - p), where p is the xval
@@ -213,4 +251,4 @@ const nerdamerFormatToLatex = (expression: string): string => {
   return nerdamer(expression).toTeX().replaceAll('\\cdot', '').replaceAll('~', '')
 }
 
-export { getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, sortPolynomialByDegree, getStringFactorFromXval, convertArrayToObject, findLCM, generateLimitTableData, formatPolynomialToLatex, nerdamerFormatToLatex }
+export { getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, sortPolynomialByDegree, getStringFactorFromXval, convertArrayToObject, findLCM, generateLimitTableData, formatPolynomialToLatex, nerdamerFormatToLatex, getCoeffsOfPolynomial, getRootsOfPolynomial, convertToDecimal }
