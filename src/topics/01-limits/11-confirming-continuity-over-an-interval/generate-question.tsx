@@ -1,5 +1,5 @@
 import { formatPolynomialToLatex, getCoeffsOfPolynomial, getRandomNumber, getRandomWithExclusions, getRootsOfPolynomial, getStringFactorFromXval, sortPolynomialByDegree } from "../../../helpers/functions"
-import { getPolynomialFunctionWithPoint, fitPointsToQuadraticFractions } from "../../../helpers/expression-generators"
+import { getPolynomialFunctionWithPoint } from "../../../helpers/expression-generators"
 import * as math from "mathjs"
 import { PiecewiseFunction } from "../../../types/PiecewiseFunction"
 import { Piecewise } from "../../../components/latex/Piecewise"
@@ -13,22 +13,15 @@ const piecewiseQuestion = () => {
   // need 1 point where function may or may not be continuous but will be included in the interval
   // need endpoints (can be on the boundaries or not) that will be included in the interval
   const continuousX = getRandomNumber(-3, 3);
-  const endpoint1 = getRandomNumber(-7, continuousX - 1);
-  const endpoint2 = getRandomNumber(continuousX + 1, 7);
-  const b4EP1 = endpoint1 - getRandomNumber(1, 3)
-  const bYEP2 = endpoint2 + getRandomNumber(1, 3)
 
   // decide if domains will be 
   // 1. [(before ep1, ep1)], [(ep1, contX)], [(contX, beyond ep2)]
   // 2. [(before ep1, contX)], [(contX, ep2)], [(ep2, beyond ep2)]
-  const firstOrSecond = getRandomNumber(0, 1)
+  let firstOrSecond = getRandomNumber(0, 1)
+  let srF = getSqrtFunction(continuousX)
 
-  // first generate quadratic with all 3 points
-  let srF = math.string(fitPointsToQuadraticFractions([
-    { x: endpoint1, y: getRandomNumber(1, 6) ** 2 },
-    { x: continuousX, y: getRandomNumber(1, 6) ** 2 },
-    { x: endpoint2, y: getRandomNumber(1, 6) ** 2 }
-  ]))
+  let endpoint1 = getRandomNumber(-7, continuousX - 1);
+  let endpoint2 = getRandomNumber(continuousX + 1, 7);
 
   // get coeffs and roots of function
   const coeffs = getCoeffsOfPolynomial(srF)
@@ -41,7 +34,22 @@ const piecewiseQuestion = () => {
     const rootNumbers = [Number(roots[0]), Number(roots[1])]
     rootNumbers.sort((a, b) => a - b) // sort in ascending order
     sqRtFunction = continuousX < rootNumbers[0] ? 0 : continuousX > rootNumbers[1] ? 2 : 1
+
+    if (Math.ceil(rootNumbers[0]) === continuousX) {
+      firstOrSecond = 1
+    } else if (Math.floor(rootNumbers[1]) === continuousX) {
+      firstOrSecond = 0
+    }
+
+    if (firstOrSecond === 0 && sqRtFunction === 1) {
+      endpoint1 = getRandomNumber(Math.ceil(rootNumbers[0]), continuousX - 1)
+    } else if (firstOrSecond === 1 && sqRtFunction === 1) {
+      endpoint2 = getRandomNumber(continuousX + 1, Math.floor(rootNumbers[1]))
+    }
   }
+
+  const b4EP1 = endpoint1 - getRandomNumber(1, 3) // value before endpoint 1
+  const bYEP2 = endpoint2 + getRandomNumber(1, 3) // value beyond endpoint 2
 
   // generate other function positions
   const ratFunction = getRandomWithExclusions(0, 2, [1, sqRtFunction])
@@ -52,11 +60,11 @@ const piecewiseQuestion = () => {
   functionTypes[ratFunction] = "rat"
 
   let ans = getRandomNumber(0, 2) // correct answer option
-
+  ans = 0
   const firstYAtContX = Math.round(math.evaluate(srF, { x: continuousX })); //srF's yVal
-  const secondYAtContX = (ans === 1) ? getRandomWithExclusions(-7, 7, [firstYAtContX]) : firstYAtContX // based on answer determineif f should be continuous at contX
-  let defaultEpY: number; // default and other endpoint vals
-  let otherEpY: number;
+  const secondYAtContX = (ans === 1) ? getRandomWithExclusions(-7, 7, [firstYAtContX, 0]) : firstYAtContX // based on answer determineif f should be continuous at contX
+  let defaultEpY: number | string; // default and other endpoint vals
+  let otherEpY: number | string;
 
   const piecewiseFunctions: PiecewiseFunction[] = [] // array to keep track of functions
 
@@ -88,9 +96,25 @@ const piecewiseQuestion = () => {
   piecewiseFunctions[1] = getFunctionHelper(srF, functionTypes, xYPairs, leftXs, rightXs, domains, 1)
 
   // based on answer decide if endoint should be included
-  defaultEpY = Math.round(math.evaluate(piecewiseFunctions[1].f,
-    { x: firstOrSecond === 0 ? endpoint1 : endpoint2 }))
-  otherEpY = (ans === 2) ? getRandomWithExclusions(-7, 7, [defaultEpY]) : defaultEpY
+  // find ep value from middle function
+  if (sqRtFunction === 1) {
+    // if sqrt function in the middle use nerdamer to keep sqrt
+    defaultEpY = nerdamer(piecewiseFunctions[1].f)
+      .sub(`x`, firstOrSecond === 0 ? endpoint1 : endpoint2)
+      .simplify()
+      .toString();
+  } else {
+    defaultEpY = math.evaluate(piecewiseFunctions[1].f,
+      { x: firstOrSecond === 0 ? endpoint1 : endpoint2 })
+  }
+
+  // based on value of default and answer, determine other ep value
+  if (Number.isNaN(Number(defaultEpY))) {
+    otherEpY = (ans === 2) ? getRandomWithExclusions(-7, 7, [0]) : defaultEpY
+  } else {
+    defaultEpY = Number(defaultEpY)
+    otherEpY = (ans === 2) ? getRandomWithExclusions(-7, 7, [defaultEpY, 0]) : defaultEpY
+  }
 
   // populate xypairs with x-values
   xYPairs[0][0] = rightXs[0]
@@ -129,18 +153,17 @@ const piecewiseQuestion = () => {
   piecewiseFunctions[0] = getFunctionHelper(srF, functionTypes, xYPairs, leftXs, rightXs, domains, 0)
   piecewiseFunctions[2] = getFunctionHelper(srF, functionTypes, xYPairs, leftXs, rightXs, domains, 2)
 
-  // convrt everything to latex
+  // convert everything to latex
   for (let i = 0; i < 3; i++) {
     piecewiseFunctions[i].f = formatPolynomialToLatex(piecewiseFunctions[i].f)
   }
 
-  const title = <></>
+  const title = <h2>
+    Is <Latex expression="f(x)" /> continous on <Latex expression={`[${endpoint1}, ${endpoint2}]`} />?
+  </h2>
 
   const question = <div className="flex vertical center medium-gap">
-    <h2>
-      Is <Latex expression="f(x)" /> continous on <Latex expression={`[${endpoint1}, ${endpoint2}]`} />?
-    </h2>
-    <Piecewise classes="larger-font" functions={piecewiseFunctions} title={`f(x)`} />
+    <Piecewise classes="large-font" functions={piecewiseFunctions} title={`f(x)`} />
   </div>
 
   const hints: React.JSX.Element[] = [
@@ -231,32 +254,80 @@ const piecewiseQuestion = () => {
   ]
 
   return { title, question, type: 'mc', input: options, hints }
-
 }
 
+/**
+ * Gets a sqrt function to use in above piecewise question
+ * @param x x value at which there should be a squared y val on function
+ * @returns sqrt function that has a wide enough domain
+ */
+const getSqrtFunction = (x: number) => {
+  let srF = getPolynomialFunctionWithPoint(getRandomNumber(1, 2), x, getRandomNumber(1, 6) ** 2)
+  let roots = getRootsOfPolynomial(srF)
+
+  // keep generating function till it is valid for a wide enough domain
+  while (!roots[0].includes("i") && !roots[1].includes("i") &&
+    Number(roots[0]) !== Number(roots[1])) {
+    if (Math.floor(Number(roots[1])) - Math.ceil(Number(roots[0])) > 1) {
+      break;
+    }
+    srF = getPolynomialFunctionWithPoint(getRandomNumber(1, 2), x, getRandomNumber(1, 6) ** 2)
+    roots = getRootsOfPolynomial(srF)
+  }
+
+  return srF
+}
+
+/**
+ * Function generation helper method for above question
+ * @param srF square root function
+ * @param functions types of functions
+ * @param xYPairs x, y pairs that function should have a point at
+ * @param leftXs left domains
+ * @param rightXs right domains
+ * @param domains domain strings
+ * @param i index to use in all arrays  
+ * @returns piecewise function with generated function and domain
+ */
 const getFunctionHelper = (srF: string, functions: string[], xYPairs: Array<number>[],
-  leftXs: number[], rightXs: number[], domains: string[], i: number) => {
-  let f;
-  if (functions[i] === "root") {
-    f = srF
-  } else {
+  leftXs: number[], rightXs: number[], domains: string[], i: number): PiecewiseFunction => {
+  // do srF in case the function is a root - otherwise, generate function normally
+  let f = srF;
+  if (functions[i] !== "root") {
     f = generateFunction(functions[i], xYPairs[i][0], xYPairs[i][1], leftXs[i], rightXs[i])
   }
   return { f, domain: domains[i] }
 }
 
-const generateFunction = (type: string, x: number, y: number, minValid: number, maxValid: number) => {
+/**
+ * Generates specific function at (x, y)
+ * @param type of function to generate
+ * @param x value at which there should be a point
+ * @param y value at which there should be a point
+ * @param minValid x-value that function must be valid on
+ * @param maxValid x-value that function must be valid on
+ * @returns generated function string
+ */
+const generateFunction = (type: string, x: number, y: number | string,
+  minValid: number, maxValid: number) => {
   if (type === "ln") {
-    const node = getPolynomialFunctionWithPoint(getRandomNumber(1, 2), x, y)
+    const num: number = typeof y === "string" ? getRandomWithExclusions(-7, 7, [0]) : y
+    let node = getPolynomialFunctionWithPoint(getRandomNumber(1, 2), x, num)
+    if (typeof y === "string") {
+      // if y is a string (sqrt), use nerdamer to simplify
+      node = `${nerdamer(`simplify(${y}/${num})`)}(${node})`
+    }
     return `log(e^(${node}))`
   } else if (type === "rat") {
+    // get factors with xvals that are beyond min and max valid
     const f1 = getStringFactorFromXval(maxValid + getRandomNumber(1, 2))
     const f2 = getStringFactorFromXval(minValid - getRandomNumber(1, 2))
 
     const bottomExpression = sortPolynomialByDegree(nerdamer(`${f1}${f2}`).expand());
     const bottom = math.evaluate(bottomExpression, { x })
-    const top = bottom * y
 
+    // use nerdamer to simplify in case y is a sqrt
+    const top = nerdamer(`simplify((${bottom})(${y}))`).toString()
     return `${top}/(${bottomExpression})`
   }
 }

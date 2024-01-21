@@ -18,7 +18,7 @@ export const Piecewise: React.FC<PiecewiseProps> = ({ title, functions, display,
         e = e + functions[i].f + "&";
         e = e + functions[i].domain;
         if (i !== functions.length - 1) {
-          e = e + "\\\\"
+          e = e + "\\\\\\\\"
         }
       }
       e = e + "\\end{cases}"

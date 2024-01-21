@@ -244,7 +244,7 @@ const formatPolynomialToLatex = (polynomial: string): any => {
 }
 
 /**
- * @param {String} polynomial to format
+ * @param {String} expression to format
  * @returns formatted latex polynomial formatted with nerdamer
  */
 const nerdamerFormatToLatex = (expression: string): string => {
