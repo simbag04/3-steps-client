@@ -113,6 +113,40 @@ const sortPolynomialByDegree = (polynomial: string): string => {
 }
 
 /**
+ * Returns polynomial expression given coefficients of polynomial
+ * @param coeffs to use in building polynomial
+ * @returns expression
+ */
+const buildPolynomialFromCoeffs = (coeffs: any[]): string => {
+  for (let i = 0; i < coeffs.length; i++) {
+    coeffs[i] = String(coeffs[i])
+  }
+  
+  let ans = ''
+  for (let i = coeffs.length - 1; i >= 0; i--) {
+    if (coeffs[i] === "0") continue; // skip 0 terms
+
+    // add "+" before positive coefficient terms
+    if (i !== coeffs.length - 1) {
+      if (Number.isNaN(Number(coeffs[i])) || Number(coeffs[i]) > 0) {
+        ans += "+"
+      }
+    }
+
+    if (coeffs[i] !== "1" || (coeffs[i] === "1" && i === 0)) {
+      ans += coeffs[i] === "-1" ? i === 0 ? "-1" : "-" : coeffs[i];
+    }
+
+    if (i > 1) {
+      ans += `x^${i}`;
+    } else if (i === 1) {
+      ans += 'x';
+    }
+  }
+  return ans;
+}
+
+/**
  * Extracts coefficients of polynomial in increasing order of degree
  * @param polynomial string with polynomial expression
  * @returns Coefficients of polynomial in increasing order of degree
@@ -251,4 +285,4 @@ const nerdamerFormatToLatex = (expression: string): string => {
   return nerdamer(expression).toTeX().replaceAll('\\cdot', '').replaceAll('~', '')
 }
 
-export { getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, sortPolynomialByDegree, getStringFactorFromXval, convertArrayToObject, findLCM, generateLimitTableData, formatPolynomialToLatex, nerdamerFormatToLatex, getCoeffsOfPolynomial, getRootsOfPolynomial, convertToDecimal }
+export { getRandomNumber, getRandomWithExclusions, generateOrderedValues, shuffleArray, sortPolynomialByDegree, getStringFactorFromXval, convertArrayToObject, findLCM, generateLimitTableData, formatPolynomialToLatex, nerdamerFormatToLatex, getCoeffsOfPolynomial, getRootsOfPolynomial, convertToDecimal, buildPolynomialFromCoeffs }

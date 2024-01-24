@@ -312,4 +312,56 @@ function generateLimitPropertyTerm(functions, operators, depth = 2) {
   }
 }
 
-export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm, getPolynomialFunctionWithPoint, getPolynomialFunction, fitPointsToQuadraticFractions }
+/**
+ * Generates one side of the fraction in trig limit problem involving sinx/x, x/sinx, (1 - cos x)/x
+ * @param {number} degree of side (ex. 3 could mean x^2 sin x)
+ * @param {string} multipliedAns used to keep trace of the current answer in generation process
+ * @param {boolean} denominator whether we are generating a denminator (important since we can't have (1 - cos x) in the denominator and denominator will have 1 trig term or 1 poly term and at least another trig term)
+ * @returns generated term and updated multipliedAns
+ */
+const generateSpecialTrig = 
+  (degree, multipliedAns, denominator) => {
+  let term = "1"; // initialize term
+  let exclusions = []; // coeffs that have already been used
+
+  // iterate over degree
+  for (let i = 0; i < degree;) {
+    // while we are less than degree, generate random term
+    const trig = getRandomNumber(0, 9) > 7 || i > 0; // whether term is poly or trig
+    const exp = getRandomNumber(1, denominator ? degree - i - 1 : degree - i) // exp of term
+    const expText = exp > 1 ? `^${exp}` : "";
+
+    // coeff of x in term, ex. 3 in sin(3x)
+    const coeff = getRandomWithExclusions(1, 4, exclusions); 
+    const coeffText = coeff !== 1 ? coeff : "";
+
+    exclusions.push(coeff); // update coeff exclusions
+
+    if (trig === true) {
+      // update ans
+      const add = `(${Math.pow(coeff, exp)})`
+      multipliedAns = (denominator ? multipliedAns + add : add + multipliedAns)
+
+      // term to generate
+      if (getRandomNumber(0, 1) === 0 || denominator) {
+        term += `\\sin${expText}(${coeffText}x)`
+      } else {
+        term += `(1 - \\cos(${coeffText}x))${expText}`
+      }
+    } else {
+      // poly term
+      multipliedAns = denominator ? multipliedAns + `(${coeff})` : `(${coeff})` + multipliedAns 
+      term += `${coeffText}x${expText}`
+    }
+    // increment i by degree that we added
+    i += exp;
+  }
+
+  // remove beginning 1 from term
+  if (term.length > 1) {
+    term = term.substring(1)
+  }
+  return { term, multipliedAns }
+}
+
+export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm, getPolynomialFunctionWithPoint, getPolynomialFunction, fitPointsToQuadraticFractions, generateSpecialTrig }

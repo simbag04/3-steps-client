@@ -55,7 +55,7 @@ function App() {
 
   return (
     <div>
-      <ApiContext.Provider value={'https://cyan-clear-chipmunk.cyclic.cloud'}>
+      <ApiContext.Provider value={'https://three-steps-api.onrender.com'}>
         <UserContext.Provider value={{ user, setUser }}>
           <HashRouter>
             <Routes>
