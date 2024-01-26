@@ -133,6 +133,11 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
 
   // handler for math input
   const handleMathInput = (e) => {
+    // const t = String(e.latex())
+    // const inf = math.parse("infinity").toTex()
+    // console.log(t === inf)
+    // console.log(inf)    
+
     if (!goToNext) {
       if (currQ.ans !== 'dne') {
         try {
@@ -149,15 +154,13 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     }
   }
 
-  /*
   // handler for sqrt button click
-  const sqrt = () => {
-    if (mathRef.current) {
-      mathRef.current.cmd(`\\sqrt`)
-      mathRef.current.focus();
-    }
-  }
-  */
+  // const sqrt = () => {
+  //   if (mathRef.current) {
+  //     mathRef.current.cmd(`\\infty`)
+  //     mathRef.current.focus();
+  //   }
+  // }
 
   // sets classes based on whether answer is correct
   useEffect(() => {
