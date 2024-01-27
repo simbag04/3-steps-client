@@ -140,7 +140,7 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     // console.log(inf)    
 
     if (!goToNext) {
-      if (currQ.ans.includes("infty")) {
+      if (String(currQ.ans).includes("infty")) {
         correctRef.current = String(e.latex()) === currQ.ans
       } else if (currQ.ans !== 'dne') {
         try {

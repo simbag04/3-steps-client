@@ -178,7 +178,7 @@ function fitPointsToQuadratic(points) {
 
   // formula
   const det = (x1 - x2) * (x1 - x3) * (x2 - x3);
-  const a = math.simplify((x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / det);
+  const a = ((x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / det);
   const b = ((x3 * x3 * (y1 - y2) + x2 * x2 * (y3 - y1) + x1 * x1 * (y2 - y3)) / det);
   const c = ((x2 * x3 * (x2 - x3) * y1 + x3 * x1 * (x3 - x1) * y2 + x1 * x2 * (x1 - x2) * y3) / det);
 
