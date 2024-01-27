@@ -19,6 +19,7 @@ import { Stars } from "../Stars";
 import { useWindowSize } from "../../helpers/useWindowSize";
 import { EditableMathField, addStyles } from "react-mathquill";
 import * as math from 'mathjs'
+import Latex from "../latex/Latex"
 
 addStyles()
 
@@ -139,7 +140,9 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     // console.log(inf)    
 
     if (!goToNext) {
-      if (currQ.ans !== 'dne') {
+      if (currQ.ans.includes("infty")) {
+        correctRef.current = String(e.latex()) === currQ.ans
+      } else if (currQ.ans !== 'dne') {
         try {
           let n1 = math.parse(String(currQ.ans));
           let n2 = math.parse(e.text() ? e.text() : "0");
@@ -154,13 +157,13 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
     }
   }
 
-  // handler for sqrt button click
-  // const sqrt = () => {
-  //   if (mathRef.current) {
-  //     mathRef.current.cmd(`\\infty`)
-  //     mathRef.current.focus();
-  //   }
-  // }
+  // handler for inf button click
+  const inf = () => {
+    if (mathRef.current) {
+      mathRef.current.cmd(`\\infty`)
+      mathRef.current.focus();
+    }
+  }
 
   // sets classes based on whether answer is correct
   useEffect(() => {
@@ -222,17 +225,22 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
                 {currQ && currQ.type === 'math' &&
                   <span className="flex horizontal center medium-gap">
                     {currQ.nextToInput}
-                    <div className={`mathquill input ${classes}`}>
-                      <EditableMathField 
-                        latex={textInput}
-                        onChange={handleMathInput}
-                        mathquillDidMount={(mathField) => (mathRef.current = mathField)} />
+                    <div className="flex horizontal center small-gap">
+                      <div className={`mathquill input ${classes}`}>
+                        <EditableMathField
+                          latex={textInput}
+                          onChange={handleMathInput}
+                          mathquillDidMount={(mathField) => (mathRef.current = mathField)} />
+                      </div>
+                      {currQ && currQ.math_input_buttons && currQ.math_input_buttons.includes("infinity") && !goToNext ?
+                        <button className="math-symbol-input" onClick={inf}><Latex expression={`\\infty`} /></button> :
+                        <></>}
                     </div>
 
-                    {/* <button onClick={sqrt}>sqrt</button> */}
                     {goToNext && !correctRef.current ?
                       <div className="correct ans">
-                        {currQ.ans}
+                        {currQ.ans.includes(`\\infty`) ? <Latex expression={currQ.ans} /> : 
+                        currQ.ans}
                       </div> : null}
                   </span>
                 }

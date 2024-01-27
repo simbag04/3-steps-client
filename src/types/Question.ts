@@ -6,5 +6,6 @@ export type Question = {
   type: 'mc' | 'math',
   nextToInput?: JSX.Element,
   hints: JSX.Element[],
-  input?: Array<Option>
+  input?: Array<Option>,
+  math_input_buttons?: string[]
 } 

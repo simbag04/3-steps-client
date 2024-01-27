@@ -55,6 +55,11 @@ input, .input {
   border-radius: var(--border-radius);
 }
 
+.math-symbol-input {
+  padding: 5px 10px;
+  background-color: lightgray;
+}
+
 .input.selected {
   box-shadow: 0 0 0 2px #007bff;
 }
