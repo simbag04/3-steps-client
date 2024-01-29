@@ -109,8 +109,8 @@ const checkIfIVTApplies = () => {
   // get yval within and outside f(x1) and f(x2)
   const withinYVal = getRandomNumber(Math.min(intervalY1, intervalY2) + 1, Math.max(intervalY1, intervalY2) - 1)
   const outsideYVal = Boolean(getRandomNumber(0, 1)) ?
-    getRandomNumber(-10, Math.min(intervalY1, intervalY2) - 1) :
-    getRandomNumber(Math.max(intervalY1, intervalY2) + 1, 10)
+    getRandomNumber(Math.min(intervalY1, intervalY2) - 10, Math.min(intervalY1, intervalY2) - 1) :
+    getRandomNumber(Math.max(intervalY1, intervalY2) + 1, Math.max(intervalY1, intervalY2) + 10)
 
   const yToAsk = Boolean(getRandomNumber(0, 1)) ? withinYVal : outsideYVal // which y to use
   const piecewiseFunctions: PiecewiseFunction[] = [
@@ -202,7 +202,7 @@ const checkIfIVTApplies = () => {
 
 const generateRandomQuestion = () => {
   const rand = getRandomNumber(0, 9)
-  if (rand <= 4) {
+  if (rand <= 9) {
     return checkIfIVTApplies()
   } else {
     return applyIVT()
