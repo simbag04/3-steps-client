@@ -122,7 +122,7 @@ const tableToLimit = (): Question => {
   const question = <div className="flex vertical center medium-gap">
     <div className="flex vertical center small-gap">
       <h2>Estimate the limit from the table.</h2>
-      <div>Enter "dne" if the limit doesn't exist or cannot be evaluated from the table</div>
+      <div>Enter "dne" if the limit doesn't exist or cannot be evaluated from the table.</div>
     </div>
     <FunctionTable xTitle={`x`} yTitle={`g(x)`} data={data} />
   </div>

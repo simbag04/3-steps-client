@@ -47,14 +47,18 @@ const jumpGraphQuestion = (): any => {
     }
   ];
 
-  let question: React.JSX.Element = <div className="flex vertical center medium-gap">
+  let tempQuestion: React.JSX.Element = <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
     <FunctionGraph functions={functions} size={GRAPH_SIZE} />
   </div>
 
-  const { title, options, hints } = generateOptionsAndHints("jump", question, y1 === y2)
+  const { title, options, hints } = generateOptionsAndHints("jump", tempQuestion, y1 === y2)
+  const question = <div className="flex vertical center medium-gap">
+    {title}
+    {tempQuestion}
+  </div>
 
-  return { question, title, input: options, hints }
+  return { question, title: <></>, input: options, hints }
 }
 
 const infiniteGraphQuestion = () => {
@@ -95,14 +99,19 @@ const infiniteGraphQuestion = () => {
     },
   ]
 
-  const question = <div className="flex vertical center medium-gap">
+  const tempQuestion = <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
     <AsymptoticGraph functions={functions} size={GRAPH_SIZE} x={[xVal]} y={[verticalShift]} />
   </div>
 
-  const { title, options, hints } = generateOptionsAndHints("infinite", question, false)
+  const { title, options, hints } = generateOptionsAndHints("infinite", tempQuestion, false)
 
-  return { question, title, input: options, hints }
+  const question = <div className="flex vertical center medium-gap">
+    {title}
+    {tempQuestion}
+  </div>
+
+  return { question, title: <></>, input: options, hints }
 }
 
 const removableGraphQuestion = (): any => {
@@ -146,88 +155,92 @@ const removableGraphQuestion = (): any => {
     }
   ]
 
-  let question: React.JSX.Element = <div className="flex vertical center medium-gap">
+  let tempQuestion: React.JSX.Element = <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
     <FunctionGraph functions={functions} size={GRAPH_SIZE} points={points} />
   </div>
 
-  const { title, options, hints } = generateOptionsAndHints("removable", question, y1 === y2)
+  const { title, options, hints } = generateOptionsAndHints("removable", tempQuestion, y1 === y2)
+  const question = <div className="flex vertical center medium-gap">
+    {title}
+    {tempQuestion}
+  </div>
 
-  return { question, title, input: options, hints }
+  return { question, title: <></>, input: options, hints }
 }
 
-const generateOptionsAndHints = 
+const generateOptionsAndHints =
   (graphType: string, question: React.JSX.Element, continuous?: boolean): any => {
-  let title: React.JSX.Element;
-  let options: Option[];
-  const hints = []
-  hints.push(<>
-    <div>
-      Recall our 3 types of discontinuities:
-      <ul className="text-start">
-        <li>
-          a <strong>jump</strong> discontinuity - when there is a jump in the graph
-        </li>
-        <li>
-          an <strong>infinite</strong> discontinuity - when a graph has asymptotes
-        </li>
-        <li>
-          a <strong>removable</strong> discontinuity - when only the value of the function is inconsistent with the rest of the graph
-        </li>
-      </ul>
-    </div>
-  </>)
-
-  if (continuous || getRandomNumber(0, 1) === 0) {
-    title = <h3>
-      Is the graph below continuous?
-    </h3>
-    hints.push(<div className="flex vertical center medium-gap">
+    let title: React.JSX.Element;
+    let options: Option[];
+    const hints = []
+    hints.push(<>
       <div>
-        Are any of these discontinuities present in this graph?
+        Recall our 3 types of discontinuities:
+        <ul className="text-start">
+          <li>
+            a <strong>jump</strong> discontinuity - when there is a jump in the graph
+          </li>
+          <li>
+            an <strong>infinite</strong> discontinuity - when a graph has asymptotes
+          </li>
+          <li>
+            a <strong>removable</strong> discontinuity - when only the value of the function is inconsistent with the rest of the graph
+          </li>
+        </ul>
       </div>
-      {question}
-    </div>)
+    </>)
 
-    options = [
-      {
-        component: <div>Yes</div>,
-        correct: continuous
-      },
-      {
-        component: <div>No</div>,
-        correct: !continuous
-      },
-    ]
-  } else {
-    title = <h3>
-      What type  of discontinuity is shown in the graph below?
-    </h3>
-    hints.push(<div className="flex vertical center medium-gap">
-      <div>
-        What type of discontinuity is shown here?
-      </div>
-      {question}
-    </div>)
+    if (continuous || getRandomNumber(0, 1) === 0) {
+      title = <h3>
+        Is the graph below continuous?
+      </h3>
+      hints.push(<div className="flex vertical center medium-gap">
+        <div>
+          Are any of these discontinuities present in this graph?
+        </div>
+        {question}
+      </div>)
 
-    options = [
-      {
-        component: <div>Jump Discontinuity</div>,
-        correct: graphType === "jump"
-      },
-      {
-        component: <div>Infinite Discontinuity</div>,
-        correct: graphType === "infinite"
-      },
-      {
-        component: <div>Removable Discontinuity</div>,
-        correct: graphType === "removable"
-      }
-    ]
+      options = [
+        {
+          component: <div>Yes</div>,
+          correct: continuous
+        },
+        {
+          component: <div>No</div>,
+          correct: !continuous
+        },
+      ]
+    } else {
+      title = <h3>
+        What type  of discontinuity is shown in the graph below?
+      </h3>
+      hints.push(<div className="flex vertical center medium-gap">
+        <div>
+          What type of discontinuity is shown here?
+        </div>
+        {question}
+      </div>)
+
+      options = [
+        {
+          component: <div>Jump Discontinuity</div>,
+          correct: graphType === "jump"
+        },
+        {
+          component: <div>Infinite Discontinuity</div>,
+          correct: graphType === "infinite"
+        },
+        {
+          component: <div>Removable Discontinuity</div>,
+          correct: graphType === "removable"
+        }
+      ]
+    }
+
+    return { title, options, hints }
   }
-
-  return { title, options, hints }
-}
 
 const generateRandomQuestion = (): Question => {
   let question: any;

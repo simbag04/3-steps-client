@@ -34,7 +34,7 @@ const asymptoticFunctions = [
     rightCircle: false,
     type: "asymptotic"
   }
-]   
+]
 
 const Section1 = <>
   <div>
@@ -43,7 +43,7 @@ const Section1 = <>
   <div>
     Let's start by looking at a graph to understand how we can do this:
   </div>
-  <div>
+  <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression="f(x)" /></h3>
     <AsymptoticGraph functions={asymptoticFunctions} size={GRAPH_SIZE} x={[1]} y={[1]} />
   </div>
@@ -71,7 +71,7 @@ const Section3 = <>
   <div>
     For each of these rules, let <Latex expression="n" /> be the highest degree of the numerator, and <Latex expression="d" /> be the highest degree of the denominator.
   </div>
-  <div>
+  <div className="flex vertical center">
     <ul className="text-start">
       <li>
         If <Latex expression="n < d" />, the horizontal asymptote is 0.
@@ -88,7 +88,9 @@ const Section3 = <>
 
 const Section4 = <>
   <div>
-    Let's look at some examples - let's start with
+    Let's look at some examples - let's start with:
+  </div>
+  <div>
     <Latex expression={`f(x) = \\frac{x}{x^2 + 1}`} display={true} />
   </div>
   <div>
@@ -101,7 +103,10 @@ const Section4 = <>
 
 const Section5 = <>
   <div>
-    Antoher example we can look at is <Latex expression={`g(x) = \\frac{2x^3 + x - 1}{x^3 - x}`} display={true}/>
+    Antoher example we can look at is:
+  </div>
+  <div>
+    <Latex expression={`g(x) = \\frac{2x^3 + x - 1}{x^3 - x}`} display={true} />
   </div>
   <div>
     In this case, the degrees of both the top and bottom are <Latex classes="bold" expression="3" />, so we need to find the ratio of the leading coefficients.
@@ -116,7 +121,10 @@ const Section5 = <>
 
 const Section6 = <>
   <div>
-    Lastly, let's look at <Latex expression={`h(x) = \\frac{x^2 + 3}{x + 1}`} display={true}/>
+    Lastly, let's look at:
+  </div>
+  <div>
+    <Latex expression={`h(x) = \\frac{x^2 + 3}{x + 1}`} display={true} />
   </div>
   <div>
     In this case the degree of the numerator is <Latex classes="bold" expression="2" />, and the degree of the denominator is <Latex classes="bold" expression="1" />. Since the degree of the top is greater than the degree of the bottom, there is no horizontal asymptote!
@@ -134,34 +142,44 @@ const Section7 = <>
 
 const Section8 = <>
   <div>
-    Only looking at the higher degree terms, we see 
-    <Latex expression={`h(x) = \\frac{x^2 + 3}{x + 1} \\approx \\frac{x^2}{x} = x`} display={true} /> 
+    Only looking at the higher degree terms, we see:
+  </div>
+  <div>
+    <Latex expression={`h(x) = \\frac{x^2 + 3}{x + 1} \\approx \\frac{x^2}{x} = x`} display={true} />
   </div>
   <div>
     Now, we can directly evaluate:
-    <Latex classes="bold" expression={`\\lim_{x \\to \\infty} h(x) = \\lim_{x \\to \\infty} x = \\infty`} display={true}/>
-    <Latex classes="bold" expression={`\\lim_{x \\to -\\infty} h(x) = \\lim_{x \\to -\\infty} x = -\\infty`} display={true}/>
+  </div>
+  <div>
+    <Latex classes="bold" expression={`\\lim_{x \\to \\infty} h(x) = \\lim_{x \\to \\infty} x = \\infty`} display={true} />
+    <Latex classes="bold" expression={`\\lim_{x \\to -\\infty} h(x) = \\lim_{x \\to -\\infty} x = -\\infty`} display={true} />
   </div>
 </>
 
 const Section9 = <>
   <div>
     These are the basic rules to use when evaluating limits at <Latex expression={`\\infty`} /> or <Latex expression={`-\\infty`} /> - however, it can get a little more complicated: consider
-    <Latex expression={`f(x) = \\frac{\\sqrt{x^2 + 3}}{x}`} display={true}/>
+  </div>
+  <div>
+    <Latex expression={`f(x) = \\frac{\\sqrt{x^2 + 3}}{x}`} display={true} />
   </div>
   <div>
     In this case, we have a square root function to deal with.
   </div>
   <div>
     However, just like in the previous example, we can focus on the highest degree terms:
-    <Latex expression={`f(x) = \\frac{\\sqrt{x^2 + 3}}{x} \\approx \\frac{\\sqrt{x^2}}{x}`} display={true}/>
+  </div>
+  <div>
+    <Latex expression={`f(x) = \\frac{\\sqrt{x^2 + 3}}{x} \\approx \\frac{\\sqrt{x^2}}{x}`} display={true} />
   </div>
 </>
 
 const Section10 = <>
   <div>
     Now, we can simplify the root. The only thing to keep in mind is that the square root function is always <strong>positive</strong>, so instead of just simplifying it to <Latex expression="x" />, we should simplify it to <Latex expression="|x|" />. Thus,
-    <Latex expression={`f(x) \\approx \\frac{\\sqrt{x^2}}{x} = \\frac{|x|}{x}`} display={true}/>
+  </div>
+  <div>
+    <Latex expression={`f(x) \\approx \\frac{\\sqrt{x^2}}{x} = \\frac{|x|}{x}`} display={true} />
   </div>
 
 </>
@@ -169,6 +187,8 @@ const Section10 = <>
 const Section11 = <>
   <div>
     And now, we can take the limits:
+  </div>
+  <div>
     <Latex classes="bold" expression={`\\lim_{x \\to \\infty} \\frac{|x|}{x} = \\frac{+\\infty}{+\\infty} = 1`} display={true} />
     <Latex classes="bold" expression={`\\lim_{x \\to -\\infty} \\frac{|x|}{x} = \\frac{+\\infty}{-\\infty} = -1`} display={true} />
   </div>
@@ -179,23 +199,33 @@ const Section11 = <>
 
 const Section12 = <>
   <div>
-    Let's look at one last example: <Latex expression={`g(x) = \\frac{\\sqrt{4x^4 + 3}}{3x^2 + 5}`} display={true}/>
+    Let's look at one last example:
   </div>
   <div>
-    Again, focusing on the higher degree terms, we get <Latex expression={`g(x) = \\frac{\\sqrt{4x^4 + 3}}{3x^2 + 5} \\approx \\frac{\\sqrt{4x^4}}{3x^2} = \\frac{|2x^2|}{3x^2}`} display={true}/>
+    <Latex expression={`g(x) = \\frac{\\sqrt{4x^4 + 3}}{3x^2 + 5}`} display={true} />
+  </div>
+  <div>
+    Again, focusing on the higher degree terms, we get:
+  </div>
+  <div>
+    <Latex expression={`g(x) = \\frac{\\sqrt{4x^4 + 3}}{3x^2 + 5} \\approx \\frac{\\sqrt{4x^4}}{3x^2} = \\frac{|2x^2|}{3x^2}`} display={true} />
   </div>
 </>
 
 const Section13 = <>
   <div>
     In this case, we have <Latex expression="x^2" /> on top, and that is always positive. That's why we can drop the absolute value on top:
-    <Latex expression={`g(x) \\approx \\frac{|2x^2|}{3x^2} = \\frac{2x^2}{3x^2}`} display={true}/>
+  </div>
+  <div>
+    <Latex expression={`g(x) \\approx \\frac{|2x^2|}{3x^2} = \\frac{2x^2}{3x^2}`} display={true} />
   </div>
   <div>
     Now, using our horizontal asymptotes technique, the top and bottom have the same degree. Thus, the asymptote is just the ratio of the leading coefficients: <Latex expression={`\\frac{2}{3}`} />.
   </div>
   <div>
-    Thus, we have 
+    Thus, we have:
+  </div>
+  <div>
     <Latex classes="bold" expression={`\\lim_{x \\to \\infty} g(x) = \\frac{2}{3}`} display={true} />
     <Latex classes="bold" expression={`\\lim_{x \\to -\\infty} g(x) = \\frac{2}{3}`} display={true} />
   </div>

@@ -67,7 +67,7 @@ const Section2 = () => {
 const Section3 = () => {
   return (
     <>
-      <div>It is reasonable to estimate that <Latex expression={`{\\lim}_{x \\to 4} f(x) = 6.5`} /> because that is what the values near <Latex expression={`x = 4`} /> seem to be approaching.</div>
+      <div>It is reasonable to estimate that <Latex classes="bold" expression={`{\\lim}_{x \\to 4} f(x) = 6.5`} /> because that is what the values near <Latex expression={`x = 4`} /> seem to be approaching.</div>
     </>
   )
 }
@@ -86,7 +86,7 @@ const Section5 = () => {
   return (
     <>
       <div>
-        What about estimating <Latex expression={`{\\lim}_{x \\to 4} g(x)`} /> from this table?
+        What about estimating <Latex classes="bold" expression={`{\\lim}_{x \\to 4} g(x)`} /> from this table?
       </div>
       <FunctionTable xTitle={`x`} yTitle={`g(x)`} data={table2Data} />
     </>
@@ -107,7 +107,7 @@ const Section7 = () => {
   return (
     <>
       <div>
-        Let's look at another table: What can we say about <Latex expression={`{\\lim}_{x \\to 4} h(x)`} />?
+        Let's look at another table: What can we say about <Latex classes="bold" expression={`{\\lim}_{x \\to 4} h(x)`} />?
       </div>
       <FunctionTable xTitle={`x`} yTitle={`h(x)`} data={table3Data} />
     </>
@@ -128,7 +128,7 @@ const Section9 = () => {
   return (
     <>
       <div>
-        All of this brings us closer to estimating limits of functions. For example, suppose we are asked to find <Latex expression={`{\\lim}_{x \\to 3} k(x)`} />, where <Latex expression={`k(x) = \\frac{x^2 - 9}{x - 3}`} />
+        All of this brings us closer to estimating limits of functions. For example, suppose we are asked to find <Latex classes="bold" expression={`{\\lim}_{x \\to 3} k(x)`} />, where <Latex expression={`k(x) = \\frac{x^2 - 9}{x - 3}`} display={true}/>
       </div>
     </>
   )

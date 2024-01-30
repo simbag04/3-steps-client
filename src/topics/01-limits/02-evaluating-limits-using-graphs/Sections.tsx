@@ -91,7 +91,7 @@ const Section1 = () => {
       <div>
         Consider a graph <Latex expression={`f(x)`} inline={true} /> that has a jump: What can we say about <Latex expression={`\\ {\\lim}_{x \\to -2} f(x)`} inline={true} />?
       </div>
-      <div className="flex vertical center">
+      <div className="flex vertical center medium-gap">
         <h3>Graph of <Latex expression={`f(x)`} inline={true} /></h3>
         <FunctionGraph functions={functions} size={GRAPH_SIZE} />
       </div>
@@ -102,7 +102,7 @@ const Section1 = () => {
 const Section2 = () => {
   return (
     <div>
-      The graph seems to be approaching different values from the left and right! This brings us to the concept of <strong>one-sided limits</strong> (in other words, limits from the left or right)
+      The graph seems to be approaching different values from the left and right! This brings us to the concept of <strong>one-sided limits</strong> (in other words, limits from the left or right).
     </div>
   )
 }
@@ -110,7 +110,7 @@ const Section2 = () => {
 const Section3 = () => {
   return (
     <div>
-      The notation to write a limit approaching from the left is <Latex expression={`{\\lim}_{x \\to a^{-}}f(x)`} inline={true} />, with a minus sign on the top right of the number.
+      The notation to write a limit approaching from the <strong>left</strong> is <Latex classes="bold" expression={`{\\lim}_{x \\to a^{\\footnotesize\\texttt{-}}}f(x)`} inline={true} />, with a <strong>minus</strong> sign on the top right of the number.
     </div>
   )
 }
@@ -118,7 +118,7 @@ const Section3 = () => {
 const Section4 = () => {
   return (
     <div>
-      Similarly, the notation for a limit approaching from the right is <Latex expression={`{\\lim}_{x \\to a^{+}}f(x)`} inline={true} />, with a plus sign instead of a minus sign.
+      Similarly, the notation for a limit approaching from the <strong>right</strong> is <Latex classes="bold" expression={`{\\lim}_{x \\to a^{\\footnotesize\\texttt{+}}}f(x)`} inline={true} />, with a <strong>plus</strong> sign instead of a minus sign.
     </div>
   )
 }
@@ -127,7 +127,7 @@ const Section5 = () => {
   return (
     <>
       <div>
-        What is <Latex classes="c2" expression={`{\\lim}_{x \\to -2^{-}}f(x)`} inline={true} /> and <Latex classes="c3" expression={`{\\lim}_{x \\to -2^{+}}f(x)`} inline={true} />?
+        What is <Latex classes="c2" expression={`{\\lim}_{x \\to -2^{\\footnotesize\\texttt{-}}}f(x)`} inline={true} /> and <Latex classes="c3" expression={`{\\lim}_{x \\to -2^{\\footnotesize\\texttt{+}}}f(x)`} inline={true} />?
       </div>
 
       <div className="flex vertical center">
@@ -141,7 +141,7 @@ const Section5 = () => {
 const Section6 = () => {
   return (
     <div>
-      Looking at the graph, <Latex classes="c2" expression={`{\\lim}_{x \\to -2^{-}}f(x) = 2`} inline={true} /> and <Latex classes="c3" expression={`{\\lim}_{x \\to -2^{+}}f(x) = 3`} inline={true} />
+      Looking at the graph, <Latex classes="c2" expression={`{\\lim}_{x \\to -2^{\\footnotesize\\texttt{-}}}f(x) = 2`} inline={true} /> and <Latex classes="c3" expression={`{\\lim}_{x \\to -2^{\\footnotesize\\texttt{+}}}f(x) = 3`} inline={true} />.
     </div>
   )
 }
@@ -149,7 +149,7 @@ const Section6 = () => {
 const Section7 = () => {
   return (
     <div>
-      Since <Latex classes="c2" expression={`{\\lim}_{x \\to -2^{-}}f(x)`} inline={true} /> <Latex expression={`\\neq`} inline={true} /> <Latex classes="c3" expression={`{\\lim}_{x \\to -2^{+}}f(x)`} inline={true} />, <Latex expression={`{\\lim}_{x \\to -2}f(x)`} inline={true} /> <strong>does not exist</strong>.
+      Since <Latex classes="c2" expression={`{\\lim}_{x \\to -2^{\\footnotesize\\texttt{-}}}f(x)`} inline={true} /> <Latex expression={`\\neq`} inline={true} /> <Latex classes="c3" expression={`{\\lim}_{x \\to -2^{\\footnotesize\\texttt{+}}}f(x)`} inline={true} />, <Latex expression={`{\\lim}_{x \\to -2}f(x)`} inline={true} /> <strong>does not exist</strong>.
     </div>
   )
 }
@@ -160,7 +160,7 @@ const Section8 = () => {
       <div>
         Let's consider another type of graph: one with asymptotes. What can we say about <Latex expression={`\\lim_{x \\to 1}g(x)`} inline={true} />?
       </div>
-      <div className="flex vertical center">
+      <div className="flex vertical center medium-gap">
         <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
         <AsymptoticGraph functions={asymptoticFunctions} size={GRAPH_SIZE} x={[1]} y={[1]} />
       </div>
@@ -182,7 +182,7 @@ const Section10 = () => {
       <div>
         Lastly, let's consider an oscillating graph. What can we say about <Latex expression={`\\lim_{x \\to 0}h(x)`} inline={true} />?
       </div>
-      <div className="flex vertical center">
+      <div className="flex vertical center medium-gap">
         <h3>Graph of <Latex expression={`h(x)`} inline={true} /></h3>
         <FunctionGraph functions={oscillatingFunctions} size={GRAPH_SIZE} />
       </div>
@@ -203,15 +203,17 @@ const Section12 = () => {
     <>
       <div>
         To summarize, there are 3 cases where a limit does not exist:
+      </div>
+      <div>
         <ol className="start">
           <li>
-            When the limit from the left does not equal the right
+            When the limit from the left does not equal the right.
           </li>
           <li>
-            When the graph is approaching positive or negative infinity at the point
+            When the graph is approaching positive or negative infinity at the point.
           </li>
           <li>
-            When the graph is oscillating at the point
+            When the graph is oscillating at the point.
           </li>
         </ol>
       </div>

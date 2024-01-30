@@ -14,11 +14,7 @@ const nerdamer = require("nerdamer/all.min")
  * @returns relevant question components
  */
 const piecewiseToLimit = (): Question => {
-  const title: React.JSX.Element = <div className="flex vertical center">
-    <h2>Evaluate the limit.</h2>
-    <div>Enter "dne" if the limit doesn't exist</div>
-  </div>
-
+  const title = <></>
   const functions: PiecewiseFunction[] = []; // array for piecewise
   const mathFs = []; // array of mathjs functions
   const xValues = generateOrderedValues(2, true, -3, 2); // random xvalues
@@ -66,7 +62,13 @@ const piecewiseToLimit = (): Question => {
     functions.push({ f, domain });
   }
 
-  const question = <Piecewise functions={functions} title={`f(x)`} />
+  const question = <>
+    <div className="flex vertical center">
+      <h2>Evaluate the limit.</h2>
+      <div>Enter "dne" if the limit doesn't exist.</div>
+    </div>
+    <Piecewise functions={functions} title={`f(x)`} />
+  </>
 
   // find answer
   // 0: left, 1: right, 2: 2-sided
@@ -90,7 +92,7 @@ const piecewiseToLimit = (): Question => {
   // other relevant components
   const signText = sign === 0 ? `^{\\footnotesize\\texttt{-}}` : sign === 1 ? `^{\\footnotesize\\texttt{+}}` : ``;
   const nextToInput = <span>
-    <Latex expression={`\\lim_{x \\to ${x + signText}}g(x)`} inline={true} /> =
+    <Latex classes="bold" expression={`\\lim_{x \\to ${x + signText}}g(x)`} inline={true} /> =
   </span>
 
   const hints = [

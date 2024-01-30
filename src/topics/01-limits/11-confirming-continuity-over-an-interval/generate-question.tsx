@@ -158,11 +158,12 @@ const piecewiseQuestion = () => {
     piecewiseFunctions[i].f = formatPolynomialToLatex(piecewiseFunctions[i].f)
   }
 
-  const title = <h2>
-    Is <Latex expression="f(x)" /> continous on <Latex expression={`[${endpoint1}, ${endpoint2}]`} />?
-  </h2>
+  const title = <></>
 
   const question = <div className="flex vertical center medium-gap">
+    <h2>
+      Is <Latex expression="f(x)" /> continous on <Latex expression={`[${endpoint1}, ${endpoint2}]`} />?
+    </h2>
     <Piecewise classes="large-font" functions={piecewiseFunctions} title={`f(x)`} />
   </div>
 

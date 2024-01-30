@@ -66,7 +66,7 @@ const Section2 = () => {
         Due to this, we can evaluate limits with just <Latex expression={`x`} /> as a variable.
       </div>
       <div>
-        As an example, consider <Latex expression={`\\lim_{x \\to 3} (x^2 + 6x - 3)`} />.
+        As an example, consider <Latex classes='bold' expression={`\\lim_{x \\to 3} (x^2 + 6x - 3)`} />.
       </div>
     </>
   )
@@ -93,7 +93,7 @@ const Section4 = () => {
         Let's look at an example with <strong>piecewise functions</strong>. Let <Piecewise title={`f(x)`} functions={functions} display={true} />
       </div>
       <div>
-        What is <Latex expression={`\\lim_{x \\to 5} f(x)`} />?
+        What is <Latex classes='bold' expression={`\\lim_{x \\to 5} f(x)`} />?
       </div>
     </>
   )
@@ -116,7 +116,7 @@ const Section6 = () => {
   return (
     <>
       <div>
-        What about <Latex expression={`\\lim_{x \\to 0^{-}} f(x)`} /> and <Latex expression={`\\lim_{x \\to 0^{+}} f(x)`} />? <Latex expression={`\\lim_{x \\to 0} f(x)`} />?
+        What about <Latex classes='bold' expression={`\\lim_{x \\to 0^{\\footnotesize\\texttt{-}}} f(x)`} /> and <Latex classes='bold' expression={`\\lim_{x \\to 0^{\\footnotesize\\texttt{+}}} f(x)`} />? <Latex classes='bold' expression={`\\lim_{x \\to 0} f(x)`} />?
       </div>
     </>
   )
@@ -126,10 +126,10 @@ const Section7 = () => {
   return (
     <>
       <div>
-        For <Latex expression={`\\lim_{x \\to 0^{-}} f(x)`} />, since we are asked about the limit from the <strong>left</strong>, we need to use the first function. Therefore, <Latex expression={`\\lim_{x \\to 0^{-}} f(x) = `} /> <Latex expression={`\\lim_{x \\to 0} (2x - 1) = -1`} />.
+        For <Latex expression={`\\lim_{x \\to 0^{\\footnotesize\\texttt{-}}} f(x)`} />, since we are asked about the limit from the <strong>left</strong>, we need to use the first function. Therefore, <Latex expression={`\\lim_{x \\to 0^{\\footnotesize\\texttt{-}}} f(x) = `} /> <Latex expression={`\\lim_{x \\to 0} (2x - 1) = -1`} />.
       </div>
       <div>
-        Similarly, <Latex expression={`\\lim_{x \\to 0^{+}} f(x) = `} /> <Latex expression={`\\lim_{x \\to 0} x = 0`} />
+        Similarly, <Latex expression={`\\lim_{x \\to 0^{\\footnotesize\\texttt{+}}} f(x) = `} /> <Latex expression={`\\lim_{x \\to 0} x = 0`} />.
       </div>
     </>
   )
@@ -139,7 +139,7 @@ const Section8 = () => {
   return (
     <>
       <div>
-        Since <Latex expression={`\\lim_{x \\to 0^{-}} f(x) \\neq`} /> <Latex expression={`\\lim_{x \\to 0^{+}} f(x)`} />, <Latex expression={`\\lim_{x \\to 0} f(x)`} /> <strong>does not exist!</strong>
+        Since <Latex expression={`\\lim_{x \\to 0^{\\footnotesize\\texttt{-}}} f(x) \\neq`} /> <Latex expression={`\\lim_{x \\to 0^{\\footnotesize\\texttt{+}}} f(x)`} />, <Latex expression={`\\lim_{x \\to 0} f(x)`} /> <strong>does not exist!</strong>
       </div>
     </>
   )
@@ -173,10 +173,14 @@ const Section11 = () => {
   return (
     <>
       <div>
-        Since <Latex expression={`x - 3 \\geq 0`} /> when <Latex expression={`x \\geq 3`} />, and <Latex expression={`x - 3 < 0`} /> when <Latex expression={`x < 3`} />, we have <Piecewise title={'g(x)'} functions={functions} />
+        Since <Latex expression={`x - 3 \\geq 0`} /> when <Latex expression={`x \\geq 3`} />, and <Latex expression={`x - 3 < 0`} /> when <Latex expression={`x < 3`} />, we have <Piecewise title={'g(x)'} functions={functions} display={true} />
       </div>
       <div>
-        Using this, we can evaluate <Latex expression={`\\lim_{x \\to 3^{-}} g(x) = `} /> <Latex expression={`\\lim_{x \\to 3} -(x - 3) = 0`} /> and <Latex expression={`\\lim_{x \\to 3^{+}} g(x) = `} /> <Latex expression={`\\lim_{x \\to 3} (x - 3) = 0`} />.
+        Using this, we can evaluate both limits:
+      </div>
+      <div>
+        <Latex expression={`\\lim_{x \\to 3^{\\footnotesize\\texttt{-}}} g(x) = \\lim_{x \\to 3} \\left[-(x - 3)\\right] = 0`} display={true} />
+        <Latex expression={`\\lim_{x \\to 3^{\\footnotesize\\texttt{+}}} g(x) = \\lim_{x \\to 3} (x - 3) = 0`} display={true} />
       </div>
     </>
   )
@@ -186,7 +190,7 @@ const Section12 = () => {
   return (
     <>
       <div>
-      Since <Latex expression={`\\lim_{x \\to 3^{-}} g(x) = `} /> <Latex expression={`\\lim_{x \\to 3^{+}} g(x) = 0`} />, <Latex expression={`\\lim_{x \\to 3} g(x) = 0`} />!
+        Since <Latex expression={`\\lim_{x \\to 3^{-}} g(x) = `} /> <Latex expression={`\\lim_{x \\to 3^{+}} g(x) = 0`} />, <Latex expression={`\\lim_{x \\to 3} g(x) = 0`} />!
       </div>
     </>
   )

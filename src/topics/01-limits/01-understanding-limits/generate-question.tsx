@@ -13,7 +13,7 @@ import { Question } from "../../../types/Question";
  */
 const graphToLimit = (): Question => {
   // title for question
-  const title = <h2>Which limit best represents the graph?</h2>
+  const title = <></> // <h2>Which limit best represents the graph?</h2>
 
   // generate random graph function
   const { node, x } = generateRandomPolynomial(getRandomNumber(1, 4))
@@ -31,6 +31,7 @@ const graphToLimit = (): Question => {
 
   // question content
   const question = <div className="flex vertical center medium-gap">
+    <h2>Which limit best represents the graph?</h2> 
     <h3>Graph of <Latex expression={` g(x) `} inline={true}></Latex></h3>
     <LimitExampleGraph f={f} xval={x} y={y}
       fColor={"f"} xColor={"x"} yColor={"y"} size={GRAPH_SIZE} />
@@ -84,7 +85,7 @@ const graphToLimit = (): Question => {
  */
 const limitToGraph = (): Question => {
   // title for question
-  const title = <h2>Which graph best represents the limit?</h2>
+  const title = <></>// <h2>Which graph best represents the limit?</h2>
 
   // random graph function
   const g1 = generateRandomPolynomial(getRandomNumber(1, 4));
@@ -103,7 +104,10 @@ const limitToGraph = (): Question => {
   }
 
   const question =
+  <div className="flex vertical center medium-gap">
+    <h2>Which graph best represents the limit?</h2>
     <Latex expression={` {\\lim}_{{x \\to ${x1}}}{g(x)} = ${realY1} `} inline={true} />
+  </div>
 
   // generate options
   const o1 = {

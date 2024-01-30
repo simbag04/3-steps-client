@@ -82,8 +82,8 @@ const optionsForLimitSteps = (): Question => {
   const title = <></>
   const question = <div className="flex vertical center small-gap">
     <h3>Select the option which correctly uses the Squeeze Theorem to evaluate:</h3>
-    <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction}`}></Latex>.
-  </div>
+    <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction}`} display={true}></Latex>
+      </div>
   const hints: JSX.Element[] = []
   hints.push(<div>
     Focus on the step where the inequality is multiplied. When we multiply by a {multiplyByNegative ? "negative" : "positive"} quantity, do we flip the inequality?
@@ -101,7 +101,7 @@ const evaluateLimit = (): Question => {
   const title = <></>
   const question = <div className="flex vertical center">
     <h2>Evaluate the limit.</h2>
-    <div>Hint: Use the Squeeze Theorem</div>
+    <div>Hint: Use the Squeeze Theorem.</div>
   </div>
   const nextToInput = <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction} =`}></Latex>
   const hints: JSX.Element[] = []

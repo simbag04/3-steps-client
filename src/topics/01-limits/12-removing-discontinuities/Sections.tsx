@@ -70,7 +70,7 @@ const Section1 = <>
   <div>
     Recall when we were discussing discontinuities, one type of discontinuity we encountered was a <strong>removable</strong> discontinuity.
   </div>
-  <div className="flex vertical center small-gap">
+  <div className="flex vertical center medium-gap">
     <h3>Graph with Removable Discontinuity </h3>
     <FunctionGraph functions={removableFunctions} size={GRAPH_SIZE} points={removablePoints} ></FunctionGraph>
   </div>
@@ -81,7 +81,10 @@ const Section2 = <>
     This continuity was removable because if we define <Latex expression="f(2) = 4" />, it will match <Latex expression={`\\lim_{x \\to 2} f(x)`} />, so the function would be continuous again.
   </div>
   <div>
-    This type of situation often comes up with making functions with holes continuous. For example, consider <Latex expression={`f(x) = \\frac{x^2 - 5x - 4}{x - 1}`} display={true} />
+    This type of situation often comes up with making functions with holes continuous. For example, consider:
+  </div>
+  <div>
+    <Latex expression={`f(x) = \\frac{x^2 - 5x - 4}{x - 1}`} display={true} />
   </div>
   <div>
     This function is not defined at <Latex expression="x = 1" /> since the denominator is 0 at this point. We want to find a value for <Latex expression="f(1)" /> that will make <Latex expression="f(x)" /> continuous at this point.
@@ -104,7 +107,7 @@ const Section4 = <>
   <div>
     To solve this, recall our 2 conditions that make functions continuous at a point:
   </div>
-  <div>
+  <div className="flex vertical center">
     <ul className="text-start">
       <li>
         <Latex classes="bold" expression={`\\lim_{x \\to a} f(x)`} /> must <strong>exist</strong>
@@ -142,7 +145,7 @@ const Section6 = <>
 
 const Section7 = <>
   <div>
-    Since <Latex expression="f(1) = a" /> and <Latex expression={`\\lim_{x \\to 1} f(x) = -3`} />, this means we need <Latex classes="bold" expression="a = 3" /> in order for <Latex expression="f(x)" /> to be continuous at <Latex expression="x = 1" />
+    Since <Latex expression="f(1) = a" /> and <Latex expression={`\\lim_{x \\to 1} f(x) = -3`} />, this means we need <Latex classes="bold" expression="a = 3" /> in order for <Latex expression="f(x)" /> to be continuous at <Latex expression="x = 1." />
   </div>
 </>
 
@@ -179,7 +182,7 @@ const Section10 = <>
 
 const Section11 = <>
   <div>
-    In order for the limit to exist, both of these must equal each other. Thus, <Latex expression="a - 3 = 3" display={true}/> 
+    In order for the limit to exist, both of these must equal each other. Thus, <Latex expression="a - 3 = 3" display={true} />
     <Latex classes="bold" expression="a = 6" />
   </div>
   <div>
@@ -189,7 +192,7 @@ const Section11 = <>
 
 const Section12 = <>
   <div>
-    Now that the first condition is verified, we can also check the  second condition. 
+    Now that the first condition is verified, we can also check the  second condition.
   </div>
   <div>
     We know <Latex expression="g(1) = 1 + 2 = 3" />. Since <Latex expression={`\\lim_{x \\to 1} g(x) = g(1) = 3`} />, we know that the function is continuous at <Latex expression="x = 1" /> when <Latex classes="bold" expression="a = 6" />!

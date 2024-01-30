@@ -3,6 +3,8 @@ import Latex from "../../../components/latex/Latex"
 import * as math from 'mathjs'
 import { GRAPH_SIZE } from "../../../helpers/constants"
 import React from "react"
+import { PiecewiseFunction } from "../../../types/PiecewiseFunction"
+import { Piecewise } from "../../../components/latex/Piecewise"
 
 /**
  * All content for this topic's learn section
@@ -11,7 +13,7 @@ import React from "react"
 const Section1 = () => {
   return (
     <div>
-      In Calculus, a limit describes how a function behaves <strong>near</strong> a point, instead of <strong>at</strong> that point
+      In Calculus, a limit describes how a function behaves <strong>near</strong> a point, instead of <strong>at</strong> that point.
     </div>
   )
 }
@@ -23,8 +25,7 @@ const Section2 = () => {
       <Latex expression={`_{x \\to a}`} classes={'c2'} inline={true} />
       <Latex expression={`f(x)`} classes={'c3'} inline={true} />
       <Latex expression={`\\ =\\ `} inline={true} />
-      <Latex expression={`\\ L `} classes={'c4'} inline={true} />
-
+      <Latex expression={`\\ L `} classes={'c4'} inline={true} />.
     </div>
   )
 }
@@ -53,7 +54,7 @@ const Section4 = () => {
       <Latex expression={`_{x \\to 2}`} classes={'c2'} inline={true} />
       <Latex expression={`x^2`} classes={'c3'} inline={true} />
       <Latex expression={`\\ =\\ `} inline={true} />
-      <Latex expression={`\\ 4 `} classes={'c4'} inline={true} />
+      <Latex expression={`\\ 4 `} classes={'c4'} inline={true} />.
     </div>
   )
 }
@@ -99,14 +100,17 @@ const Section7 = () => {
   const fColor = 'c3';
   const xColor = 'c2';
   const yColor = 'c4';
+  const piecewiseFunctions: PiecewiseFunction[] = [
+    { f: `x^2`, domain: `x \\neq 2` },
+    { f: `6`, domain: `x = 2` }
+  ]
   return (
     <>
-      <div>As an example, let's look at a function <Latex expression={
-        `g(x) = \\begin{cases}
-          x^2, x \\neq 2 \\\\
-          6, x = 2 \\\\
-        \\end{cases}`
-      } inline={true} /></div>
+      <div>As an example, let's look at this function:
+      </div>
+      <div>
+        <Piecewise title="g(x)" functions={piecewiseFunctions} display={true}/>
+      </div>
       <div className='flex vertical center'>
         <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
         <LimitExampleGraph f={f} xval={xval} y={6} fColor={fColor} xColor={xColor} yColor={yColor} size={GRAPH_SIZE} />
@@ -124,9 +128,9 @@ const Section8 = () => {
       <Latex expression={`x^2`} classes={'c3'} inline={true} />
       <Latex expression={`\\ =\\ `} inline={true} />
       <Latex expression={`\\ 4\\ `} classes={'c4'} inline={true} />
-      is <strong>still </strong><Latex expression={`4`} classes={`c4`} inline={true}/>, 
-      because <strong>near </strong> 
-      <Latex classes='c2' expression={`x = 2`} inline={true}/>, 
+      is <strong>still </strong><Latex expression={`4`} classes={`c4`} inline={true} />,
+      because <strong>near </strong>
+      <Latex classes='c2' expression={`x = 2`} inline={true} />,
       <Latex classes='c3' expression={`\\ g(x)`} inline={true} /> is getting closer and closer to <Latex classes='c4' expression={`4`} inline={true} />.
     </div>
   )

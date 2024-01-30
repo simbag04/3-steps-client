@@ -75,8 +75,8 @@ const factoringFunctionValueDiscontinuity = () => {
   const nextToInput = <Latex expression={`a = `} display={true} />
   const title = <></>
   const question = <>
-    <h4>For what value of <Latex expression="a" /> will <Latex expression="f(x)" /> be continuous at <Latex expression={`x = ${holeX}`} />?</h4>
-    <Piecewise title="f(x)" functions={piecewise}></Piecewise>
+    <h3>For what value of <Latex expression="a" /> will <Latex expression="f(x)" /> be continuous at <Latex expression={`x = ${holeX}`} />?</h3>
+    <Piecewise classes="large-font" title="f(x)" functions={piecewise} display={true}></Piecewise>
   </>
   return { title, question, nextToInput, ans, hints, type: 'math' }
 }
@@ -137,7 +137,7 @@ const trigFunctionValueDiscontinuity = () => {
   const title = <></>
   const question = <>
     <h4>For what value of <Latex expression="a" /> will <Latex expression="f(x)" /> be continuous at <Latex expression={`x = 0`} />?</h4>
-    <Piecewise title="f(x)" functions={piecewise}></Piecewise>
+    <Piecewise classes="large-font" title="f(x)" functions={piecewise} display={true}></Piecewise>
   </>
   return { title, question, nextToInput, ans, hints, type: 'math' }
 }
@@ -259,8 +259,8 @@ const limitDiscontinuity = () => {
   const nextToInput = <Latex expression={`a = `} display={true} />
   const title = <></>
   const question = <>
-    <h4>For what value of <Latex expression="a" /> will <Latex expression="f(x)" /> be continuous at <Latex expression={`x = ${x}`} />?</h4>
-    <Piecewise title="f(x)" functions={functions}></Piecewise>
+    <h3>For what value of <Latex expression="a" /> will <Latex expression="f(x)" /> be continuous at <Latex expression={`x = ${x}`} />?</h3>
+    <Piecewise title="f(x)" functions={functions} display={true}></Piecewise>
   </>
 
   return { title, question, nextToInput, ans, hints, type: 'math' }

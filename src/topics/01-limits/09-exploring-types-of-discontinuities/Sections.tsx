@@ -143,7 +143,7 @@ const Section2 = <>
   <div>
     Let's consider this graph that has a <strong>removable</strong> discontinuity:
   </div>
-  <div className="flex vertical center small-gap">
+  <div className="flex vertical center medium-gap">
     <h3>Graph with Removable Discontinuity </h3>
     <FunctionGraph functions={removableFunctions} size={GRAPH_SIZE} points={removablePoints} ></FunctionGraph>
   </div>
@@ -160,7 +160,7 @@ const Section4 = <>
   <div>
     Let's look at another type of discontinuity: a <strong>jump</strong> discontinuity.
   </div>
-  <div className="flex vertical center small-gap">
+  <div className="flex vertical center medium-gap">
     <h3>Graph with Jump Discontinuity </h3>
     <FunctionGraph functions={jumpFunctions} size={GRAPH_SIZE}></FunctionGraph>
   </div>
@@ -176,7 +176,7 @@ const Section6 = <>
   <div>
     Lastly, let's look at a graph with an <strong>infinite</strong> discontinuity.
   </div>
-  <div className="flex vertical center small-gap">
+  <div className="flex vertical center medium-gap">
     <h3>Graph with Infinite Discontinuity </h3>
     <AsymptoticGraph functions={asymptoticFunctions} size={GRAPH_SIZE} x={[1]} y={[1]}></AsymptoticGraph>
   </div>
@@ -192,7 +192,7 @@ const Section8 = <>
   <div>
     If a graph doesn't fall into one of these categories, it is continuous. Now that we've looked at so many discontinuous graphs, let's look at a continuous one too:
   </div>
-  <div className="flex vertical center small-gap">
+  <div className="flex vertical center medium-gap">
     <h3>Continuous Graph</h3>
     <FunctionGraph functions={continuousFunctions} size={GRAPH_SIZE}></FunctionGraph>
   </div>

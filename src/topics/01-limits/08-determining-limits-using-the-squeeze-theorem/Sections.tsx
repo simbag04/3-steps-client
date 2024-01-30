@@ -69,13 +69,16 @@ const Section1 = <>
     This theorem says that <strong>if</strong> <Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} /> <strong>near</strong> <Latex expression={`x = a`} /> (but not necessarily <strong><em>at</em></strong> <Latex expression={`x = a`} />),
   </div>
   <div>
-    and <Latex classes={'c1'} expression={`\\lim_{x \\to a} f(x)`} /> <Latex expression={`=`} /> <Latex classes={'c3'} expression={`\\lim_{x \\to a} h(x)`} /> <Latex classes={'c4'} expression={'=L'} />, then <Latex classes={'c2'} expression={`\\lim_{x \\to a} g(x)`} /> <Latex classes={'c4'} expression={'=L'} />.
+    <strong>and</strong> <Latex classes={'c1'} expression={`\\lim_{x \\to a} f(x)`} /> <Latex expression={`=`} /> <Latex classes={'c3'} expression={`\\lim_{x \\to a} h(x)`} /> <Latex classes={'c4'} expression={'=L'} />,
+  </div>
+  <div>
+    <strong>then</strong> <Latex classes={'c2'} expression={`\\lim_{x \\to a} g(x)`} /> <Latex classes={'c4'} expression={'=L'} />.
   </div>
 </>
 
 const Section2 = <>
   <div>
-    To understand this, let's look at an example graph with <Latex classes={'c1'} expression={`f(x) = -x^2`} />, <Latex classes={'c2'} expression={`g(x) = x^2 \\sin(\\frac{1}{x})`} />, <Latex classes={'c3'} expression={`h(x) = x^2`} />
+    To understand this, let's look at an example graph with <Latex classes={'c1'} expression={`f(x) = -x^2`} />, <Latex classes={'c2'} expression={`g(x) = x^2 \\sin(\\frac{1}{x})`} />, <Latex classes={'c3'} expression={`h(x) = x^2`} />.
   </div>
   <div className="flex vertical center medium-gap">
     <h3>Sample Graph</h3>
@@ -94,7 +97,7 @@ const Section3 = <>
 
 const Section4 = <>
   <div>
-    We can use the Squeeze Theorem! In this example, we see that <Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} />
+    We can use the Squeeze Theorem! In this example, we see that <Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} />.
   </div>
 </>
 
@@ -111,7 +114,7 @@ const Section6 = <>
     Since <Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} /> near <Latex expression={`x = 0`} />, and <Latex classes={'c1'} expression={`\\lim_{x \\to 0} f(x)=0`} />, and <Latex classes={'c3'} expression={`\\lim_{x \\to 0} h(x)=0`} />,
   </div>
   <div>
-    by the Squeeze Theorem, <Latex classes={'c2'} expression={`\\lim_{x \\to 0} g(x)=0`} />
+    by the Squeeze Theorem, <Latex classes={'c2'} expression={`\\lim_{x \\to 0} g(x)=0`} />.
   </div>
 </>
 
@@ -126,7 +129,7 @@ const Section8 = <>
     Since we want to find <Latex classes={'c2'} expression={`\\lim_{x \\to 0} x^2 \\sin(\\frac{1}{x})`} />, first we can focus on just <Latex expression={`\\sin(\\frac{1}{x})`} />.
   </div>
   <div>
-    Since this is a <Latex expression={`\\sin`} /> function, we know that <Latex expression={`-1 \\leq \\sin(\\frac{1}{x}) \\leq 1`} />
+    Since this is a <Latex expression={`\\sin`} /> function, we know that <Latex expression={`-1 \\leq \\sin(\\frac{1}{x}) \\leq 1`} />.
   </div>
 </>
 
@@ -157,16 +160,19 @@ const Section11 = <>
 
 const Section12 = <>
   <div>
-    The next logical step is to multiply both sides by <Latex expression={`-x^2`} />. However, we have to be careful here - since <Latex expression={`-x^2`} /> is always negative, we have to also flip the inequalities to get: <Latex expression={`x^2 \\geq -x^2\\sin(\\frac{1}{x}) \\geq -x^2`} />.
+    The next logical step is to multiply both sides by <Latex expression={`-x^2`} />. However, we have to be careful here - since <Latex expression={`-x^2`} /> is always negative, we have to also flip the inequalities to get:
+  </div>
+  <div>
+    <Latex expression={`x^2 \\geq -x^2\\sin(\\frac{1}{x}) \\geq -x^2`} display={true}/>
   </div>
 </>
 
 const Section13 = <>
   <div>
-    Rewriting this inequality from least to greatest, we get <Latex expression={`-x^2 \\leq -x^2\\sin(\\frac{1}{x}) \\leq x^2`} />
+    Rewriting this inequality from least to greatest, we get: <Latex expression={`-x^2 \\leq -x^2\\sin(\\frac{1}{x}) \\leq x^2`} display={true}/>
   </div>
   <div>
-    Next, we can add 1 to all sides of the inequality to get <Latex expression={`-x^2 + 1 \\leq -x^2\\sin(\\frac{1}{x}) + 1 \\leq x^2 + 1`} />
+    Next, we can add 1 to all sides of the inequality to get: <Latex expression={`-x^2 + 1 \\leq -x^2\\sin(\\frac{1}{x}) + 1 \\leq x^2 + 1`} display={true}/>
   </div>
 </>
 
@@ -180,6 +186,7 @@ const Section14 = <>
     Therefore: <Latex expression={`\\lim_{x \\to 0} -x^2\\sin(\\frac{1}{x}) + 1 = 1`} display={true} />
   </div>
 </>
+
 // const Section11 = <>
 //   <div>
 //     The Squeeze Theorem can also be used to show that <Latex expression={`\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1`} /> and <Latex expression={`\\lim_{x \\to 0} \\frac{1 - \\cos x}{x} = 0`} />

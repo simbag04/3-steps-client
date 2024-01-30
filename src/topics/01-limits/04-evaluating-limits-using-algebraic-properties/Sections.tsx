@@ -26,7 +26,7 @@ const Section2 = () => {
 const Section3 = () => {
   return (
     <>
-      <div>Let's work through an example. Suppose that we are <strong>given</strong> <Latex expression={`\\lim_{x \\to 5} f(x) = 2`} /> and <Latex expression={`\\lim_{x \\to 5} g(x) = 4`} /> and we want to find:
+      <div>Let's work through an example. Suppose that we are <strong>given</strong> <Latex classes='bold' expression={`\\lim_{x \\to 5} f(x) = 2`} /> and <Latex classes='bold' expression={`\\lim_{x \\to 5} g(x) = 4`} /> and we want to find:
 
       </div>
       <div>
@@ -131,7 +131,7 @@ const Section11 = () => {
   return (
     <>
       <div>
-        Simplifying, we get down to <Latex expression={`24 + \\frac{4}{2} + 5 = 24 + 2 + 5 = 31`} />
+        Simplifying, we get down to <Latex expression={`24 + \\frac{4}{2} + 5 = 24 + 2 + 5 = 31`} />.
       </div>
     </>
   )

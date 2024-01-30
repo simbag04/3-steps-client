@@ -69,7 +69,7 @@ const Section1 = <>
   <div>
     Recall when we had graphs with asymptotes:
   </div>
-  <div>
+  <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression="g(x)" /></h3>
     <AsymptoticGraph functions={asymptoticFunctions} size={GRAPH_SIZE} x={[1]} y={[1]} />
   </div>
@@ -88,7 +88,7 @@ const Section3 = <>
   <div>
     There can also be an asymptotic graph like this:
   </div>
-  <div>
+  <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression="h(x)" /></h3>
     <AsymptoticGraph functions={asymptoticFunctions2} size={GRAPH_SIZE} x={[1]} y={[1]} />
   </div>
@@ -99,7 +99,7 @@ const Section4 = <>
     In this case, we can see that the limits from both sides are different. In particular, from the left side, the graph is approaching <Latex expression={`+\\infty`} />, and from the right side, the graph is approaching <Latex expression={`-\\infty`} />.
   </div>
   <div>
-    Thus, we can say <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{-}}} h(x) = \\infty`} /> and <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{+}}} h(x) = -\\infty`} />.  
+    Thus, we can say <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{-}}} h(x) = \\infty`} /> and <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{+}}} h(x) = -\\infty`} />.
   </div>
 </>
 
@@ -114,7 +114,13 @@ const Section6 = <>
     It is easy to see infinite limits with a graph, but how would we know the limit if we were only given an equation of a function?
   </div>
   <div>
-    For example, consider <Latex expression={`f(x) = \\frac{x + 3}{x^2 - 5x + 4}`} />. How can we find <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{-}}} f(x)`} /> and <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{+}}} f(x)`} />?
+    For example, consider:
+  </div>
+  <div>
+    <Latex expression={`f(x) = \\frac{x + 3}{x^2 - 5x + 4}`} display={true} />
+  </div>
+  <div>
+    How can we find <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{-}}} f(x)`} /> and <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{+}}} f(x)`} />?
   </div>
   <div>
     Plugging in <Latex expression="x = 1" /> into this equation doesn't really help as it makes the denominator 0, and we don't know if the limit would be positive or negative <Latex expression={`\\infty`} />.
@@ -124,6 +130,8 @@ const Section6 = <>
 const Section7 = <>
   <div>
     The first step to solve this is factor the bottom, so we have:
+  </div>
+  <div>
     <Latex expression={`f(x) = \\frac{x + 3}{x^2 - 5x + 4} = \\frac{x + 3}{(x - 1)(x - 4)}`} display={true} />
   </div>
   <div>
@@ -136,7 +144,10 @@ const Section8 = <>
     Since <Latex expression="x = 1" /> is an asymptote of this function, we know the answer is going to be <Latex expression={`\\infty`} /> or <Latex expression={`-\\infty`} />. Thus, we don't really need to plug in <Latex expression="x = 0.999" /> and get an exact number - we just need the <strong>sign</strong> of <Latex expression="f(0.999)" />.
   </div>
   <div>
-    Plugging in <Latex expression="x = 0.999" />, we get <Latex expression={`f(0.999) = \\frac{0.999 + 3}{(0.999 - 1)(0.999 - 4)}`} display={true} />
+    Plugging in <Latex expression="x = 0.999" />, we get:
+  </div>
+  <div>
+    <Latex expression={`f(0.999) = \\frac{0.999 + 3}{(0.999 - 1)(0.999 - 4)}`} display={true} />
   </div>
 </>
 
@@ -158,6 +169,8 @@ const Section10 = <>
   </div>
   <div>
     Plugging this into our factored form, we get:
+  </div>
+  <div>
     <Latex expression={`f(1.001) = \\frac{1.001 + 3}{(1.001 - 1)(1.001 - 4)}`} display={true} />
   </div>
 </>

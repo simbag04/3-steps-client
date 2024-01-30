@@ -16,13 +16,13 @@ const Section2 = <>
   </div>
   <ol className="start">
     <li>
-      When the limit from the left does not equal the right
+      When the limit from the left does not equal the right.
     </li>
     <li>
-      When the graph is approaching positive or negative infinity at the point
+      When the graph is approaching positive or negative infinity at the point.
     </li>
     <li>
-      When the graph is oscillating at the point
+      When the graph is oscillating at the point.
     </li>
   </ol>
 </>
@@ -68,7 +68,7 @@ const Section8 = <>
 
 const Section9 = <>
   <div>
-    Lastly, when given limits with trig functions, we talked about using trig identites to find the factor on the top and bottom that could be cancelled.
+    Lastly, when given limits with trig functions, we talked about using trig identites to find the factor on the top and bottom that could be cancelled. We also used special trig limits to simplify functions. 
   </div>
 </>
 
@@ -77,4 +77,5 @@ const Section10 = <>
     In the next section, you will get a chance to practice with <em>all</em> of these techniques!
   </div>
 </>
+
 export { Section1, Section2, Section3, Section4, Section5, Section6, Section7, Section8, Section9, Section10 }

@@ -78,7 +78,7 @@ const Section1 = <>
   <div>
     First, recall that graphs with jumps (such as this one) are not continuous.
   </div>
-  <div className="flex vertical center small-gap">
+  <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression="g(x)" /> </h3>
     <FunctionGraph functions={jumpFunctions} size={GRAPH_SIZE}></FunctionGraph>
   </div>
@@ -92,7 +92,7 @@ const Section2 = <>
 
 const Section3 = <>
   <div>
-    A jump occurs when the limit from the left side at a point does not equal the limit from the right side. In the graph above, we can see that <Latex expression={`\\lim_{x \\to 2^{-}} g(x) = 4 \\neq `} /> <Latex expression={`\\lim_{x \\to 2^{+}} g(x) = 2`} />.
+    A jump occurs when the limit from the left side at a point does not equal the limit from the right side. In the graph above, we can see that <Latex expression={`\\lim_{x \\to 2^{\\footnotesize\\texttt{-}}} g(x) = 4 \\neq \\lim_{x \\to 2^{\\footnotesize\\texttt{+}}} g(x) = 2`} />.
     In order for a graph to be continuous at a point, there cannot be any jumps.
   </div>
 </>
@@ -100,7 +100,7 @@ const Section3 = <>
 const Section4 = <>
   <div>
     This brings us to our 1st condition of continuity: In order for a function <Latex expression="f(x)" /> to be continuous at a point <Latex expression="x = a" />:
-    <Latex classes="bold" expression={`\\lim_{x \\to a^{+}} f(x) = \\lim_{x \\to a^{-}} f(x)`} display={true} />
+    <Latex classes="bold" expression={`\\lim_{x \\to a^{\\footnotesize\\texttt{-}}} f(x) = \\lim_{x \\to a^{\\footnotesize\\texttt{+}}} f(x)`} display={true} />
   </div>
   <div>
     In other words, <Latex classes="bold" expression={`\\lim_{x \\to a} f(x)`} /> must <strong>exist</strong>. Oscillating graphs or graphs with asymptotes at <Latex expression="x = a" /> would not be continuous as their limits don't exist at <Latex expression="x = a" />.
@@ -114,7 +114,7 @@ const Section5 = <>
   <div>
     However, this is not enough: recall that graphs can also have removable discontinuities, like the one here:
   </div>
-  <div className="flex vertical center small-gap">
+  <div className="flex vertical center medium-gap">
     <h3>Graph of <Latex expression="h(x)" /></h3>
     <FunctionGraph functions={removableFunctions} size={GRAPH_SIZE} points={removablePoints} ></FunctionGraph>
   </div>
@@ -122,7 +122,7 @@ const Section5 = <>
 
 const Section6 = <>
   <div>
-    In this case, even though <Latex expression={`\\lim_{x \\to 2^{+}} h(x) = \\lim_{x \\to 2^{-}} h(x)`} />, <Latex expression={`h(x)`} /> is not continuous at <Latex expression="x = 2" /> because the value of the function <Latex expression="h(2)" /> is not equal to <Latex expression={`\\lim_{x \\to 2} h(x)`} />.
+    In this case, even though <Latex expression={`\\lim_{x \\to 2^{\\footnotesize\\texttt{-}}} h(x) = \\lim_{x \\to 2^{\\footnotesize\\texttt{+}}} h(x)`} />, <Latex expression={`h(x)`} /> is not continuous at <Latex expression="x = 2" /> because the value of the function <Latex expression="h(2)" /> is not equal to <Latex expression={`\\lim_{x \\to 2} h(x)`} />.
   </div>
 </>
 
@@ -138,12 +138,11 @@ const Section7 = <>
 const Section8 = <>
   <div>
     To summarize, in order for a function <Latex expression="f(x)" /> to be continuous at a point <Latex expression="x = a" />, 2 conditions must be satisfied:
-
   </div>
   <div>
     <ul className="text-start">
       <li>
-        <Latex classes="bold" expression={`\\lim_{x \\to a} f(x)`} /> must <strong>exist</strong>
+        <Latex classes="bold" expression={`\\lim_{x \\to a} f(x)`} /> must <strong>exist</strong>.
       </li>
       <li>
         <Latex classes="bold" expression={`\\lim_{x \\to a} f(x) = f(a)`} display={true} />
@@ -156,6 +155,8 @@ const picewiseFunctions = [{ f: `2x - 1`, domain: `x < 0` }, { f: `x`, domain: `
 const Section9 = <>
   <div>
     Using these definitions, we can analyze the continuity of functions without graphing them. For example, let's look at this piecewise function:
+  </div>
+  <div>
     <Piecewise title={`f(x)`} functions={picewiseFunctions} display={true} />
   </div>
   <div>
@@ -178,16 +179,16 @@ const Section11 = <>
     To evaluate <Latex expression={`\\lim_{x \\to 0} f(x)`} />, we need to evaluate both 1-sided limits first:
   </div>
   <div>
-    <Latex expression={`\\lim_{x \\to 0^-} f(x) = \\lim_{x \\to 0} (2x - 1) = 2(0) - 1 = -1`} display={true} />
+    <Latex expression={`\\lim_{x \\to 0^{\\footnotesize\\texttt{-}}} f(x) = \\lim_{x \\to 0} (2x - 1) = 2(0) - 1 = -1`} display={true} />
   </div>
   <div>
-    <Latex expression={`\\lim_{x \\to 0^+} f(x) = \\lim_{x \\to 0} x = 0`} display={true} />
+    <Latex expression={`\\lim_{x \\to 0^{\\footnotesize\\texttt{+}}} f(x) = \\lim_{x \\to 0} x = 0`} display={true} />
   </div>
 </>
 
 const Section12 = <>
   <div>
-    Here, we can see that <Latex expression={`\\lim_{x \\to 0^-} f(x) \\neq \\lim_{x \\to 0^+} f(x)`} display={true} />
+    Here, we can see that <Latex expression={`\\lim_{x \\to 0^{\\footnotesize\\texttt{-}}} f(x) \\neq \\lim_{x \\to 0^{\\footnotesize\\texttt{+}}} f(x)`} display={true} />
   </div>
   <div>
     Thus, <Latex expression={`\\lim_{x \\to 0} f(x)`} /> does not exist. Therefore, the 1st condition of continuity isn't satisfied, so <Latex expression="f(x)" /> is <strong>not</strong> continuous.
@@ -197,7 +198,9 @@ const Section12 = <>
 const picewiseFunctions2 = [{ f: `2x^2 - 4`, domain: `x \\leq 1` }, { f: `3x - 5`, domain: `x > 1` }]
 const Section13 = <>
   <div>
-    Let's look at another example: 
+    Let's look at another example:
+  </div>
+  <div>
     <Piecewise title={`g(x)`} functions={picewiseFunctions2} display={true} />
   </div>
 </>
@@ -207,19 +210,19 @@ const Section14 = <>
     Evaluating the 1-sided limits, we see:
   </div>
   <div>
-    <Latex expression={`\\lim_{x \\to 1^-} g(x) = \\lim_{x \\to 1} (2x^2 - 4) = 2(1)^2 - 4 = -2`} display={true} />
+    <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{-}}} g(x) = \\lim_{x \\to 1} (2x^2 - 4) = 2(1)^2 - 4 = -2`} display={true} />
   </div>
   <div>
-    <Latex expression={`\\lim_{x \\to 1^+} g(x) = \\lim_{x \\to 1} (3x - 5) = -2`} display={true} />
+    <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{+}}} g(x) = \\lim_{x \\to 1} (3x - 5) = -2`} display={true} />
   </div>
 </>
 
 const Section15 = <>
   <div>
-    Here, we can see that <Latex expression={`\\lim_{x \\to 1^-} g(x) = \\lim_{x \\to 1^+} g(x)`} />, so <Latex expression={`\\lim_{x \\to 1} g(x) = -2`} /> - it exists! The 1st condition is satisfied.
+    Here, we can see that <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{-}}} g(x) = \\lim_{x \\to 1^{\\footnotesize\\texttt{+}}} g(x)`} />, so <Latex expression={`\\lim_{x \\to 1} g(x) = -2`} /> - it exists! The 1st condition is satisfied.
   </div>
   <div>
-    Now, we have to verify the 2nd condition: 
+    Now, we have to verify the 2nd condition:
     <Latex classes="bold" expression={`\\lim_{x \\to 1} g(x) = g(1)`} display={true} />
   </div>
 </>

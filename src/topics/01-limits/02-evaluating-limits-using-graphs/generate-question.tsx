@@ -60,12 +60,16 @@ const asymptoticGraphQuestion = (): any => {
   const val = xValues[getRandomNumber(0, xValues.length - 1)];
 
   const question = <div className="flex vertical center medium-gap">
+    <div className="flex vertical center">
+      <h2>Evaluate the limit.</h2>
+      <div>Enter "dne" if the limit doesn't exist.</div>
+    </div>
     <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
     <AsymptoticGraph functions={functions} size={GRAPH_SIZE} x={xValues} y={[verticalShift]} />
   </div>
 
   const nextToInput = <span>
-    <Latex expression={`\\lim_{x \\to ${val}} g(x)`} inline={true} /> =
+    <Latex classes="bold" expression={`\\lim_{x \\to ${val}} g(x)`} inline={true} /> =
   </span>
 
   const hints = [
@@ -114,7 +118,7 @@ const jumpGraphQuestion = (): any => {
   for (let i = 0; i < numFunctions; i++) {
     let x = null;
     let node;
- 
+
     if (i === 0) {
       // left most function
       x = xValues[i] !== undefined ? xValues[i] : getRandomNumber(-8, 8);
@@ -193,14 +197,18 @@ const jumpGraphQuestion = (): any => {
   ans = String(ans);
 
   const question = <div className="flex vertical center medium-gap">
+    <div className="flex vertical center">
+      <h2>Evaluate the limit.</h2>
+      <div>Enter "dne" if the limit doesn't exist.</div>
+    </div>
     <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
     <FunctionGraph functions={functions} size={GRAPH_SIZE} />
   </div>
 
-  const signText = sign === 0 ? `^{-}` : sign === 1 ? `^{+}` : ``;
+  const signText = sign === 0 ? `^{\\footnotesize\\texttt{-}}` : sign === 1 ? `^{\\footnotesize\\texttt{+}}` : ``;
 
   const nextToInput = <span>
-    <Latex expression={`\\lim_{x \\to ${qX + signText}}g(x)`} inline={true} /> =
+    <Latex classes="bold" expression={`\\lim_{x \\to ${qX + signText}}g(x)`} inline={true} /> =
   </span>
 
   const hints = [
@@ -250,6 +258,10 @@ const oscillatingGraphQuestion = (): any => {
 
   // set all other question stuff
   const question = <div className="flex vertical center medium-gap">
+    <div className="flex vertical center">
+      <h2>Evaluate the limit.</h2>
+      <div>Enter "dne" if the limit doesn't exist.</div>
+    </div>
     <h3>Graph of <Latex expression={`g(x)`} inline={true} /></h3>
     <FunctionGraph functions={functions} size={GRAPH_SIZE} />
   </div>
@@ -258,7 +270,7 @@ const oscillatingGraphQuestion = (): any => {
   const type = 'math'
 
   const nextToInput = <span>
-    <Latex expression={`\\lim_{x \\to ${horizShift}} g(x)`} inline={true} /> =
+    <Latex classes="bold" expression={`\\lim_{x \\to ${horizShift}} g(x)`} inline={true} /> =
   </span>
 
   const hints = [
@@ -287,11 +299,7 @@ const generateRandomQuestion = (): Question => {
     q = jumpGraphQuestion();
   }
 
-  // set title since it's the same for everything
-  q.title = <div className="flex vertical center">
-    <h2>Evaluate the limit.</h2>
-    <div>Enter "dne" if the limit doesn't exist</div>
-  </div>
+  q.title = <></>
 
   // set color of graph
   document.documentElement.style.setProperty('--random-color',

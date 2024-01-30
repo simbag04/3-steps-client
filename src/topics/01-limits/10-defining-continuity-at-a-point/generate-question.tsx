@@ -77,12 +77,13 @@ const piecewiseToLimit = (): Question => {
     functions.push({ f, domain });
   }
 
-  const question = <Piecewise functions={functions} title={`f(x)`} />
+  const question =<div className="flex vertical center medium-gap">
+    <h3>Is the function continuous at <Latex expression={`x = ${x}`} />?</h3>
+    <Piecewise functions={functions} title={`f(x)`} />
+  </div>
 
   // find answer
-  const title: React.JSX.Element = <div className="flex vertical center">
-    <h2>Is the function continuous at <Latex expression={`x = ${x}`} />?</h2>
-  </div>
+  const title: React.JSX.Element = <></>
 
   const options: Option[] = [
     {
