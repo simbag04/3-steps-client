@@ -1,12 +1,12 @@
-import { Question } from "../../../types/Question";
+import { Question } from "../../../@types/Question";
 import React from "react";
-import { PiecewiseFunction } from "../../../types/PiecewiseFunction";
+import { PiecewiseFunction } from "../../../@types/PiecewiseFunction";
 import { generateOrderedValues, getRandomNumber, getRandomWithExclusions } from "../../../helpers/functions";
 import * as math from 'mathjs'
 import { getPolynomialFunctionWithPoint } from "../../../helpers/expression-generators";
 import { Piecewise } from "../../../components/latex/Piecewise";
 import Latex from "../../../components/latex/Latex";
-import { Option } from "../../../types/Option";
+import { Option } from "../../../@types/Option";
 
 const piecewiseToLimit = (): Question => {
   const functions: PiecewiseFunction[] = []; // array for piecewise

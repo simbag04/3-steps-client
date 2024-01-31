@@ -1,9 +1,9 @@
 import { formatPolynomialToLatex, getRandomNumber, getRandomWithExclusions, shuffleArray } from "../../../helpers/functions"
 import { getPolynomialFunctionWithPoint } from "../../../helpers/expression-generators"
-import { Option } from "../../../types/Option"
+import { Option } from "../../../@types/Option"
 import Latex from "../../../components/latex/Latex"
 import React from "react"
-import { PiecewiseFunction } from "../../../types/PiecewiseFunction"
+import { PiecewiseFunction } from "../../../@types/PiecewiseFunction"
 import { Piecewise } from "../../../components/latex/Piecewise"
 import * as math from "mathjs"
 

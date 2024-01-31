@@ -1,6 +1,6 @@
 import React from "react"
 import Latex from "../../../components/latex/Latex"
-import { PiecewiseFunction } from "../../../types/PiecewiseFunction"
+import { PiecewiseFunction } from "../../../@types/PiecewiseFunction"
 import { Piecewise } from "../../../components/latex/Piecewise"
 
 const Section1 = <>

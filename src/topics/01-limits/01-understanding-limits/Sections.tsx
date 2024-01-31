@@ -3,7 +3,7 @@ import Latex from "../../../components/latex/Latex"
 import * as math from 'mathjs'
 import { GRAPH_SIZE } from "../../../helpers/constants"
 import React from "react"
-import { PiecewiseFunction } from "../../../types/PiecewiseFunction"
+import { PiecewiseFunction } from "../../../@types/PiecewiseFunction"
 import { Piecewise } from "../../../components/latex/Piecewise"
 
 /**

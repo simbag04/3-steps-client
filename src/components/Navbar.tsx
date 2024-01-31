@@ -7,7 +7,7 @@ import { NavLinks } from "./NavLinks";
 import menu from '../svgs/menu.svg'
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import React from "react";
 
 export const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState("");

@@ -4,6 +4,7 @@
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
 import { useContext } from "react";
+import React from "react";
 
 export const Logout = () => {
   const { setUser } = useContext(UserContext);

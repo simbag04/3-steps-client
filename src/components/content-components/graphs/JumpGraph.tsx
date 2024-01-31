@@ -1,15 +1,19 @@
 /**
  * Creates jump graph with limit lines at the jump
- * Parameters:
- *  - functions: functions to graph
- *  - size: size of graph
  */
 import { useEffect, useRef } from "react"
 import { createBlankCanvas, createFunctionLimitLine, createMultipleFunctionsGraph } from "../../../helpers/graph-helpers";
 import '../../../styles/graph.css'
 import * as d3 from 'd3';
+import React from "react";
+import { GraphFunction } from "../../../@types/GraphFunction";
 
-const JumpGraph = ({ functions, size }) => {
+interface JumpGraphProps {
+  functions: GraphFunction[], // functions to graph
+  size: number // size of graph
+}
+
+const JumpGraph: React.FC<JumpGraphProps> = ({ functions, size }) => {
   const svgRef = useRef(null);
 
   useEffect(() => {

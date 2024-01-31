@@ -1,17 +1,21 @@
 /**
  * Creates Table of a funcion. Makes table vertical if screen is not wide enough
- * Parameters:
- *  - xTitle: title of x values
- *  - yTitle: title of y values
- *  - data: array data to put in table in { x: Number, y: Number } format
  */
 
 import { useRef, useState, useEffect } from "react"
 import { useWindowSize } from "../../../helpers/useWindowSize";
 import '../../../styles/table.css'
 import Latex from "../../latex/Latex";
+import React from "react";
+import { TableValue } from "../../../@types/TableValue";
 
-export const FunctionTable = ({ xTitle, yTitle, data }) => {
+interface FunctionTableProps {
+  xTitle: string, // title of x values
+  yTitle: string, // title of y values
+  data: TableValue[] // data to put in table
+}
+
+export const FunctionTable: React.FC<FunctionTableProps> = ({ xTitle, yTitle, data }) => {
   const tableRef = useRef(null);// ref for table
   const [width, setWidth] = useState(0); // current width of table
   const originalWidthRef = useRef(null); // horizontal table width

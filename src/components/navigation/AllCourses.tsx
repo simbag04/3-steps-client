@@ -5,6 +5,7 @@
 import { ApiContext } from "../../App"
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import React from "react";
 
 export const AllCourses = () => {
   const apiLink = useContext(ApiContext);

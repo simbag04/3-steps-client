@@ -1,13 +1,5 @@
 /**
  * Creates graph of function f showing limit at xval
- * Parameters: 
- *  - f : function to generate graph of
- *  - xval: xvalue at which to show limit
- *  - y: y of function - could be different from f(xval) if there's a hole, or null if f is undefined at xval
- *  - fColor: classes to add to function graph
- *  - xcolor: classes to add to x limit arrows
- *  - ycolor: classes to add to y limit arrows
- *  - size: size of graph
  */
 
 import { useEffect, useRef } from "react"
@@ -16,8 +8,19 @@ import { AXIS_OFFSET, CLOSE_DIST, FAR_DIST } from "../../../helpers/constants";
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import '../../../styles/graph.css'
+import React from "react";
 
-const LimitExampleGraph = ({ f, xval, y, fColor, xColor, yColor, size }) => {
+interface LimitExampleGraphProps {
+  f: Function, // function to generate graph of
+  xval: number, // xvalue at which to show limit
+  y: number, // y of function - could be different from f(xval) if there's a hole, or null if f is undefined at xval
+  fColor: string, //classes to add to function graph
+  xColor: string, // classes to add to x limit arrows
+  yColor: string, // classes to add to y limit arrows
+  size: number // size of graph
+}
+
+const LimitExampleGraph: React.FC<LimitExampleGraphProps> = ({ f, xval, y, fColor, xColor, yColor, size }) => {
   const svgRef = useRef(null);
 
   useEffect(() => {

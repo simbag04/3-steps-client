@@ -1,7 +1,7 @@
 import React from "react";
-import { GraphFunction } from "../../../types/GraphFunction";
+import { GraphFunction } from "../../../@types/GraphFunction";
 import * as math from "mathjs"
-import { GraphPoint } from "../../../types/GraphPoint";
+import { GraphPoint } from "../../../@types/GraphPoint";
 import Latex from "../../../components/latex/Latex";
 import FunctionGraph from "../../../components/content-components/graphs/FunctionGraph";
 import AsymptoticGraph from "../../../components/content-components/graphs/AsymptoticGraph"

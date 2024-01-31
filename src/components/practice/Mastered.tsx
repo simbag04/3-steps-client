@@ -1,19 +1,23 @@
 /**
  * Mastered component
  * Renders when user gets to star 1
- * Parameters: 
- *  - cname: url name of course
- *  - uname: url name of unit
- *  - name: url name of topic
- *  - title: topic name
- *  - setShowMastered: state for whether this page should be shown
- *  - stars: info about current stars for user for topic
  */
 import { useNavigate } from "react-router-dom"
 import { Stars } from "../Stars";
 import { format_review_date } from "../../helpers/format-helpers";
+import React from "react";
+import { StarInfo } from "../../@types/StarInfo";
 
-export const Mastered = ({ cname, uname, name, title, setShowMastered, stars }) => {
+interface MasteredProps {
+  cname: string, // url name of course
+  uname: string, // url name of unit
+  name: string, // url name of topic
+  title: string, // name of topic
+  setShowMastered: Function, // state for whether this page should be shown
+  stars: StarInfo // info for stars
+}
+
+export const Mastered: React.FC<MasteredProps> = ({ cname, uname, name, title, setShowMastered, stars }) => {
   const nav = useNavigate();
   const star = stars.star_goal;
 

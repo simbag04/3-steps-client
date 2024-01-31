@@ -2,20 +2,21 @@
  * Login page
  * Renders email/password field for user to log in
  */
+import React from "react";
 import { useContext, useState } from "react";
-import { ApiContext } from "../../App";
+import { ApiContext, UserContextType } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
 
 export const Login = () => {
   const apiLink = useContext(ApiContext)
-  const { setUser } = useContext(UserContext)
+  const { setUser } = useContext(UserContext) as UserContextType
   const nav = useNavigate();
   const [formData, setFormData] = useState({}); // data that user inputs
   const [message, setMessage] = useState(null); // login error messages
 
   const goHome = () => nav('/');
-  
+
   // sets form data
   const handleInputChange = (e) => {
     setFormData({

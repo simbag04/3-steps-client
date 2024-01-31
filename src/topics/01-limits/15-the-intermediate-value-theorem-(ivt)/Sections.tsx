@@ -1,6 +1,6 @@
 import React from "react"
 import Latex from "../../../components/latex/Latex"
-import { GraphFunction } from "../../../types/GraphFunction"
+import { GraphFunction } from "../../../@types/GraphFunction"
 import FunctionGraph from "../../../components/content-components/graphs/FunctionGraph"
 import * as math from "mathjs"
 import { GRAPH_SIZE } from "../../../helpers/constants"

@@ -1,8 +1,9 @@
+import { TableValue } from "../../../@types/TableValue"
 import { FunctionTable } from "../../../components/content-components/tables/FunctionTable"
 import Latex from "../../../components/latex/Latex"
 import React from "react"
 
-const table1Data = [
+const table1Data: TableValue[] = [
   { x: 1, y: 3 },
   { x: 2, y: 4 },
   { x: 3, y: 6 },
@@ -18,7 +19,7 @@ const table1Data = [
   { x: 7, y: 10 },
 ]
 
-const table2Data = [
+const table2Data: TableValue[] = [
   { x: 1, y: 5 },
   { x: 2, y: 6 },
   { x: 3, y: 8 },
@@ -28,7 +29,7 @@ const table2Data = [
   { x: 4, y: 9 },
 ]
 
-const table3Data = [
+const table3Data: TableValue[] = [
   { x: 1, y: 8 },
   { x: 2, y: 7 },
   { x: 3, y: 3 },
@@ -38,7 +39,7 @@ const table3Data = [
   { x: 7, y: -9 },
 ]
 
-const table4Data = [
+const table4Data: TableValue[] = [
   { x: 2, y: 5},
   { x: 2.9, y: 5.9 },
   { x: 2.99, y: 5.99 },

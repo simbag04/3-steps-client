@@ -7,8 +7,8 @@ import * as math from "mathjs"
 import { GRAPH_SIZE, COLORS } from "../../../helpers/constants";
 import { LimitPropertyRules } from "./LimitPropertyRules";
 import React from "react";
-import { Question } from "../../../types/Question";
-import { GraphFunction } from "../../../types/GraphFunction";
+import { Question } from "../../../@types/Question";
+import { GraphFunction } from "../../../@types/GraphFunction";
 
 /**
  * generates random question that presents a table and a graph from which some limits can be evaluated, then generates expression with limit properties and asks user to solve

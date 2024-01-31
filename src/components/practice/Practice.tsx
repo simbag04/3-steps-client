@@ -1,12 +1,6 @@
 /**
  * Practice component
  * This component handles the "practice" content for each topic
- * Parameters: 
- *  - cname: url name of course
- *  - uname: url name of unit
- *  - name: url name of topic
- *  - title: topic name
- *  - numProblems: streak needed to get first star
  */
 
 import React, { useEffect, useRef, useState } from "react";
@@ -18,19 +12,29 @@ import { Hints } from "./Hints";
 import { Stars } from "../Stars";
 import { useWindowSize } from "../../helpers/useWindowSize";
 import { EditableMathField, addStyles } from "react-mathquill";
-import * as math from 'mathjs'
 import Latex from "../latex/Latex"
+import { Question } from "../../@types/Question";
+import { StarInfo } from "../../@types/StarInfo";
+const math = require("mathjs")
 
 addStyles()
 
-export const Practice = ({ cname, uname, name, title, numProblems }) => {
+interface PracticeProps {
+  cname: string, // url name of course
+  uname: string, // url name of unit
+  name: string, // url name of topic
+  title: string, // topic name
+  numProblems: number // streak needed to get first star
+}
+
+export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, numProblems }) => {
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
   const [newQ, setNewQ] = useState(false); // renders new question on change
-  const correctRef = useRef(null); // stores whether current answer is correct
-  const [qFunction, setQFunction] = useState(() => () => { }); // function to generate question
-  const [currQ, setCurrQ] = useState({}); // current question information
+  const correctRef = useRef<boolean | undefined>(); // stores whether current answer is correct
+  const [qFunction, setQFunction] = useState(() => (): Question | null => { return null }); // function to generate question
+  const [currQ, setCurrQ] = useState<Question | null>(null); // current question information
   const [showMastered, setShowMastered] = useState(false) // stores whether to show mastered page
-  const [stars, setStars] = useState({}); // stores stars info for user for this topic
+  const [stars, setStars] = useState<StarInfo | null>(null); // stores stars info for user for this topic
   const [showHints, setShowHints] = useState(false); // stores whether to show hints page
   const [hintsIndex, setHintsIndex] = useState(0); // stores what hint user is on
   const [hintsUsed, setHintsUsed] = useState(false); // stores whether hints were used
@@ -186,7 +190,8 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
               <h1 className="title flex horizontal center small-gap">
                 <span>{title}: {titleWord}</span>
               </h1>
-              <Stars star_goal={stars.star_goal} star_2={stars.star_2} star_3={stars.star_3} streak={stars.streak} current_streak={stars.current_streak} />
+              {stars !== null ?
+                <Stars star_goal={stars.star_goal} star_2={stars.star_2} star_3={stars.star_3} streak={stars.streak} current_streak={stars.current_streak} /> : null}
             </span>
             {/* Beginning of Question */}
             {currQ && currQ.title}
@@ -239,8 +244,8 @@ export const Practice = ({ cname, uname, name, title, numProblems }) => {
 
                     {goToNext && !correctRef.current ?
                       <div className="correct ans">
-                        {currQ.ans.includes(`\\infty`) ? <Latex expression={currQ.ans} /> : 
-                        currQ.ans}
+                        {currQ.ans.includes(`\\infty`) ? <Latex expression={currQ.ans} /> :
+                          currQ.ans}
                       </div> : null}
                   </span>
                 }

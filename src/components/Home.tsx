@@ -4,6 +4,7 @@
  */
 
 import { AllCourses } from "./navigation/AllCourses"
+import React from "react"
 
 export const Home = () => {
   return (

@@ -3,7 +3,7 @@ import { FunctionTable } from "../../../components/content-components/tables/Fun
 import Latex from "../../../components/latex/Latex";
 import * as math from 'mathjs'
 import React from "react";
-import { Question } from "../../../types/Question";
+import { Question } from "../../../@types/Question";
 
 const nerdamer = require("nerdamer/all.min")
 

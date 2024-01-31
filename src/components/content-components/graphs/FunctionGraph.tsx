@@ -1,8 +1,5 @@
 /**
  * Creates graph of multiple functions
- * Parameters:
- *  - functions: functions to graph
- *  - size: size of graph
  */
 
 import { useEffect, useRef } from "react"
@@ -10,17 +7,17 @@ import { createBlankCanvas, createMultipleFunctionsGraph, addPointsToGraph } fro
 import '../../../styles/graph.css'
 import * as d3 from 'd3';
 import React from "react";
-import { GraphFunction } from "../../../types/GraphFunction";
-import { GraphPoint } from "../../../types/GraphPoint";
+import { GraphFunction } from "../../../@types/GraphFunction";
+import { GraphPoint } from "../../../@types/GraphPoint";
 
 interface FunctionGraphProps {
-  functions: GraphFunction[],
-  size: number,
-  minx?: number,
-  maxx?: number,
-  miny?: number,
-  maxy?: number,
-  points?: GraphPoint[]
+  functions: GraphFunction[], // functions to graph
+  size: number, // size of graph
+  minx?: number, // minimum x value of graph (default: -11)
+  maxx?: number, // maximum x value of graph (default: 11)
+  miny?: number, // minimum y value of graph (default: -11)
+  maxy?: number, // maximum y value of graph (default: -11)
+  points?: GraphPoint[] // additional full circle points to graph
 }
 
 const FunctionGraph: React.FC<FunctionGraphProps> = ({ functions, size, minx, maxx, miny, maxy, points}) => {

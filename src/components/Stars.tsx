@@ -2,12 +2,6 @@
  * Stars component
  * This renders the number of stars for the user for the topic
  * It also renders the info icon, with a popup on hover that shows more info about the stars
- * Parameters: 
- *  - star_goal: user's goal for next star to get to
- *  - star_2: array of dates of review for star_2
- *  - star_3: array of dates of review for star_3
- *  - streak: streak to achieve to get the first star
- *  - current_streak: user's best streak
  */
 
 import bronzeStar from '../svgs/bronze-star.svg'
@@ -19,8 +13,17 @@ import '../styles/stars.css'
 import check from '../svgs/check.svg'
 import cross from '../svgs/cross.svg'
 import { UserContext } from '../App'
+import React from 'react'
 
-export const Stars = ({ star_goal, star_2, star_3, streak, current_streak }) => {
+interface StarsProps {
+  star_goal: number, // user's goal for next star to get to
+  star_2: string[], // array of dates of review for star_2
+  star_3: string[], // array of dates of review for star_3
+  streak: number, // streak to achieve to get the first star
+  current_streak: number // user's best streak
+}
+
+export const Stars: React.FC<StarsProps> = ({ star_goal, star_2, star_3, streak, current_streak }) => {
   const { user } = useContext(UserContext);
   const [visible, setVisible] = useState(false); // visibility of popup
   const [position, setPosition] = useState({ x: 0, y: 0 }); // position of popup

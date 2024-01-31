@@ -5,7 +5,7 @@ import Latex from "../../../components/latex/Latex";
 import LimitExampleGraph from "../../../components/content-components/graphs/LimitExampleGraph";
 import { GRAPH_SIZE } from "../../../helpers/constants";
 import React from "react";
-import { Question } from "../../../types/Question";
+import { Question } from "../../../@types/Question";
 
 /**
  * generates random question that asks users to select the limit that best matches the graph

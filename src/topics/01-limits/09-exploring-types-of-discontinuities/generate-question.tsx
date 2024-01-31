@@ -1,16 +1,16 @@
 import { getRandomNumber, getRandomWithExclusions } from "../../../helpers/functions";
 import { generateRandomPolynomialWithPoint } from "../../../helpers/expression-generators"
-import { GraphFunction } from "../../../types/GraphFunction";
+import { GraphFunction } from "../../../@types/GraphFunction";
 import React from "react";
 import Latex from "../../../components/latex/Latex";
 import FunctionGraph from "../../../components/content-components/graphs/FunctionGraph";
 import AsymptoticGraph from "../../../components/content-components/graphs/AsymptoticGraph";
 import { GRAPH_SIZE } from "../../../helpers/constants";
-import { Option } from "../../../types/Option";
-import { Question } from "../../../types/Question";
+import { Option } from "../../../@types/Option";
+import { Question } from "../../../@types/Question";
 import * as math from "mathjs"
 import { COLORS } from "../../../helpers/constants";
-import { GraphPoint } from "../../../types/GraphPoint";
+import { GraphPoint } from "../../../@types/GraphPoint";
 
 
 const jumpGraphQuestion = (): any => {

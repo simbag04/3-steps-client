@@ -1,20 +1,6 @@
 /**
  * Stats component
  * This is the "Progress" box on the Practice Page
- * Parameters: 
- *  - cname: url name of course
- *  - uname: url name of unit
- *  - name: url name of topic
- *  - correctRef: represents if inputted answer is correct
- *  - goToNext/setGoToNext: state to represent if user is ready to move on to next question
- *  - setNewQ: state that renders new question on change
- *  - setShowMastered: state that shows "Mastered" page when true
- *  - numProblems: streak that user must get for star 1
- *  - setStars: info about the stars user has earned on this topic
- *  - setShowHints: state that shows "Hints" page when true
- *  - hintsUsed/setHintsUsed: state that represents what hint the user is currently on
- *  - setTitleWord: state that represents "Practice" or "Review" in title
- *  - moveStatsDown: whether the stats is below the question, in which case it should be styled horizontally
  */
 import { useState, useContext, useEffect, useCallback } from "react";
 import { UserContext } from "../../App";
@@ -22,11 +8,31 @@ import { ApiContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { format_review_date, review_date_passed } from "../../helpers/format-helpers";
 import { useRef } from "react";
+import React from "react";
+import { UserTopicEntry } from "../../@types/UserTopicEntry";
 
-export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed, setTitleWord, moveStatsDown }) => {
+interface StatsProps {
+  cname: string, // url name of course
+  uname: string, // url name of unit
+  name: string, // url name of topic
+  correctRef: React.MutableRefObject<boolean>, // whether inputted answer is correct
+  goToNext: boolean, // state for if user is ready to move on to next question
+  setGoToNext: Function, // state for if user is ready to move on to next question
+  setNewQ: Function, // state that renders new question on change
+  setShowMastered: Function, // state that shows "Mastered" page when true
+  numProblems: number, // streak that user must get for star 1
+  setStars: Function, // info about the stars user has earned on this topic
+  setShowHints: Function, // state that shows "Hints" page when true
+  hintsUsed: boolean, // state for what hint the user is currently on
+  setHintsUsed: Function, // state for what hint the user is currently on
+  setTitleWord: Function, // state for "Practice" or "Review" in title
+  moveStatsDown: string // whether stats is below question, meaning it should be styled horizontally
+}
+
+export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed, setTitleWord, moveStatsDown }) => {
   const [text, setText] = useState(""); // feedback text, such as "Incorrect"
   const [feedback, setFeedback] = useState(""); // added to feedback element classes for styling
-  const [dbEntry, setDbEntry] = useState({}); // entry for this user for this topic in DB
+  const [dbEntry, setDbEntry] = useState<UserTopicEntry | null>(null); // entry for this user for this topic in DB
   const [reviewDatePassed, setReviewDatePassed] = useState(-1); // How many days ago review date was
   const [showHintsInfo, setShowHintsInfo] = useState(false);
   const hintsButtonRef = useRef(null);
@@ -177,7 +183,7 @@ export const Stats = ({ cname, uname, name, correctRef, goToNext, setGoToNext, s
         <h2>Progress</h2>
         <div className={`stats-content flex center medium-gap vertical`}>
           <div className={`stats-question-info flex ${moveStatsDown === "horizontal" ? "vertical" : "horizontal"} center small-gap`}>
-            {user ?
+            {user && dbEntry ?
               <>
                 {/* General user stats */}
                 <div>Streak: <strong>{dbEntry.current_streak}</strong></div>

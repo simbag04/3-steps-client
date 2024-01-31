@@ -3,7 +3,7 @@ import Latex from "../../../components/latex/Latex";
 import { getPolynomialFunction, generateSpecialTrig } from "../../../helpers/expression-generators";
 import { formatPolynomialToLatex, getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, nerdamerFormatToLatex, sortPolynomialByDegree } from "../../../helpers/functions"; 
 import React from "react"
-import { Question } from "../../../types/Question"
+import { Question } from "../../../@types/Question"
 
 const nerdamer = require("nerdamer/all.min")
 

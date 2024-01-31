@@ -4,9 +4,9 @@ import * as math from "mathjs"
 import Latex from "../../../components/latex/Latex";
 import { Piecewise } from "../../../components/latex/Piecewise"
 import React from "react";
-import { PiecewiseFunction } from "../../../types/PiecewiseFunction";
-import { Option } from "../../../types/Option";
-import { Question } from "../../../types/Question";
+import { PiecewiseFunction } from "../../../@types/PiecewiseFunction";
+import { Option } from "../../../@types/Option";
+import { Question } from "../../../@types/Question";
 const nerdamer = require("nerdamer/all.min")
 
 /**

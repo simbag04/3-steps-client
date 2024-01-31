@@ -3,7 +3,7 @@ export type Question = {
   title: JSX.Element,
   question: JSX.Element,
   ans?: any,
-  type: 'mc' | 'math',
+  type: 'mc' | 'math' | 'frq',
   nextToInput?: JSX.Element,
   hints: JSX.Element[],
   input?: Array<Option>,

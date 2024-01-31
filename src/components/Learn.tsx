@@ -1,16 +1,22 @@
 /**
  * Learn component
  * This component handles the "learn" content for each topic
- * Parameters:
- *  - learnContent: an array of components, where each component represents one "section" of content
- * This component allows 1 by 1 rendering of sections to help users process information in small chunks
  */
 
 import { useEffect, useState } from "react";
 import '../styles/learn.css'
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
-const Learn = ({ learnContent, title, cname, uname, name }) => {
+interface LearnProps {
+  learnContent: React.JSX.Element[], // array of components of content
+  cname: string, // url name of course
+  uname: string, // url name of unit
+  name: string, // url name of topic
+  title: string // topic name
+}
+
+const Learn: React.FC<LearnProps> = ({ learnContent, cname, uname, name, title }) => {
   const [step, setStep] = useState(0);
   const [remaining, setRemaining] = useState(true);
   const [items, setItems] = useState([]);

@@ -2,7 +2,7 @@ import Latex from "../../../components/latex/Latex"
 import { getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, sortPolynomialByDegree } from "../../../helpers/functions"
 import React from "react"
 import * as math from "mathjs"
-import { Option } from "../../../types/Option"
+import { Option } from "../../../@types/Option"
 
 const nerdamer = require("nerdamer/all.min")
 

@@ -6,8 +6,8 @@ import AsymptoticGraph from "../../../components/content-components/graphs/Asymp
 import { COLORS, GRAPH_SIZE } from "../../../helpers/constants";
 import FunctionGraph from "../../../components/content-components/graphs/FunctionGraph";
 import React from "react";
-import { Question } from "../../../types/Question";
-import { GraphFunction } from "../../../types/GraphFunction";
+import { Question } from "../../../@types/Question";
+import { GraphFunction } from "../../../@types/GraphFunction";
 
 /**
  * generates random question that shows a graph with asymptote(s) and asks users to find the limit at an asymptotic point

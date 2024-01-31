@@ -1,11 +1,11 @@
 import { formatPolynomialToLatex, getCoeffsOfPolynomial, getRandomNumber, getRandomWithExclusions, getRootsOfPolynomial, getStringFactorFromXval, sortPolynomialByDegree } from "../../../helpers/functions"
 import { getPolynomialFunctionWithPoint } from "../../../helpers/expression-generators"
 import * as math from "mathjs"
-import { PiecewiseFunction } from "../../../types/PiecewiseFunction"
+import { PiecewiseFunction } from "../../../@types/PiecewiseFunction"
 import { Piecewise } from "../../../components/latex/Piecewise"
 import React from "react"
 import Latex from "../../../components/latex/Latex"
-import { Option } from "../../../types/Option"
+import { Option } from "../../../@types/Option"
 
 const nerdamer = require("nerdamer/all.min")
 

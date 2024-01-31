@@ -1,6 +1,6 @@
 import { getRandomNumber, shuffleArray } from "../../../helpers/functions";
-import { Option } from "../../../types/Option";
-import { Question } from "../../../types/Question";
+import { Option } from "../../../@types/Option";
+import { Question } from "../../../@types/Question";
 import Latex from '../../../components/latex/Latex'
 import React from "react";
 import * as math from "mathjs"

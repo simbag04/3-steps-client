@@ -4,7 +4,7 @@ import g04 from "../04-evaluating-limits-using-algebraic-properties/generate-que
 import g05 from "../05-evaluating-limits-using-direct-substitution/generate-question";
 import g06 from "../06-evaluating-limits-using-algebraic-manipulation/generate-question";
 import { getRandomNumber } from "../../../helpers/functions";
-import { Question } from "../../../types/Question";
+import { Question } from "../../../@types/Question";
 
 const generateRandomQuestion = (): Question => {
   const rand = getRandomNumber(1, 10);

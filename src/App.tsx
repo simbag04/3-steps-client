@@ -17,9 +17,16 @@ import { Unit } from "./components/navigation/Unit";
 import { Login } from "./components/auth/Login";
 import { Logout } from "./components/auth/Logout";
 import { Register } from "./components/auth/Register";
+import React from "react";
+import { User } from "./@types/User";
 
-export const ApiContext = createContext();
-export const UserContext = createContext();
+export type UserContextType = {
+  user: User,
+  setUser: Function
+}
+
+export const ApiContext = createContext(null);
+export const UserContext = createContext<UserContextType>(null);
 
 function App() {
   const [user, setUser] = useState(null);

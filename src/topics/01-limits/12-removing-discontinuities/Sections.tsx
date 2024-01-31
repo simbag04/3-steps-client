@@ -1,12 +1,12 @@
 import React from "react";
-import { GraphFunction } from "../../../types/GraphFunction";
-import { GraphPoint } from "../../../types/GraphPoint";
+import { GraphFunction } from "../../../@types/GraphFunction";
+import { GraphPoint } from "../../../@types/GraphPoint";
 import * as math from "mathjs"
 import FunctionGraph from "../../../components/content-components/graphs/FunctionGraph";
 import { GRAPH_SIZE } from "../../../helpers/constants";
 import Latex from "../../../components/latex/Latex";
 import { Piecewise } from "../../../components/latex/Piecewise";
-import { PiecewiseFunction } from "../../../types/PiecewiseFunction";
+import { PiecewiseFunction } from "../../../@types/PiecewiseFunction";
 
 const f1 = math.parse("x^2")
 const removableFunctions: GraphFunction[] = [

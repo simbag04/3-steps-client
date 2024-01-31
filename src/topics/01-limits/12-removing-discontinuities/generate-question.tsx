@@ -2,7 +2,7 @@ import { buildPolynomialFromCoeffs, formatPolynomialToLatex, getCoeffsOfPolynomi
 import { getStringFactorFromXval, sortPolynomialByDegree, getRandomWithExclusions, generateOrderedValues } from "../../../helpers/functions";
 import { getPolynomialFunction, generateSpecialTrig, getPolynomialFunctionWithPoint } from "../../../helpers/expression-generators"
 import * as math from "mathjs"
-import { PiecewiseFunction } from "../../../types/PiecewiseFunction";
+import { PiecewiseFunction } from "../../../@types/PiecewiseFunction";
 import Latex from "../../../components/latex/Latex";
 import React from "react";
 import { Piecewise } from "../../../components/latex/Piecewise";

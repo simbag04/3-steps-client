@@ -1,17 +1,21 @@
 /**
  * Creates asymptotic graph with dashed lines at asymptotes
- * Parameters:
- *  - functions: functions to graph
- *  - size: size of graph
- *  - x: array of x values of asymptotes
- *  - y: array of y values of asymptotes
  */
 import { useEffect, useRef } from "react"
 import { createBlankCanvas, createMultipleFunctionsGraph } from "../../../helpers/graph-helpers";
 import '../../../styles/graph.css'
 import * as d3 from 'd3';
+import React from "react";
+import { GraphFunction } from "../../../@types/GraphFunction";
 
-const AsymptoticGraph = ({ functions, size, x, y }) => {
+interface AsymptoticGraphProps {
+  functions: GraphFunction[], // functions to graph
+  size: number, // size of graph
+  x: number[], // xvalues of asymptotes where there will be dotted lines
+  y: number[] // y values of asymptotes where there will be dotted lines
+}
+
+const AsymptoticGraph: React.FC<AsymptoticGraphProps> = ({ functions, size, x, y }) => {
   const svgRef = useRef(null);
 
   useEffect(() => {

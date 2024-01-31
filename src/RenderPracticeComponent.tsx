@@ -7,6 +7,7 @@ import { Practice } from "./components/practice/Practice";
 import { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { ApiContext } from './App';
+import React from 'react';
 
 export const RenderPracticeComponent = () => {
   const { cname, uname, name } = useParams();

@@ -1,12 +1,15 @@
+/**
+ * Renders Piecewise Function in Latex
+ */
 import React, { useEffect, useState } from "react";
 import Latex from "./Latex";
-import { PiecewiseFunction } from "../../types/PiecewiseFunction";
+import { PiecewiseFunction } from "../../@types/PiecewiseFunction";
 
 interface PiecewiseProps {
-  title: string,
-  functions: PiecewiseFunction[],
-  display?: string | boolean,
-  classes?: string
+  title: string, // name of function
+  functions: PiecewiseFunction[], // functions to show
+  display?: string | boolean, // whether it should be display mode
+  classes?: string // classes to apply
 }
 
 export const Piecewise: React.FC<PiecewiseProps> = ({ title, functions, display, classes }) => {
