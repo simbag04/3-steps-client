@@ -1,3 +1,7 @@
+/**
+ * React hook to get size of window
+ */
+
 import { useLayoutEffect, useState } from 'react';
 
 export const useWindowSize = () => {

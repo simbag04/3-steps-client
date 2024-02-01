@@ -1,6 +1,11 @@
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid';
 import { FAR_DIST, CLOSE_DIST, AXIS_OFFSET } from "./constants";
+import { GraphFunction } from '../@types/GraphFunction';
+import { DataPoint } from '../@types/DataPoint';
+import { GraphFunctionData } from '../@types/GraphFunctionData';
+import { GraphPoint } from '../@types/GraphPoint';
+import { LimitPoints } from '../@types/LimitPoints';
 
 /**
  * generates graphing data for mathematical function
@@ -10,7 +15,7 @@ import { FAR_DIST, CLOSE_DIST, AXIS_OFFSET } from "./constants";
  * @param {number} dataGap how close to generate function data
  * @returns array of data with generated values
  */
-const generateFunctionData = (f, min, max, dataGap = 0.01) => {
+const generateFunctionData = (f: Function, min: number, max: number, dataGap: number = 0.01): DataPoint[] => {
   let data = [];
 
   for (let i = min; i <= max; i += dataGap) {
@@ -40,7 +45,10 @@ const generateFunctionData = (f, min, max, dataGap = 0.01) => {
  * @param {number} dataGap how close to generate function data
  * @returns data that was used to graph function, id of svg path of function
  */
-const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, classes, min, max, leftArrow, rightArrow, type, dataGap) => {
+const createFunctionGraph = (svg: any, f: Function, width: number, height: number,
+  color: string, xScale: any, yScale: any, classes: string, min: number,
+  max: number, leftArrow: boolean, rightArrow: boolean, type: string, dataGap: number): GraphFunctionData => {
+
   let data = generateFunctionData(f, min, max, dataGap); // generate data
 
   // filter data
@@ -102,9 +110,9 @@ const createFunctionGraph = (svg, f, width, height, color, xScale, yScale, class
  * @param {number} xMin of domain
  * @param {number} xMax of domain
  * @param {number} tolerance for how far away ans can be from y
- * @returns 
+ * @returns xvalue at which there is intersection
  */
-function findIntersections(func, y, xMin, xMax, tolerance) {
+const findIntersections = (func: Function, y: number, xMin: number, xMax: number, tolerance: number): number => {
   var a = xMin;
   var b = xMax;
 
@@ -149,7 +157,7 @@ function findIntersections(func, y, xMin, xMax, tolerance) {
  * @param {scale} yScale of svg
  * @returns {Array} array of all data and ids of function graphs
  */
-const createMultipleFunctionsGraph = (svg, functions, width, height, xScale, yScale) => {
+const createMultipleFunctionsGraph = (svg: any, functions: GraphFunction[], width: number, height: number, xScale: any, yScale: any): { dataArray: GraphFunctionData[] } => {
   const dataArray = [];
 
   for (let i = 0; i < functions.length; i++) {
@@ -189,15 +197,15 @@ const createMultipleFunctionsGraph = (svg, functions, width, height, xScale, ySc
  * @param {scale} xScale of svg
  * @param {scale} yScale of svg
  */
-const addPointsToGraph = (svg, points, xScale, yScale) => {
+const addPointsToGraph = (svg: any, points: GraphPoint[], xScale: any, yScale: any) => {
   for (let i = 0; i < points.length; i++) {
     svg
-    .append('circle')
-    .attr('class', 'fill stroke ' + points[i].classes)
-    .attr('cx', xScale(points[i].x))
-    .attr('cy', yScale(points[i].y))
-    .attr('r', 3)
-  } 
+      .append('circle')
+      .attr('class', 'fill stroke ' + points[i].classes)
+      .attr('cx', xScale(points[i].x))
+      .attr('cy', yScale(points[i].y))
+      .attr('r', 3)
+  }
 
 }
 
@@ -213,7 +221,7 @@ const addPointsToGraph = (svg, points, xScale, yScale) => {
  * @param {number} maxy maximum range value
  * @returns width, height, xscale, and yscale of graph
  */
-const createBlankCanvas = (width, height, svgRef, textSize, minx = -10, maxx = 10, miny = -10, maxy = 10) => {
+const createBlankCanvas = (width: number, height: number, svgRef: React.RefObject<HTMLCanvasElement>, textSize: number, minx: number = -10, maxx: number = 10, miny: number = -10, maxy: number = 10): { width: number, height: number, xScale: any, yScale: any } => {
   const numCells = 20;
   const half = (width / 2) / numCells;
   const color = "#707070"
@@ -263,7 +271,7 @@ const createBlankCanvas = (width, height, svgRef, textSize, minx = -10, maxx = 1
       .attr("y2", height)
       .attr("stroke", "lightgray");
   })
-  
+
   // add marks and text to xaxis
   ticks2.forEach(tick => {
     tickMarks.append("line")
@@ -351,7 +359,7 @@ const createBlankCanvas = (width, height, svgRef, textSize, minx = -10, maxx = 1
  * @param {string} color color of marker
  * @param {string} classes custom classes to be added to marker
  */
-function createArrowMarker(name, svg, size, color, classes) {
+const createArrowMarker = (name: string, svg: any, size: number, color: string, classes?: string) => {
   svg.append("defs").append("marker")
     .attr("id", name)
     .attr('class', 'fill ' + classes)
@@ -376,7 +384,7 @@ function createArrowMarker(name, svg, size, color, classes) {
  * @param {string} name of arrow markers on line
  * @param {string} classes custom classes o add to generated arrow
  */
-function createLimitLine(svg, line, x1, x2, y1, y2, name, classes) {
+const createLimitLine = (svg: any, line: Function, x1: number, x2: number, y1: number, y2: number, name: string, classes: string) => {
   // check if arrow marker exists
   if (d3.select(`#${name}`).empty()) {
     createArrowMarker(name, svg, 4, null, classes)
@@ -397,7 +405,7 @@ function createLimitLine(svg, line, x1, x2, y1, y2, name, classes) {
  * @param {number} y height
  * @returns hypotenuse of triangle formed with width/height
  */
-function findHypotenusefromSlope(x, y) {
+const findHypotenusefromSlope = (x: number, y: number): number => {
   return Math.sqrt(((x) ** 2) + ((y) ** 2))
 }
 
@@ -409,7 +417,7 @@ function findHypotenusefromSlope(x, y) {
  * @param {scale} yScale yscale of graph
  * @returns points object with converted x/y values
  */
-function convertScale(far, close, xScale, yScale) {
+const convertScale = (far: DataPoint, close: DataPoint, xScale: any, yScale: any): LimitPoints => {
   const farx = xScale.invert(far.x)
   const closex = xScale.invert(close.x)
   const fary = yScale.invert(far.y)
@@ -422,7 +430,7 @@ function convertScale(far, close, xScale, yScale) {
  * @param {object} points object representing points from which to compute slope
  * @returns perpendicular slope from points
  */
-function findSlope(points) {
+const findSlope = (points: LimitPoints): number => {
   let ans = (-1 * (points.farx - points.closex)) / (points.fary - points.closey)
   return ans;
 }
@@ -433,7 +441,7 @@ function findSlope(points) {
  * @param {number} axisOffset how much line should be offset
  * @returns x, y representing by how much lines need to move in each direction
  */
-function findOffsets(points, axisOffset) {
+const findOffsets = (points: LimitPoints, axisOffset: number): DataPoint => {
   let slope = findSlope(points)
   const hyp = findHypotenusefromSlope(1, slope);
   let scale = -1 * axisOffset / hyp;
@@ -459,7 +467,7 @@ function findOffsets(points, axisOffset) {
  * @returns points of the line in svg scale
  */
 
-function createFunctionLimitLine(svg, functionLine, pathLength, xScale, yScale, line, fColor, right, markerName) {
+const createFunctionLimitLine = (svg: any, functionLine: any, pathLength: number, xScale: any, yScale: any, line: Function, fColor: string, right: boolean, markerName: string): { closePoint: DataPoint, farPoint: DataPoint } => {
 
   // modify lengths based on if the arrow is from the left or the right
   let farDistLength = xScale(FAR_DIST) - xScale(0);

@@ -9,5 +9,6 @@ export type GraphFunction = {
   classes: string,
   leftCircle: boolean,
   rightCircle: boolean,
-  type?: string
+  type?: string,
+  dataGap?: number
 }

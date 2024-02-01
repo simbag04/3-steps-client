@@ -1,6 +1,8 @@
 import * as math from 'mathjs'
 import { generateFunctionData } from './graph-helpers';
 import { getRandomWithExclusions, getRandomNumber, convertArrayToObject, findLCM, convertToDecimal } from './functions';
+import { GraphPoint } from '../@types/GraphPoint';
+import { FunctionValue } from '../@types/FunctionValue';
 
 /**
  * Compresses polynomial so it fits on 10 by 10 graph
@@ -9,7 +11,7 @@ import { getRandomWithExclusions, getRandomNumber, convertArrayToObject, findLCM
  * @param {array} values other values that should be within [-max, max]
  * @returns math.js node representing scaled polynomial
  */
-function compressPolynomial(expression, max, values) {
+const compressPolynomial = (expression: string, max: number, values: number[]): math.MathNode => {
   const node = math.parse(expression);
 
   /// Makes all values within expression fit in graph range
@@ -30,8 +32,8 @@ function compressPolynomial(expression, max, values) {
  * @param {node} node math.js node with current function
  * @returns modified node, x: modified math.js node that has a whole number value at x
  */
-function modifyForWholeNumber(node) {
-  const f = (x) => node.evaluate({ x });
+const modifyForWholeNumber = (node: math.MathNode): { x: number, node: math.MathNode } => {
+  const f = (x: number) => node.evaluate({ x });
   let data = generateFunctionData(f, -11, 11);
 
   // filter out values where y is > 7 or < -7, x is > 8 or < -8
@@ -45,7 +47,7 @@ function modifyForWholeNumber(node) {
   const y = f(x);
 
   // find constant by which to move graph up or down to get integer y
-  let move;
+  let move: number;
   if (Math.round(y) < 0) {
     move = Math.min(-2, Math.round(y)) - y; // y must be <= -2
   } else {
@@ -62,7 +64,7 @@ function modifyForWholeNumber(node) {
  * @param {number} degree degree of polynomial to be generated
  * @returns ready to graph polynomial function with integer point at x
  */
-function generateRandomPolynomial(degree) {
+const generateRandomPolynomial = (degree: number): { x: number, node: math.MathNode } => {
   const expression = getPolynomialFunction(degree);
   const scaledNode = compressPolynomial(expression, 9, []);
   return modifyForWholeNumber(scaledNode);
@@ -71,11 +73,15 @@ function generateRandomPolynomial(degree) {
 /**
  * generates random polynomial function with random whole number coefficients 
  * @param {number} degree degree of polynomial to generate
- * @param {boolean} skipConstant boolean whether to not generate constant 
+ * @param {boolean} [skipConstant=false] boolean whether to not generate constant 
  * @param {boolean} [guaranteedTermAtDegree=false] whether there must be a term at the specified degree (eg. if degree is 2, there must be an x^2 term)
  * @returns random polynomial function with random coefficients
  */
-function getPolynomialFunction(degree, skipConstant = false, guaranteedTermAtDegree = false) {
+const getPolynomialFunction = (degree: number,
+  skipConstant: boolean = false,
+  guaranteedTermAtDegree: boolean = false): string => {
+
+  // generate random coefficients
   const coefficients = [];
   for (let i = 0; i <= degree; i++) {
     if (guaranteedTermAtDegree && degree === i) {
@@ -85,6 +91,7 @@ function getPolynomialFunction(degree, skipConstant = false, guaranteedTermAtDeg
     }
   }
 
+  // create each term 
   let terms = coefficients.map((coef, exp) => {
     if (exp === 0) {
       if (skipConstant || coef === 0) return "";
@@ -102,8 +109,9 @@ function getPolynomialFunction(degree, skipConstant = false, guaranteedTermAtDeg
 
   terms = terms.filter(t => t !== "");
 
+  // join each term
   const expression = terms.reverse().join('').replace(/\s+/g, '');
-  if (expression.length < 2) return '(2*x)';
+  if (expression.length < 2) return '(2*x)'; // default if all terms were ""
   return expression;
 }
 
@@ -115,7 +123,7 @@ function getPolynomialFunction(degree, skipConstant = false, guaranteedTermAtDeg
  * @param {boolean} [guaranteedTermAtDegree=false] whether there must be a term at the specified degree (eg. if degree is 2, there must be an x^2 term)
  * @returns string expression of polynomial
  */
-function getPolynomialFunctionWithPoint(degree, x, y, guaranteedTermAtDegree = false) {
+const getPolynomialFunctionWithPoint = (degree: number, x: number, y: number, guaranteedTermAtDegree: boolean = false): string => {
   let expression = getPolynomialFunction(degree, true, guaranteedTermAtDegree);
 
   // add constant to function to make (x, y) on graph
@@ -132,7 +140,7 @@ function getPolynomialFunctionWithPoint(degree, x, y, guaranteedTermAtDegree = f
  * @param {number} y y value of point
  * @returns math.js node representing polynomial expression
  */
-function generateRandomPolynomialWithPoint(degree, x, y) {
+const generateRandomPolynomialWithPoint = (degree: number, x: number, y: number): math.MathNode => {
   // generate polynomial
   let expression = getPolynomialFunction(degree);
   let node = math.parse(expression);
@@ -161,7 +169,7 @@ function generateRandomPolynomialWithPoint(degree, x, y) {
  * @param {Array} points array of 3 points ({x, y}) to fit quadratic to
  * @returns math.js node representing polynomial expression
  */
-function fitPointsToQuadratic(points) {
+const fitPointsToQuadratic = (points: GraphPoint[]): math.MathNode => {
   // Ensure we have at least 3 points
   if (points.length < 3) {
     console.error('At least 3 points are required for quadratic regression.');
@@ -191,7 +199,7 @@ function fitPointsToQuadratic(points) {
  * @param {Array} points array of 3 points ({x, y}) to fit quadratic to
  * @returns math.js node representing polynomial expression with fractional coefficients
  */
-function fitPointsToQuadraticFractions(points) {
+const fitPointsToQuadraticFractions = (points: GraphPoint[]): math.MathNode => {
   // Ensure we have at least 3 points
   if (points.length < 3) {
     console.error('At least 3 points are required for quadratic regression.');
@@ -211,36 +219,37 @@ function fitPointsToQuadraticFractions(points) {
   const denominatorB = (x2 - x1) * (x2 - x3);
   const denominatorC = (x3 - x1) * (x3 - x2);
 
-  const a = math.string(math.simplify(`(${y1} / ${denominatorA}) + (${y2} / ${denominatorB}) + (${y3} / ${denominatorC})`));
+  const a = math.simplify(`(${y1} / ${denominatorA}) + (${y2} / ${denominatorB}) + (${y3} / ${denominatorC})`).toString();
 
-  const b = math.string(math.simplify(`-(
+  const b = math.simplify(`-(
     (${y1 * (x2 + x3)} / ${denominatorA}) +
     (${y2 * (x1 + x3)} / ${denominatorB}) +
     (${y3 * (x1 + x2)} / ${denominatorC})
-  )`));
+  )`).toString();
 
-  const c = math.string(math.simplify(`(
+  const c = math.simplify(`(
     (${y1 * x2 * x3} / ${denominatorA}) +
     (${y2 * x1 * x3} / ${denominatorB}) +
     (${y3 * x1 * x2} / ${denominatorC})
-  )`));
+  )`).toString();
+
   // Return math.js node
   return createPolynomialFromCoefficients(a, b, c)
 }
 
 /**
  * creates formatted polynomial math.js node from potentially fractional coefficients
- * @param {Number} a coefficient of quadratic
- * @param {Number} b coefficient of quadratic
- * @param {Number} c coefficient of quadratic
+ * @param {string} a coefficient of quadratic
+ * @param {string} b coefficient of quadratic
+ * @param {string} c coefficient of quadratic
  * @returns math.js formatted polynomial node
  */
-const createPolynomialFromCoefficients = (a, b, c) => {
+const createPolynomialFromCoefficients = (a: string, b: string, c: string) => {
   const newA = Number(convertToDecimal(a))
   const newB = Number(convertToDecimal(b))
   const newC = Number(convertToDecimal(c))
   const expression = `${newA === 0 ? `` : `${a}x^2`} 
-    ${newB === 0 ? ``: `${newB < 0 ? `${b}` : `+${b}`}x`} 
+    ${newB === 0 ? `` : `${newB < 0 ? `${b}` : `+${b}`}x`} 
     ${newC === 0 ? `` : `${newC < 0 ? `${c}` : `+${c}`}`}`
 
   return math.parse(expression)
@@ -252,7 +261,7 @@ const createPolynomialFromCoefficients = (a, b, c) => {
  * @param {Number} depth of equation, i.e. how many levels of nesting in terms
  * @returns random term that uses functions variables and operators
  */
-function generateLimitPropertyTerm(functions, operators, depth = 2) {
+const generateLimitPropertyTerm = (functions: FunctionValue[], operators: string[], depth: number = 2): string => {
   if (depth === 0) {
     // base case
     const coefficient = getRandomNumber(2, 3); // coefficient of variable
@@ -319,49 +328,50 @@ function generateLimitPropertyTerm(functions, operators, depth = 2) {
  * @param {boolean} denominator whether we are generating a denminator (important since we can't have (1 - cos x) in the denominator and denominator will have 1 trig term or 1 poly term and at least another trig term)
  * @returns generated term and updated multipliedAns
  */
-const generateSpecialTrig = 
-  (degree, multipliedAns, denominator) => {
-  let term = "1"; // initialize term
-  let exclusions = []; // coeffs that have already been used
+const generateSpecialTrig =
+  (degree: number, multipliedAns: string, denominator: boolean): 
+  { term: string, multipliedAns: string } => {
+    let term = "1"; // initialize term
+    let exclusions = []; // coeffs that have already been used
 
-  // iterate over degree
-  for (let i = 0; i < degree;) {
-    // while we are less than degree, generate random term
-    const trig = getRandomNumber(0, 9) > 7 || i > 0; // whether term is poly or trig
-    const exp = getRandomNumber(1, denominator ? degree - i - 1 : degree - i) // exp of term
-    const expText = exp > 1 ? `^${exp}` : "";
+    // iterate over degree
+    for (let i = 0; i < degree;) {
+      // while we are less than degree, generate random term
+      const trig = getRandomNumber(0, 9) > 7 || i > 0; // whether term is poly or trig
+      const exp = getRandomNumber(1, denominator ? degree - i - 1 : degree - i) // exp of term
+      const expText = exp > 1 ? `^${exp}` : "";
 
-    // coeff of x in term, ex. 3 in sin(3x)
-    const coeff = getRandomWithExclusions(1, 4, exclusions); 
-    const coeffText = coeff !== 1 ? coeff : "";
+      // coeff of x in term, ex. 3 in sin(3x)
+      const coeff = getRandomWithExclusions(1, 4, exclusions);
+      const coeffText = coeff !== 1 ? coeff : "";
 
-    exclusions.push(coeff); // update coeff exclusions
+      exclusions.push(coeff); // update coeff exclusions
 
-    if (trig === true) {
-      // update ans
-      const add = `(${Math.pow(coeff, exp)})`
-      multipliedAns = (denominator ? multipliedAns + add : add + multipliedAns)
+      if (trig === true) {
+        // update ans
+        const add = `(${Math.pow(coeff, exp)})`
+        multipliedAns = (denominator ? multipliedAns + add : add + multipliedAns)
 
-      // term to generate
-      if (getRandomNumber(0, 1) === 0 || denominator) {
-        term += `\\sin${expText}(${coeffText}x)`
+        // term to generate
+        if (getRandomNumber(0, 1) === 0 || denominator) {
+          term += `\\sin${expText}(${coeffText}x)`
+        } else {
+          term += `(1 - \\cos(${coeffText}x))${expText}`
+        }
       } else {
-        term += `(1 - \\cos(${coeffText}x))${expText}`
+        // poly term
+        multipliedAns = denominator ? multipliedAns + `(${coeff})` : `(${coeff})` + multipliedAns
+        term += `${coeffText}x${expText}`
       }
-    } else {
-      // poly term
-      multipliedAns = denominator ? multipliedAns + `(${coeff})` : `(${coeff})` + multipliedAns 
-      term += `${coeffText}x${expText}`
+      // increment i by degree that we added
+      i += exp;
     }
-    // increment i by degree that we added
-    i += exp;
-  }
 
-  // remove beginning 1 from term
-  if (term.length > 1) {
-    term = term.substring(1)
+    // remove beginning 1 from term
+    if (term.length > 1) {
+      term = term.substring(1)
+    }
+    return { term, multipliedAns }
   }
-  return { term, multipliedAns }
-}
 
 export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm, getPolynomialFunctionWithPoint, getPolynomialFunction, fitPointsToQuadraticFractions, generateSpecialTrig }

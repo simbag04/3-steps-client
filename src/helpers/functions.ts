@@ -1,4 +1,6 @@
 import * as math from "mathjs"
+import { FunctionValue } from "../@types/FunctionValue";
+import { TableValue } from "../@types/TableValue";
 const nerdamer = require("nerdamer/all.min")
 
 /**
@@ -6,7 +8,7 @@ const nerdamer = require("nerdamer/all.min")
  * @param {array} array array to be shuffled
  * @returns shuffled array
  */
-const shuffleArray =  (array: Array<any>): Array<any> => {
+const shuffleArray = (array: Array<any>): Array<any> => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1)); // Generate a random index from 0 to i
 
@@ -33,46 +35,46 @@ const getRandomNumber = (min: number, max: number): number => {
  * @param {array} exclusions numbers to be excluded from generation
  * @returns random number in the range [min, max] excluding exclusions
  */
-const getRandomWithExclusions = 
+const getRandomWithExclusions =
   (min: number, max: number, exclusions: Array<number>): number => {
-  const validValues = [];
-  for (let i = min; i <= max; i++) {
-    if (!exclusions.includes(i)) {
-      validValues.push(i);
+    const validValues = [];
+    for (let i = min; i <= max; i++) {
+      if (!exclusions.includes(i)) {
+        validValues.push(i);
+      }
     }
-  }
 
-  if (validValues.length === 0) {
-    return max;
-  }
+    if (validValues.length === 0) {
+      return max;
+    }
 
-  const randomIndex = getRandomNumber(0, validValues.length - 1);
-  return validValues[randomIndex];
-}
+    const randomIndex = getRandomNumber(0, validValues.length - 1);
+    return validValues[randomIndex];
+  }
 
 /**
  * @param {Number} n number of values to generate
  * @param {boolean} increasing true if values should be increasing, false if decreasing
  * @returns array of n ordered numbers 
  */
-const generateOrderedValues = 
-  (n: number, increasing: boolean, extreme: number = 10, 
+const generateOrderedValues =
+  (n: number, increasing: boolean, extreme: number = 10,
     increment: number = 4): Array<number> => {
-  if (n <= 0) {
-    return [];
+    if (n <= 0) {
+      return [];
+    }
+
+    const values = [Math.floor(Math.random() * extreme) + 1]; // Initialize with a random value
+
+    while (values.length < n) {
+      // generate a value greater than the last one
+      const nextDiff = getRandomNumber(1, increment) * (increasing ? 1 : -1);
+      const nextValue = values[values.length - 1] + nextDiff;
+      values.push(nextValue);
+    }
+
+    return values;
   }
-
-  const values = [Math.floor(Math.random() * extreme) + 1]; // Initialize with a random value
-
-  while (values.length < n) {
-    // generate a value greater than the last one
-    const nextDiff = getRandomNumber(1, increment) * (increasing ? 1 : -1);
-    const nextValue = values[values.length - 1] + nextDiff;
-    values.push(nextValue);
-  }
-
-  return values;
-}
 
 /**
  * 
@@ -121,7 +123,7 @@ const buildPolynomialFromCoeffs = (coeffs: any[]): string => {
   for (let i = 0; i < coeffs.length; i++) {
     coeffs[i] = String(coeffs[i])
   }
-  
+
   let ans = ''
   for (let i = coeffs.length - 1; i >= 0; i--) {
     if (coeffs[i] === "0") continue; // skip 0 terms
@@ -203,7 +205,7 @@ const getStringFactorFromXval = (xval: number): string => {
  * @param {Array} array where each element is in the form {f: String, value: Number}
  * @returns object with keys as all the f Strings, values as the value of that String
  */
-const convertArrayToObject = (array: Array<any>): any => {
+const convertArrayToObject = (array: Array<FunctionValue>): FunctionValue => {
   const obj = {};
   for (let i = 0; i < array.length; i++) {
     const currentObj = array[i];
@@ -212,7 +214,7 @@ const convertArrayToObject = (array: Array<any>): any => {
       obj[key] = currentObj['value'];
     }
   }
-  return obj;
+  return obj as FunctionValue;
 }
 
 /**
@@ -240,39 +242,39 @@ const findLCM = (a: number, b: number): number => {
  * @param {Number} end of xs in table
  * @returns data array containing x, y pairs for points that could be used in a limit table
  */
-const generateLimitTableData = 
-  (xVal: number, values: Array<number>, start: number, end: number): any => {
-  const increasing = values[1] - values[0] >= 0;
-  const data = [];
-  // build table data
-  for (let i = start; i <= end; i++) {
-    const val = values[i - start];
+const generateLimitTableData =
+  (xVal: number, values: Array<number>, start: number, end: number): { data: TableValue[] } => {
+    const increasing = values[1] - values[0] >= 0;
+    const data: TableValue[] = [];
+    // build table data
+    for (let i = start; i <= end; i++) {
+      const val = values[i - start];
 
-    // zooming in to the left of xVal
-    if (i === xVal && xVal !== start) {
-      data.push({ x: i - 0.1, y: val - (increasing ? 0.1 : -0.1) })
-      data.push({ x: i - 0.01, y: val - (increasing ? 0.01 : -0.01) })
-      data.push({ x: i - 0.001, y: val - (increasing ? 0.001 : -0.001) })
+      // zooming in to the left of xVal
+      if (i === xVal && xVal !== start) {
+        data.push({ x: i - 0.1, y: val - (increasing ? 0.1 : -0.1) })
+        data.push({ x: i - 0.01, y: val - (increasing ? 0.01 : -0.01) })
+        data.push({ x: i - 0.001, y: val - (increasing ? 0.001 : -0.001) })
+      }
+
+      data.push({ x: i, y: val });  // other xvalues
+
+      // zooming in to the right of xval
+      if (i === xVal && xVal !== end) {
+        data.push({ x: i + 0.001, y: val + (increasing ? 0.001 : -0.001) })
+        data.push({ x: i + 0.01, y: val + (increasing ? 0.01 : -0.01) })
+        data.push({ x: i + 0.1, y: val + (increasing ? 0.1 : -0.1) })
+      }
     }
 
-    data.push({ x: i, y: val });  // other xvalues
-
-    // zooming in to the right of xval
-    if (i === xVal && xVal !== end) {
-      data.push({ x: i + 0.001, y: val + (increasing ? 0.001 : -0.001) })
-      data.push({ x: i + 0.01, y: val + (increasing ? 0.01 : -0.01) })
-      data.push({ x: i + 0.1, y: val + (increasing ? 0.1 : -0.1) })
-    }
+    return { data }
   }
-
-  return {data}
-}
 
 /**
  * @param {String} polynomial to format
  * @returns formatted latex polynomial formatted with mathjs
  */
-const formatPolynomialToLatex = (polynomial: string): any => {
+const formatPolynomialToLatex = (polynomial: string): string => {
   const str: String = math.simplifyCore(polynomial).toTex()
   return str.replaceAll('\\cdot', '').replaceAll('~', '');
 }

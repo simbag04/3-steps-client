@@ -9,12 +9,13 @@ import { LimitPropertyRules } from "./LimitPropertyRules";
 import React from "react";
 import { Question } from "../../../@types/Question";
 import { GraphFunction } from "../../../@types/GraphFunction";
+import { FunctionValue } from "../../../@types/FunctionValue";
 
 /**
  * generates random question that presents a table and a graph from which some limits can be evaluated, then generates expression with limit properties and asks user to solve
  */
 const limitPropertyQuestion = (): Question => {
-  const functions = []; // functions in expression, ex: {f: f(x), value: 2}
+  const functions: FunctionValue[] = []; // functions in expression, ex: {f: f(x), value: 2}
   const xVal = getRandomWithExclusions(-9, 9, [-1, 0, 1]); // where to eval limit
 
   // generate table
