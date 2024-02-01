@@ -5,8 +5,12 @@
  */
 const format_review_date = (date: string | Date): string => {
   const d = new Date(date);
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: "numeric" }
-  return d.toLocaleDateString('en-us', options)
+  // format: Feb 1, 2024, 4:00 PM
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: "numeric", hour:"numeric", hourCycle: "h12",  minute: "numeric" }
+
+  // format: Feb 1, 2024
+  // const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: "numeric" }
+  return d.toLocaleString('en-us', options)
 }
 
 /**
@@ -21,9 +25,6 @@ const review_date_passed = (date: string | Date | undefined): number | boolean =
   const today = new Date();
   // today.setDate(today.getDate() + 2)
   const d = new Date(date);
-  // reset hours
-  today.setHours(0, 0, 0, 0) 
-  d.setHours(0, 0, 0, 0) 
 
   // number of days that today is after the date
   return (today.getTime() - d.getTime())/(24 * 60 * 60 * 1000);
