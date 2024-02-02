@@ -22,16 +22,15 @@ interface StatsProps {
   setShowMastered: Function, // state that shows "Mastered" page when true
   numProblems: number, // streak that user must get for star 1
   setStars: Function, // info about the stars user has earned on this topic
+  showHints: boolean
   setShowHints: Function, // state that shows "Hints" page when true
-  hintsUsed: boolean, // state for what hint the user is currently on
-  setHintsUsed: Function, // state for what hint the user is currently on
   setTitleWord: Function, // state for "Practice" or "Review" in title
   moveStatsDown: string, // whether stats is below question, meaning it should be styled horizontally
   setShowExplain: Function,
-  hintsRef: React.RefObject<HTMLDivElement>
+  setScroll: Function
 }
 
-export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed, setTitleWord, moveStatsDown, setShowExplain, hintsRef }) => {
+export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, showHints, setShowHints, setTitleWord, moveStatsDown, setShowExplain, setScroll }) => {
   const [text, setText] = useState(""); // feedback text, such as "Incorrect"
   const [feedback, setFeedback] = useState(""); // added to feedback element classes for styling
   const [dbEntry, setDbEntry] = useState<UserTopicEntry | null>(null); // entry for this user for this topic in DB
@@ -111,7 +110,7 @@ export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, go
       }
       setGoToNext(true); // ready to move to next question
 
-      if (!hintsUsed) {
+      if (!showHints) {
         // only update stats if no hints were used
         if (user) {
           try {
@@ -154,14 +153,15 @@ export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, go
     setNewQ(newQ => !newQ);
   }, [setGoToNext, setText, correctRef, setNewQ]);
 
-  const showHints = () => {
+  const showHintsFunction = () => {
     setShowHints(true);
-    setHintsUsed(true);
     setShowHintsInfo(false)
+    setScroll(scroll => !scroll)
   }
 
   const showExplain = () => {
     setShowExplain(true)
+    setScroll(scroll => !scroll)
   }
 
   const login = () => nav('/login');
@@ -225,7 +225,7 @@ export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, go
             {/* Buttons shown based on state variables */}
             {!goToNext && <button onClick={checkAnswer}><strong>Check</strong></button>}
             {goToNext && <button onClick={nextQuestion}><strong>Next</strong></button>}
-            {!goToNext && showHints && !hintsUsed && <button onClick={showHints} ref={hintsButtonRef} onMouseEnter={handleMouseEnterHints} onMouseLeave={handleMouseLeaveHints}><strong>I Need a Hint!</strong></button>}
+            {!goToNext && <button onClick={showHintsFunction} ref={hintsButtonRef} onMouseEnter={handleMouseEnterHints} onMouseLeave={handleMouseLeaveHints}><strong>I Need a Hint!</strong></button>}
             {goToNext && <button onClick={showExplain}><strong>Explain</strong></button>}
             <button onClick={backToTopicsButtonHandler}><strong>Back to Topics</strong></button>
           </div>

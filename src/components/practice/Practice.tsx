@@ -15,7 +15,6 @@ import { EditableMathField, addStyles } from "react-mathquill";
 import Latex from "../latex/Latex"
 import { Question } from "../../@types/Question";
 import { StarInfo } from "../../@types/StarInfo";
-import { Explain } from "./Explain";
 const math = require("mathjs")
 
 addStyles()
@@ -36,10 +35,10 @@ export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, n
   const [currQ, setCurrQ] = useState<Question | null>(null); // current question information
   const [showMastered, setShowMastered] = useState(false) // stores whether to show mastered page
   const [stars, setStars] = useState<StarInfo | null>(null); // stores stars info for user for this topic
+
+  const [scroll, setScroll] = useState(false)
   const [showExplain, setShowExplain] = useState(false)
   const [showHints, setShowHints] = useState(false); // stores whether to show hints page
-  const [hintsIndex, setHintsIndex] = useState(0); // stores what hint user is on
-  const [hintsUsed, setHintsUsed] = useState(false); // stores whether hints were used
   const [titleWord, setTitleWord] = useState("Practice"); // Practice or Review
 
   const [selectedOption, setSelectedOption] = useState(null); // current option that was selected
@@ -54,7 +53,6 @@ export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, n
   const windowWidth = useWindowSize()[0]; // width of window
   const originalWidthRef = useRef(null); // width of question without wrapping
   const mathRef = useRef(null);
-  const hintsRef = useRef(null)
 
   // dynamically import relevant topic question
   useEffect(() => {
@@ -114,8 +112,6 @@ export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, n
     setCurrQ(qFunction());
     setSelectedOption(null);
     setClasses("");
-    setHintsIndex(0)
-    setHintsUsed(false);
     setTextInput("")
     if (mathRef && mathRef.current) {
       mathRef.current.latex('')
@@ -255,17 +251,14 @@ export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, n
 
             {/* Stats box */}
             <Stats cname={cname} uname={uname} name={name} correctRef={correctRef}
-              goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered} setStars={setStars}
-              setShowHints={setShowHints} hintsUsed={hintsUsed} setHintsUsed={setHintsUsed} setTitleWord={setTitleWord} moveStatsDown={moveStatsDown} setShowExplain={setShowExplain} hintsRef={hintsRef}></Stats>
+              goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered} setStars={setStars} showHints={showHints} setShowHints={setShowHints} setTitleWord={setTitleWord} moveStatsDown={moveStatsDown} setShowExplain={setShowExplain} setScroll={setScroll}></Stats>
           </div>
         </div> :
         <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered} stars={stars} />}
       
-      {showHints && !showExplain && currQ && currQ.hints &&
-        <Hints currQ={currQ} setShowHints={setShowHints} hintsIndex={hintsIndex} setHintsIndex={setHintsIndex} />}
+      {(showHints || showExplain || goToNext) && currQ && currQ.hints &&
+        <Hints currQ={currQ} explain={goToNext || showExplain} scroll={scroll} firstExplainRender={!showExplain && !showHints}/>}
 
-      {showExplain && currQ && currQ.explain &&
-        <Explain setShowExplain={setShowExplain} currQ={currQ}></Explain>}
     </div>
   );
 }
