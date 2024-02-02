@@ -24,7 +24,6 @@ export const Hints: React.FC<HintsProps> = ({ currQ, explain, scroll, firstExpla
   useEffect(() => {
     if (!firstExplainRender) {
       let obj = document.getElementById("hints-section")
-      console.log(height)
       window.scrollTo({ top: obj.offsetTop - height, behavior: "smooth" })
     }
   }, [scroll, firstExplainRender])

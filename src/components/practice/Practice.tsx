@@ -36,8 +36,8 @@ export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, n
   const [showMastered, setShowMastered] = useState(false) // stores whether to show mastered page
   const [stars, setStars] = useState<StarInfo | null>(null); // stores stars info for user for this topic
 
-  const [scroll, setScroll] = useState(false)
-  const [showExplain, setShowExplain] = useState(false)
+  const [scroll, setScroll] = useState(false) // whether to scroll to hints/explain
+  const [showExplain, setShowExplain] = useState(false) // whether explain button was clicked
   const [showHints, setShowHints] = useState(false); // stores whether to show hints page
   const [titleWord, setTitleWord] = useState("Practice"); // Practice or Review
 
@@ -180,7 +180,7 @@ export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, n
   }, [goToNext])
 
   return (
-    <div className="flex vertical center practice text-center">
+    <div className="flex vertical center medium-gap practice text-center">
       {!showMastered ?
         <div className="flex vertical center medium-gap practice text-center">
           <span className="flex vertical center text-center">
