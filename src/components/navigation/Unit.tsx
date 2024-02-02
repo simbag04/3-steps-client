@@ -72,7 +72,7 @@ export const Unit = () => {
                   {rdp >= 9 && t.next_star_goal === 4 ?
                     <span><strong>Review in the next {14 - rdp} days to keep the gold star!</strong></span> :
                     rdp >= 0 ?
-                      <span>It's time to review! Streak: {t.next_review_date.streak}/2</span>
+                      <span><strong>It's time to review!</strong> Streak: {t.next_review_date.streak}/2</span>
                       : <span>Next review: <strong>{format_review_date(t.next_review_date.date)}</strong></span>}
                 </span> : <span className="review-info invisible">none</span>}
               </div>

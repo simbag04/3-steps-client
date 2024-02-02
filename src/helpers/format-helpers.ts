@@ -18,8 +18,8 @@ const format_review_date = (date: string | Date): string => {
  * @param {string | Date | undefined} date to check against
  * @returns number of days that today is after date
  */
-const review_date_passed = (date: string | Date | undefined): number | boolean => {
-  if (!date) return false;
+const review_date_passed = (date: string | Date | undefined): number => {
+  if (!date) return -1;
 
   // create dates
   const today = new Date();

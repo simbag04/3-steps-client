@@ -32,7 +32,7 @@ export const AllCourses = () => {
   return (
     <div className="flex vertical center large-gap text-center">
       <h1>All Courses</h1>
-      <div className="navigation unit">
+      <div className="navigation course">
         {/* Links to all available coures */}
         {courses &&
           courses.map((course) => {
