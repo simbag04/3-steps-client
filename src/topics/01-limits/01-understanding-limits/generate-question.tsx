@@ -32,14 +32,14 @@ const graphToLimit = (): Question => {
   // question content
   const question = <div className="flex vertical center medium-gap">
     <h2>Which limit best represents the graph?</h2>
-    <h3>Graph of <Latex expression={` g(x) `} inline={true}></Latex></h3>
+    <h3>Graph of <Latex expression={` g(x) `} ></Latex></h3>
     <LimitExampleGraph f={f} xval={x} y={y}
       fColor={"f"} xColor={"x"} yColor={"y"} size={GRAPH_SIZE} />
   </div>
 
   // generate options
   const o1 = {
-    component: <Latex expression={` {\\lim}_{{x \\to ${x}}}{g(x)} = ${realY} `} inline={true} />,
+    component: <Latex expression={` {\\lim}_{{x \\to ${x}}}{g(x)} = ${realY} `} />,
     correct: true
   }
 
@@ -58,26 +58,45 @@ const graphToLimit = (): Question => {
     const rand = getRandomWithExclusions(-7, 7, [realY])
     ex = `{\\lim}_{{x \\to ${x}}}{g(x)} = ${rand}`;
   }
-  o2.component = <Latex expression={` ${ex} `} inline={true} />
+  o2.component = <Latex expression={` ${ex} `} />
 
   const input = shuffleArray([o1, o2]);
   const type = 'mc'
 
   const hints = [
-    <div>Recall the definition of a limit:
-      <Latex expression={`\\lim_{x \\to a} f(x) = L`} inline={true} />
-    </div>,
-    <div>In this graph, what is <Latex expression={`x`} inline={true} /> approaching? What is <Latex expression={`y`} inline={true} /> approaching?</div>
+    <>
+      <div>
+        Recall the definition of a limit: <Latex expression={`\\lim_{x \\to a} f(x) = L`} />
+      </div>
+      <div>
+        This is read as "the limit of <Latex expression="f(x)" /> as <Latex expression="x" /> approaches <Latex expression="a" /> is <Latex expression="L" />."
+      </div>
+    </>,
+    <>
+      <div>
+        This means that the <Latex expression="x" /> value the function is approaching is <Latex expression="a" />, and the <Latex expression="y" /> value is <Latex expression="L" />.
+      </div>
+      <div>
+        In this graph, what value is <Latex expression={`x`} /> approaching? What is <Latex expression={`y`} /> approaching?
+      </div>
+    </>,
+    <>
+      <div>
+        Looking at the arrows on the graph, it is clear that <Latex expression="x" /> is approaching <Latex classes="bold" expression={`${x}`} />, and <Latex expression="y" /> is approaching <Latex classes="bold" expression={`${realY}`} />.
+      </div>
+    </>,
+    <>
+      <div className="flex vertical center medium-gap">
+        Thus, the correct answer is:
+        <div className="correct ans">
+          {o1.component}
+        </div>
+      </div>
+    </>
   ]
 
-  const explain = [
-    <div>
-      {question}
-      <span className="flex"></span>
-    </div>
-  ]
 
-  return { title, question, input, type, hints, explain }
+  return { title, question, input, type, hints }
 }
 
 /**
@@ -107,13 +126,13 @@ const limitToGraph = (): Question => {
   const question =
     <div className="flex vertical center medium-gap">
       <h2>Which graph best represents the limit?</h2>
-      <Latex expression={` {\\lim}_{{x \\to ${x1}}}{g(x)} = ${realY1} `} inline={true} />
+      <Latex expression={` {\\lim}_{{x \\to ${x1}}}{g(x)} = ${realY1} `} />
     </div>
 
   // generate options
   const o1 = {
     component: <div className="flex vertical center medium-gap">
-      <h3>Graph of <Latex expression={` g(x) `} inline={true} /></h3>
+      <h3>Graph of <Latex expression={` g(x) `} /></h3>
       <LimitExampleGraph f={f1} xval={x1} y={y1} fColor={"f"} xColor={"x"} yColor={"y"} size={GRAPH_SIZE} />
     </div>,
     correct: true
@@ -136,7 +155,7 @@ const limitToGraph = (): Question => {
 
   const o2 = {
     component: <div className="flex vertical center medium-gap">
-      <h3>Graph of <Latex expression={` g(x) `} inline={true} /></h3>
+      <h3>Graph of <Latex expression={` g(x) `} /></h3>
       <LimitExampleGraph f={f2} xval={x2} y={y2} fColor={"f"} xColor={"x"} yColor={"y"} size={GRAPH_SIZE} />
     </div>,
     correct: false
@@ -145,18 +164,32 @@ const limitToGraph = (): Question => {
   const input = shuffleArray([o1, o2]);
   const type = 'mc'
 
-  const hints1 = <div>Recall the definition of a limit:
-    <Latex expression={`\\ {\\lim}`} inline={true} />
-    <Latex expression={`_{x \\to a}`} inline={true} />
-    <Latex expression={`f(x)`} inline={true} />
-    <Latex expression={`\\ =\\ `} inline={true} />
-    <Latex expression={`\\ L `} inline={true} />
-  </div>
-
-
-  const hints2 = <div>Which graph accurately shows the correct <Latex expression={`x`} inline={true} /> value approaching the correct <Latex expression={`y`} inline={true} /> value?</div>
-
-  const hints = [hints1, hints2];
+  const hints = [
+    <>
+      <div>
+        Recall the definition of a limit: <Latex expression={`\\lim_{x \\to a} f(x) = L`} />
+      </div>
+      <div>
+        This is read as "the limit of <Latex expression="f(x)" /> as <Latex expression="x" /> approaches <Latex expression="a" /> is <Latex expression="L" />."
+      </div>
+    </>,
+    <>
+      <div>
+        This means that the <Latex expression="x" /> value the function is approaching is <Latex expression="a" />, and the <Latex expression="y" /> value is <Latex expression="L" />.
+      </div>
+      <div>
+        Thus, we are looking for a graph where <Latex expression="x" /> is approaching <Latex classes="bold" expression={`${x1}`} />, and <Latex expression="y" /> is approaching <Latex classes="bold" expression={`${realY1}`} />.
+      </div>
+    </>,
+    <>
+      <div className="flex vertical center medium-gap">
+        Looking at both graphs, the correct answer is:
+        <div className="hint-ans input correct ans">
+          {o1.component}
+        </div>
+      </div>
+    </>
+  ]
 
   return { title, question, input, type, hints }
 }

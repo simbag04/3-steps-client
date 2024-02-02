@@ -30,7 +30,7 @@ interface PracticeProps {
 export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, numProblems }) => {
   const [goToNext, setGoToNext] = useState(false); // manages whether it's time to go to the next question
   const [newQ, setNewQ] = useState(false); // renders new question on change
-  const correctRef = useRef<boolean | undefined>(); // stores whether current answer is correct
+  const correctRef = useRef<boolean | null>(null); // stores whether current answer is correct
   const [qFunction, setQFunction] = useState(() => (): Question | null => { return null }); // function to generate question
   const [currQ, setCurrQ] = useState<Question | null>(null); // current question information
   const [showMastered, setShowMastered] = useState(false) // stores whether to show mastered page

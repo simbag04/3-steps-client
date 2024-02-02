@@ -26,7 +26,7 @@ export const Hints: React.FC<HintsProps> = ({ currQ, explain, scroll, firstExpla
       let obj = document.getElementById("hints-section")
       window.scrollTo({ top: obj.offsetTop - height, behavior: "smooth" })
     }
-  }, [scroll, firstExplainRender])
+  }, [scroll, firstExplainRender, height])
 
   return (
     <div id="hints-section" style={{ minHeight: `calc(100vh - ${height}px - 20px)` }}>

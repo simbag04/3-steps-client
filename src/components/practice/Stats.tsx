@@ -151,7 +151,7 @@ export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, go
 
     correctRef.current = null;
     setNewQ(newQ => !newQ);
-  }, [setGoToNext, setText, correctRef, setNewQ]);
+  }, [setGoToNext, setText, correctRef, setNewQ, setShowExplain, setShowHints]);
 
   const showHintsFunction = () => {
     setShowHints(true);
