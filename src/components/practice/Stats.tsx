@@ -26,10 +26,12 @@ interface StatsProps {
   hintsUsed: boolean, // state for what hint the user is currently on
   setHintsUsed: Function, // state for what hint the user is currently on
   setTitleWord: Function, // state for "Practice" or "Review" in title
-  moveStatsDown: string // whether stats is below question, meaning it should be styled horizontally
+  moveStatsDown: string, // whether stats is below question, meaning it should be styled horizontally
+  setShowExplain: Function,
+  hintsRef: React.RefObject<HTMLDivElement>
 }
 
-export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed, setTitleWord, moveStatsDown }) => {
+export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, goToNext, setGoToNext, setNewQ, setShowMastered, numProblems, setStars, setShowHints, hintsUsed, setHintsUsed, setTitleWord, moveStatsDown, setShowExplain, hintsRef }) => {
   const [text, setText] = useState(""); // feedback text, such as "Incorrect"
   const [feedback, setFeedback] = useState(""); // added to feedback element classes for styling
   const [dbEntry, setDbEntry] = useState<UserTopicEntry | null>(null); // entry for this user for this topic in DB
@@ -145,6 +147,9 @@ export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, go
     setText("");
     setFeedback("")
     setGoToNext(false);
+    setShowHints(false);
+    setShowExplain(false)
+
     correctRef.current = null;
     setNewQ(newQ => !newQ);
   }, [setGoToNext, setText, correctRef, setNewQ]);
@@ -152,19 +157,24 @@ export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, go
   const showHints = () => {
     setShowHints(true);
     setHintsUsed(true);
+    setShowHintsInfo(false)
+  }
+
+  const showExplain = () => {
+    setShowExplain(true)
   }
 
   const login = () => nav('/login');
   const register = () => nav('/register');
 
-  const handleMouseEnter = () => {
+  const handleMouseEnterHints = () => {
     if (hintsButtonRef.current) {
       setShowHintsInfo(true);
       setHintsInfoPos({ x: hintsButtonRef.current.offsetLeft, y: hintsButtonRef.current.offsetTop });
     }
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseLeaveHints = () => {
     setShowHintsInfo(false);
   };
 
@@ -215,7 +225,8 @@ export const Stats: React.FC<StatsProps> = ({ cname, uname, name, correctRef, go
             {/* Buttons shown based on state variables */}
             {!goToNext && <button onClick={checkAnswer}><strong>Check</strong></button>}
             {goToNext && <button onClick={nextQuestion}><strong>Next</strong></button>}
-            {!goToNext && <button onClick={showHints} ref={hintsButtonRef} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}><strong>I Need a Hint!</strong></button>}
+            {!goToNext && showHints && !hintsUsed && <button onClick={showHints} ref={hintsButtonRef} onMouseEnter={handleMouseEnterHints} onMouseLeave={handleMouseLeaveHints}><strong>I Need a Hint!</strong></button>}
+            {goToNext && <button onClick={showExplain}><strong>Explain</strong></button>}
             <button onClick={backToTopicsButtonHandler}><strong>Back to Topics</strong></button>
           </div>
 

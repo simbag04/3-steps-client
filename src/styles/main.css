@@ -2,6 +2,7 @@
   --header-padding: 40px;
   --padding: 20px;
   --small-padding: 10px;
+  --section-gap: 60px;
   --huge-gap: 40px;
   --large-gap: 20px;
   --medium-gap: 14px;
@@ -83,6 +84,10 @@ ol, ul {
 
 .center {
   align-items: center;
+}
+
+.section-gap {
+  gap: var(--section-gap)
 }
 
 .large-gap {

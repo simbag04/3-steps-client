@@ -5,12 +5,15 @@ import { Outlet } from "react-router-dom"
 import '../styles/navbar.css'
 import { NavLinks } from "./NavLinks";
 import menu from '../svgs/menu.svg'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import { HeaderHeightContext } from "../App";
 
 export const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState("");
+  const { setHeight } = useContext(HeaderHeightContext)
+  let container = useRef(null)
   const nav = useNavigate();
 
   const goHome = () => nav("/")
@@ -32,9 +35,11 @@ export const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => setHeight(container.current.offsetHeight))
+
   return (
-    <>
-      <span className="navbar flex horizontal center">
+    <div>
+      <span className="navbar flex horizontal center" ref={container}>
         <h1 className="logo" onClick={goHome}>3 Steps</h1>
         <div className="links flex horizontal center">
           <NavLinks></NavLinks>
@@ -47,6 +52,6 @@ export const Navbar = () => {
       <div className="body">
         <Outlet></Outlet>
       </div>
-    </>
+    </div>
   )
 }

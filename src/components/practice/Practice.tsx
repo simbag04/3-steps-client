@@ -15,6 +15,7 @@ import { EditableMathField, addStyles } from "react-mathquill";
 import Latex from "../latex/Latex"
 import { Question } from "../../@types/Question";
 import { StarInfo } from "../../@types/StarInfo";
+import { Explain } from "./Explain";
 const math = require("mathjs")
 
 addStyles()
@@ -35,6 +36,7 @@ export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, n
   const [currQ, setCurrQ] = useState<Question | null>(null); // current question information
   const [showMastered, setShowMastered] = useState(false) // stores whether to show mastered page
   const [stars, setStars] = useState<StarInfo | null>(null); // stores stars info for user for this topic
+  const [showExplain, setShowExplain] = useState(false)
   const [showHints, setShowHints] = useState(false); // stores whether to show hints page
   const [hintsIndex, setHintsIndex] = useState(0); // stores what hint user is on
   const [hintsUsed, setHintsUsed] = useState(false); // stores whether hints were used
@@ -52,6 +54,7 @@ export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, n
   const windowWidth = useWindowSize()[0]; // width of window
   const originalWidthRef = useRef(null); // width of question without wrapping
   const mathRef = useRef(null);
+  const hintsRef = useRef(null)
 
   // dynamically import relevant topic question
   useEffect(() => {
@@ -181,86 +184,88 @@ export const Practice: React.FC<PracticeProps> = ({ cname, uname, name, title, n
   }, [goToNext])
 
   return (
-    <div className="flex vertical center medium-gap practice text-center">
-      {!showHints ?
-        !showMastered ?
-          <>
-            <span className="flex vertical center text-center">
-              {/* Title with stars */}
-              <h1 className="title flex horizontal center small-gap">
-                <span>{title}: {titleWord}</span>
-              </h1>
-              {stars !== null ?
-                <Stars star_goal={stars.star_goal} star_2={stars.star_2} star_3={stars.star_3} streak={stars.streak} current_streak={stars.current_streak} /> : null}
-            </span>
-            {/* Beginning of Question */}
-            {currQ && currQ.title}
-            <div className={"practice-section " + moveStatsDown}>
-              <div className="question flex vertical center medium-gap" ref={questionRef}>
-                {currQ && currQ.question}
+    <div className="flex vertical center practice text-center">
+      {!showMastered ?
+        <div className="flex vertical center medium-gap practice text-center">
+          <span className="flex vertical center text-center">
+            {/* Title with stars */}
+            <h1 className="title flex horizontal center small-gap">
+              <span>{title}: {titleWord}</span>
+            </h1>
+            {stars !== null ?
+              <Stars star_goal={stars.star_goal} star_2={stars.star_2} star_3={stars.star_3} streak={stars.streak} current_streak={stars.current_streak} /> : null}
+          </span>
+          {/* Beginning of Question */}
+          {currQ && currQ.title}
+          <div className={"practice-section " + moveStatsDown}>
+            <div className="question flex vertical center medium-gap" ref={questionRef}>
+              {currQ && currQ.question}
 
-                {/* Multiple choice input */}
-                {currQ && currQ.type === 'mc' &&
-                  <div className={`options ` + wrap}>
-                    {currQ.input && currQ.input.map((option, index) => {
-                      return (
-                        <label key={index}
-                          className={`input ${selectedOption === option ? classes : ""} ${option.correct && goToNext ? "correct" : ""}`}
-                          onClick={() => handleClick(option)}>
-                          {option.component}
-                        </label>
-                      )
-                    })}
-                  </div>
-                }
+              {/* Multiple choice input */}
+              {currQ && currQ.type === 'mc' &&
+                <div className={`options ` + wrap}>
+                  {currQ.input && currQ.input.map((option, index) => {
+                    return (
+                      <label key={index}
+                        className={`input ${selectedOption === option ? classes : ""} ${option.correct && goToNext ? "correct" : ""}`}
+                        onClick={() => handleClick(option)}>
+                        {option.component}
+                      </label>
+                    )
+                  })}
+                </div>
+              }
 
-                {/* FRQ Input */}
-                {currQ && currQ.type === 'frq' &&
-                  <span className="flex horizontal center medium-gap">
-                    {currQ.nextToInput}
-                    <input type="text" onChange={handleInput} value={textInput} className={`input ${classes}`}></input>
-                    {goToNext && !correctRef.current ?
-                      <div className="correct ans">
-                        {currQ.ans}
-                      </div> : null}
-                  </span>
-                }
+              {/* FRQ Input */}
+              {currQ && currQ.type === 'frq' &&
+                <span className="flex horizontal center medium-gap">
+                  {currQ.nextToInput}
+                  <input type="text" onChange={handleInput} value={textInput} className={`input ${classes}`}></input>
+                  {goToNext && !correctRef.current ?
+                    <div className="correct ans">
+                      {currQ.ans}
+                    </div> : null}
+                </span>
+              }
 
-                {/* Math Input */}
-                {currQ && currQ.type === 'math' &&
-                  <span className="flex horizontal center medium-gap">
-                    {currQ.nextToInput}
-                    <div className="flex horizontal center small-gap">
-                      <div className={`mathquill input ${classes}`}>
-                        <EditableMathField
-                          latex={textInput}
-                          onChange={handleMathInput}
-                          mathquillDidMount={(mathField) => (mathRef.current = mathField)} />
-                      </div>
-                      {currQ && currQ.math_input_buttons && currQ.math_input_buttons.includes("infinity") && !goToNext ?
-                        <button className="math-symbol-input" onClick={inf}><Latex expression={`\\infty`} /></button> :
-                        <></>}
+              {/* Math Input */}
+              {currQ && currQ.type === 'math' &&
+                <span className="flex horizontal center medium-gap">
+                  {currQ.nextToInput}
+                  <div className="flex horizontal center small-gap">
+                    <div className={`mathquill input ${classes}`}>
+                      <EditableMathField
+                        latex={textInput}
+                        onChange={handleMathInput}
+                        mathquillDidMount={(mathField) => (mathRef.current = mathField)} />
                     </div>
+                    {currQ && currQ.math_input_buttons && currQ.math_input_buttons.includes("infinity") && !goToNext ?
+                      <button className="math-symbol-input" onClick={inf}><Latex expression={`\\infty`} /></button> :
+                      <></>}
+                  </div>
 
-                    {goToNext && !correctRef.current ?
-                      <div className="correct ans">
-                        {currQ.ans.includes(`\\infty`) ? <Latex expression={currQ.ans} /> :
-                          currQ.ans}
-                      </div> : null}
-                  </span>
-                }
-              </div>
-
-              {/* Stats box */}
-              <Stats cname={cname} uname={uname} name={name} correctRef={correctRef}
-                goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered} setStars={setStars}
-                setShowHints={setShowHints} hintsUsed={hintsUsed} setHintsUsed={setHintsUsed} setTitleWord={setTitleWord} moveStatsDown={moveStatsDown}></Stats>
+                  {goToNext && !correctRef.current ?
+                    <div className="correct ans">
+                      {currQ.ans.includes(`\\infty`) ? <Latex expression={currQ.ans} /> :
+                        currQ.ans}
+                    </div> : null}
+                </span>
+              }
             </div>
-          </> :
-          <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered} stars={stars} />
-        : currQ && currQ.hints &&
-        <Hints currQ={currQ} setShowHints={setShowHints} hintsIndex={hintsIndex} setHintsIndex={setHintsIndex} />
-      }
+
+            {/* Stats box */}
+            <Stats cname={cname} uname={uname} name={name} correctRef={correctRef}
+              goToNext={goToNext} setGoToNext={setGoToNext} setNewQ={setNewQ} numProblems={numProblems} setShowMastered={setShowMastered} setStars={setStars}
+              setShowHints={setShowHints} hintsUsed={hintsUsed} setHintsUsed={setHintsUsed} setTitleWord={setTitleWord} moveStatsDown={moveStatsDown} setShowExplain={setShowExplain} hintsRef={hintsRef}></Stats>
+          </div>
+        </div> :
+        <Mastered cname={cname} uname={uname} name={name} title={title} setShowMastered={setShowMastered} stars={stars} />}
+      
+      {showHints && !showExplain && currQ && currQ.hints &&
+        <Hints currQ={currQ} setShowHints={setShowHints} hintsIndex={hintsIndex} setHintsIndex={setHintsIndex} />}
+
+      {showExplain && currQ && currQ.explain &&
+        <Explain setShowExplain={setShowExplain} currQ={currQ}></Explain>}
     </div>
   );
 }

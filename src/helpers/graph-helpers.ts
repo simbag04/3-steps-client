@@ -47,7 +47,7 @@ const generateFunctionData = (f: Function, min: number, max: number, dataGap: nu
  */
 const createFunctionGraph = (svg: any, f: Function, width: number, height: number,
   color: string, xScale: any, yScale: any, classes: string, min: number,
-  max: number, leftArrow: boolean, rightArrow: boolean, type: string, dataGap: number): GraphFunctionData => {
+  max: number, leftArrow: boolean, rightArrow: boolean, type?: string, dataGap?: number): GraphFunctionData => {
 
   let data = generateFunctionData(f, min, max, dataGap); // generate data
 
@@ -467,7 +467,7 @@ const findOffsets = (points: LimitPoints, axisOffset: number): DataPoint => {
  * @returns points of the line in svg scale
  */
 
-const createFunctionLimitLine = (svg: any, functionLine: any, pathLength: number, xScale: any, yScale: any, line: Function, fColor: string, right: boolean, markerName: string): { closePoint: DataPoint, farPoint: DataPoint } => {
+const createFunctionLimitLine = (svg: any, functionLine: any, pathLength: number, xScale: any, yScale: any, line: Function, fColor: string, right: boolean, markerName?: string): { closePoint: DataPoint, farPoint: DataPoint } => {
 
   // modify lengths based on if the arrow is from the left or the right
   let farDistLength = xScale(FAR_DIST) - xScale(0);

@@ -25,11 +25,18 @@ export type UserContextType = {
   setUser: Function
 }
 
+export type HeaderHeightContextType = {
+  height: number,
+  setHeight: Function
+}
+
 export const ApiContext = createContext(null);
 export const UserContext = createContext<UserContextType>(null);
+export const HeaderHeightContext = createContext<HeaderHeightContextType>(null)
 
 function App() {
   const [user, setUser] = useState(null);
+  const [height, setHeight] = useState(null)
   const parseJwt = (token) => {
     try {
       return JSON.parse(atob(token.split(".")[1]))
@@ -64,23 +71,25 @@ function App() {
     <div>
       <ApiContext.Provider value={'https://three-steps-api.onrender.com'}>
         <UserContext.Provider value={{ user, setUser }}>
-          <HashRouter>
-            <Routes>
-              <Route path="/" element={<Navbar />}>
-                <Route index element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/logout" element={<Logout />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/courses" element={<AllCourses />} />
-                <Route path="/:cname" element={<Course />} />
-                <Route path="/:cname/:uname" element={<Unit />} />
-                <Route path="/:cname/:uname/:name/learn"
-                  element={<RenderLearnComponent />} />
-                <Route path="/:cname/:uname/:name/practice"
-                  element={<RenderPracticeComponent />} />
-              </Route>
-            </Routes>
-          </HashRouter>
+          <HeaderHeightContext.Provider value={{height, setHeight}}>
+            <HashRouter>
+              <Routes>
+                <Route path="/" element={<Navbar />}>
+                  <Route index element={<Home />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/logout" element={<Logout />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/courses" element={<AllCourses />} />
+                  <Route path="/:cname" element={<Course />} />
+                  <Route path="/:cname/:uname" element={<Unit />} />
+                  <Route path="/:cname/:uname/:name/learn"
+                    element={<RenderLearnComponent />} />
+                  <Route path="/:cname/:uname/:name/practice"
+                    element={<RenderPracticeComponent />} />
+                </Route>
+              </Routes>
+            </HashRouter>
+          </HeaderHeightContext.Provider>
         </UserContext.Provider>
       </ApiContext.Provider>
     </div >

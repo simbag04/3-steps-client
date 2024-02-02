@@ -119,3 +119,7 @@ div.correct.ans {
   padding: var(--padding);
   border-radius: var(--border-radius);
 }
+
+.hints-section {
+  padding-top: 40px;
+}

@@ -31,7 +31,7 @@ const graphToLimit = (): Question => {
 
   // question content
   const question = <div className="flex vertical center medium-gap">
-    <h2>Which limit best represents the graph?</h2> 
+    <h2>Which limit best represents the graph?</h2>
     <h3>Graph of <Latex expression={` g(x) `} inline={true}></Latex></h3>
     <LimitExampleGraph f={f} xval={x} y={y}
       fColor={"f"} xColor={"x"} yColor={"y"} size={GRAPH_SIZE} />
@@ -63,20 +63,21 @@ const graphToLimit = (): Question => {
   const input = shuffleArray([o1, o2]);
   const type = 'mc'
 
-  const hints1 = <div>Recall the definition of a limit:
-    <Latex expression={`\\ {\\lim}`} inline={true} />
-    <Latex expression={`_{x \\to a}`} inline={true} />
-    <Latex expression={`f(x)`} inline={true} />
-    <Latex expression={`\\ =\\ `} inline={true} />
-    <Latex expression={`\\ L `} inline={true} />
-  </div>
+  const hints = [
+    <div>Recall the definition of a limit:
+      <Latex expression={`\\lim_{x \\to a} f(x) = L`} inline={true} />
+    </div>,
+    <div>In this graph, what is <Latex expression={`x`} inline={true} /> approaching? What is <Latex expression={`y`} inline={true} /> approaching?</div>
+  ]
 
+  const explain = [
+    <div>
+      {question}
+      <span className="flex"></span>
+    </div>
+  ]
 
-  const hints2 = <div>In this graph, what is <Latex expression={`x`} inline={true}/> approaching? What is <Latex expression={`y`} inline={true}/> approaching?</div>
-
-  const hints = [hints1, hints2];
-
-  return { title, question, input, type, hints }
+  return { title, question, input, type, hints, explain }
 }
 
 /**
@@ -104,10 +105,10 @@ const limitToGraph = (): Question => {
   }
 
   const question =
-  <div className="flex vertical center medium-gap">
-    <h2>Which graph best represents the limit?</h2>
-    <Latex expression={` {\\lim}_{{x \\to ${x1}}}{g(x)} = ${realY1} `} inline={true} />
-  </div>
+    <div className="flex vertical center medium-gap">
+      <h2>Which graph best represents the limit?</h2>
+      <Latex expression={` {\\lim}_{{x \\to ${x1}}}{g(x)} = ${realY1} `} inline={true} />
+    </div>
 
   // generate options
   const o1 = {
@@ -153,7 +154,7 @@ const limitToGraph = (): Question => {
   </div>
 
 
-  const hints2 = <div>Which graph accurately shows the correct <Latex expression={`x`} inline={true}/> value approaching the correct <Latex expression={`y`} inline={true}/> value?</div>
+  const hints2 = <div>Which graph accurately shows the correct <Latex expression={`x`} inline={true} /> value approaching the correct <Latex expression={`y`} inline={true} /> value?</div>
 
   const hints = [hints1, hints2];
 

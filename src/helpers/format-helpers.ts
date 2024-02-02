@@ -3,8 +3,8 @@
  * @param {string | Date} date to format
  * @returns formatted date string similar to "Aug 12, 2023"
  */
-const format_review_date = (date: string | Date): string => {
-  const d = new Date(date);
+const format_review_date = (date: string | String | Date): string => {
+  const d = new Date(date.toString());
   // format: Feb 1, 2024, 4:00 PM
   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: "numeric", hour:"numeric", hourCycle: "h12",  minute: "numeric" }
 
