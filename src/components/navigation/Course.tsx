@@ -100,13 +100,13 @@ export const Course = () => {
                 <h2>{unit.name}</h2>
                 {unitsInfo[i] ?
                   <>
-                    <span className={`flex horizontal center medium-gap unit-stars ${unitsInfo[i].review > 0 ? "review" : "reviewed"}`} key={i}>
+                    <span className={`flex horizontal center medium-gap unit-stars`} key={i}>
                       <span className="flex horizontal center"><img className="star" src={bronzeStar} alt="star" />: {unitsInfo[i].bronze}/{unitsInfo[i].sum}</span>
                       <span className="flex horizontal center"><img className="star" src={silverStar} alt="star" />: {unitsInfo[i].silver}/{unitsInfo[i].sum}</span>
                       <span className="flex horizontal center"><img className="star" src={goldStar} alt="star" />: {unitsInfo[i].gold}/{unitsInfo[i].sum}</span>
 
                     </span>
-                    <span className={`unit-review medium-font ${unitsInfo[i].review > 0 ? "review" : "reviewed"}`}>
+                    <span className={`flex center unit-review`}>
                       {unitsInfo[i].review > 0 ?
                         <>
                           {unitsInfo[i].review} skills to review!
