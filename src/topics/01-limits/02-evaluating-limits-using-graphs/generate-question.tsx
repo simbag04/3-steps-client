@@ -73,14 +73,35 @@ const asymptoticGraphQuestion = (): any => {
   </span>
 
   const hints = [
-    <div className="flex vertical center small-gap">
-      <span>{nextToInput} ?</span>
-      Focus on x = {val} on the graph.
-      {question}
-    </div>,
     <div>
-      What can we say about the limit at a point where the function appears to be boundless?
-    </div>
+      Focus on <Latex expression={`x = ${val}`} /> on the graph.
+    </div>,
+    <>
+      <div>
+        Recall that there are 3 cases when a limit doesn't exist:
+      </div>
+      <div>
+        <ol className="start">
+          <li>
+            When the limit from the left does not equal the right.
+          </li>
+          <li>
+            When the graph is approaching positive or negative infinity at the point.
+          </li>
+          <li>
+            When the graph is oscillating at the point.
+          </li>
+        </ol>
+      </div>
+    </>,
+    <>
+      <div>
+        In this case, it is clear that the graph is approaching positive or negative infinity at <Latex expression={`x = ${val}`} />. Thus, the correct answer is:
+      </div>
+      <div className="hint-ans input correct ans">
+        dne
+      </div>
+    </>
   ]
 
   return { question, ans, type, nextToInput, hints }
@@ -211,21 +232,55 @@ const jumpGraphQuestion = (): any => {
     <Latex classes="bold" expression={`\\lim_{x \\to ${qX + signText}}g(x)`} inline={true} /> =
   </span>
 
+  const hintsAnsComponent = <div className="hint-ans input correct ans">
+    {ans}
+  </div>
+
   const hints = [
-    <div className="flex vertical center small-gap">
-      <span>{nextToInput} ?</span>
-      Focus on x = {qX} on the graph.
-      {question}
+    <div>
+      First, look at the value we are trying to find. Are we interested in the limit from the left, right, or both directions?
     </div>,
     <div>
-      Are we interested in the limit from the left, right, or both directions?
+      In this case, since we {sign === 2 ? "don't" : ""} see a {sign === 2 ? "plus or minus" : sign === 1 ? "plus" : "minus"} sign on the top right of the number <Latex expression="x" /> is approaching, we are interested in the limit from {sign === 2 ? <strong>both sides</strong> : sign === 1 ? <>the <strong>right</strong></> : <>the <strong>left</strong></>}.
     </div>,
     <div>
-      {ans === 'dne' ? "What do we know about limits at point where there is a jump in the graph?" :
-        sign === 2 ? `Looking at the graph, what do we know about the asked limit?` :
-          "Which sub-function graph should we look at to get our answer?"}
+      Now, focus on <Latex expression={`x = ${qX}`} /> on the graph.
     </div>
   ]
+
+  if (sign === 2) {
+    if (ans === "dne") {
+      hints.push(
+        <div>
+          At <Latex expression={`x = ${qX}`} />, is the limit the same from the left and the right side?
+        </div>,
+        <>
+          <div>
+            Since the limits aren't the same from both sides, the limit doesn't exist. Thus, the correct answer is:
+          </div>
+          {hintsAnsComponent}
+        </>
+      )
+    } else {
+      hints.push(
+        <>
+          <div>
+            At <Latex expression={`x = ${qX}`} />, we can see the graph approaching <Latex classes="bold" expression={ans} /> from both sides. Thus, the correct answer is:
+          </div>
+          {hintsAnsComponent}
+        </>
+      )
+    }
+  } else {
+    hints.push(
+      <>
+        <div>
+          From the {sign === 1 ? "right" : "left"} of <Latex expression={`x = ${qX}`} />, we can see the graph is approaching <Latex classes="bold" expression={ans} />. Thus, the correct answer is:
+        </div>
+        {hintsAnsComponent}
+      </>
+    )
+  }
 
   return { question, ans, type, nextToInput, hints }
 }
@@ -274,14 +329,35 @@ const oscillatingGraphQuestion = (): any => {
   </span>
 
   const hints = [
-    <div className="flex vertical center small-gap">
-      <span>{nextToInput} ?</span>
-      Focus on x = {horizShift} on the graph.
-      {question}
-    </div>,
     <div>
-      What can we say about the limit of a function at a point where the function is oscillating?
-    </div>
+      Focus on <Latex expression={`x = ${horizShift}`} /> on the graph.
+    </div>,
+    <>
+      <div>
+        Recall that there are 3 cases when a limit doesn't exist:
+      </div>
+      <div>
+        <ol className="start">
+          <li>
+            When the limit from the left does not equal the right.
+          </li>
+          <li>
+            When the graph is approaching positive or negative infinity at the point.
+          </li>
+          <li>
+            When the graph is oscillating at the point.
+          </li>
+        </ol>
+      </div>
+    </>,
+    <>
+      <div>
+        In this case, it is clear that the graph is oscillating at <Latex expression={`x = ${horizShift}`} />. Thus, the correct answer is:
+      </div>
+      <div className="hint-ans input correct ans">
+        dne
+      </div>
+    </>
   ]
 
   return { question, ans, type, nextToInput, hints }
