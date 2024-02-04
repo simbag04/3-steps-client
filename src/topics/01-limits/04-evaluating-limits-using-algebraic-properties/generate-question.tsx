@@ -5,7 +5,6 @@ import { convertArrayToObject, generateLimitTableData, generateOrderedValues, ge
 import Latex from "../../../components/latex/Latex";
 import * as math from "mathjs"
 import { GRAPH_SIZE, COLORS } from "../../../helpers/constants";
-import { LimitPropertyRules } from "./LimitPropertyRules";
 import React from "react";
 import { Question } from "../../../@types/Question";
 import { GraphFunction } from "../../../@types/GraphFunction";
@@ -63,6 +62,11 @@ const limitPropertyQuestion = (): Question => {
 
   // format expression
   expression = math.simplifyCore(expression).toTex({ parenthesis: 'auto' });
+  const replacedWithVals = expression.replaceAll('x', `(${functions[0].value})`)
+    .replaceAll('y', `(${functions[1].value})`)
+    .replaceAll(`~`, '')
+    .replaceAll(`~{`, `{`)
+
   expression = expression.replaceAll('x', 'f(x)')
   expression = expression.replaceAll('y', 'g(x)')
   expression = expression.replaceAll('~', '')
@@ -77,17 +81,34 @@ const limitPropertyQuestion = (): Question => {
 
   // hints
   const hints = [
-    <div className="flex vertical center medium-gap">
-      <span>First, evaluate <Latex expression={`\\lim_{x \\to ${xVal}} f(x)`} /> using the table and <Latex expression={`\\lim_{x \\to ${xVal}} g(x)`} /> using the graph. </span>
-      {table} 
-      {graph}
-    </div>,
-    <div className="flex vertical center medium-gap">
-      Now, what is the easiest way to evaluate the limit, knowing the below list of properties? 
-      <LimitPropertyRules />
-    </div>
+    <>
+      <div>
+        First, evaluate <Latex expression={`\\lim_{x \\to ${xVal}} f(x)`} /> using the table and <Latex expression={`\\lim_{x \\to ${xVal}} g(x)`} /> using the graph.
+      </div>
+    </>,
+    <>
+      <div>
+        You should find that <Latex expression={`\\lim_{x \\to ${xVal}} f(x) = ${functions[0].value}`} /> and <Latex expression={`\\lim_{x \\to ${xVal}} g(x) = ${functions[1].value}`} />.
+      </div>
+    </>,
+    <>
+      <div>
+        Now, remember we can just directly substitute in these values into the limit, like this:
+      </div>
+      <div>
+        <Latex expression={`\\lim_{x \\to ${xVal}} \\left[${expression}\\right] = ${replacedWithVals}`} display={true} />
+      </div>
+    </>,
+    <>
+      <div>
+        Simplifying this, the correct answer is:
+      </div>
+      <div className="hint-ans input correct ans">
+        {ans}
+      </div>
+    </>
   ]
-  
+
   return { question, title, ans, type: 'math', nextToInput, hints }
 
 }

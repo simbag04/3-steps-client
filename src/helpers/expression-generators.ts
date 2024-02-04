@@ -329,15 +329,15 @@ const generateLimitPropertyTerm = (functions: FunctionValue[], operators: string
  * @returns generated term and updated multipliedAns
  */
 const generateSpecialTrig =
-  (degree: number, multipliedAns: string, denominator: boolean): 
-  { term: string, multipliedAns: string } => {
+  (degree: number, multipliedAns: string, denominator: boolean): { term: string, multipliedAns: string, functions: Array<any> } => {
     let term = "1"; // initialize term
     let exclusions = []; // coeffs that have already been used
+    let functions = []
 
     // iterate over degree
     for (let i = 0; i < degree;) {
       // while we are less than degree, generate random term
-      const trig = getRandomNumber(0, 9) > 7 || i > 0; // whether term is poly or trig
+      const trig = getRandomNumber(0, 9) >= 0 || i > 0; // whether term is poly or trig
       const exp = getRandomNumber(1, denominator ? degree - i - 1 : degree - i) // exp of term
       const expText = exp > 1 ? `^${exp}` : "";
 
@@ -354,14 +354,20 @@ const generateSpecialTrig =
 
         // term to generate
         if (getRandomNumber(0, 1) === 0 || denominator) {
-          term += `\\sin${expText}(${coeffText}x)`
+          const t = `\\sin${expText}(${coeffText}x)`
+          term += t
+          functions.push({ term: t, coeff, exp })
         } else {
-          term += `(1 - \\cos(${coeffText}x))${expText}`
+          const t = `(1 - \\cos(${coeffText}x))${expText}`
+          term += t
+          functions.push({ term: t, coeff, exp })
         }
       } else {
         // poly term
         multipliedAns = denominator ? multipliedAns + `(${coeff})` : `(${coeff})` + multipliedAns
-        term += `${coeffText}x${expText}`
+        const t = `${coeffText}x${expText}`
+        term += t
+        functions.push({ term: t, coeff, exp })
       }
       // increment i by degree that we added
       i += exp;
@@ -371,7 +377,7 @@ const generateSpecialTrig =
     if (term.length > 1) {
       term = term.substring(1)
     }
-    return { term, multipliedAns }
+    return { term, multipliedAns, functions }
   }
 
 export { generateRandomPolynomial, generateRandomPolynomialWithPoint, fitPointsToQuadratic, generateLimitPropertyTerm, getPolynomialFunctionWithPoint, getPolynomialFunction, fitPointsToQuadraticFractions, generateSpecialTrig }

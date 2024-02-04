@@ -73,15 +73,21 @@ const functionToTable = (): Question => {
   const type = 'mc'
 
   const hints = [
-    <div className="flex vertical center small-gap">
-      <div>Focus on <Latex expression={`x = ${xVal}`} />. Recall that a limit is about getting infinitely close to the xvalue.</div>
-      <div className="flex vertical center small-gap">
-        {option1.component}
+    <>
+      <div>
+        Focus on <Latex expression={`x = ${xVal}`} /> in both tables. Recall that a limit is about getting infinitely close to the <Latex expression="x" /> value.
+      </div>
+      <div>
+        This means we really need to "zoom in" on our <Latex expression="x" /> value.
+      </div>
+    </>,
+    <>
+      <div>
+        Thus, looking at both tables, it is clear that the correct answer is:
+      </div>
+      <div className="hint-ans input correct ans">
         {option2.component}
       </div>
-    </div>,
-    <>
-      <div>When using a table, we really need to "zoom in" near the x-value. Which table does that?</div>
     </>
   ]
 
@@ -116,7 +122,7 @@ const tableToLimit = (): Question => {
 
   const signText = sign === 0 ? `^\\textbf{-}` : sign === 1 ? `^\\textbf{+}` : ``;
   const nextToInput = <span>
-    <Latex expression={`\\lim_{x \\to ${xVal + signText}}g(x)`} inline={true} /> =
+    <Latex classes="bold" expression={`\\lim_{x \\to ${xVal + signText}}g(x)`} inline={true} /> =
   </span>
 
   const question = <div className="flex vertical center medium-gap">
@@ -130,20 +136,57 @@ const tableToLimit = (): Question => {
   const type = 'math';
 
   const hints = [
-    <div className="flex vertical center small-gap">
-      <div>We are focused on evaluating the limit as <Latex expression={`x`} /> approaches {xVal} from {sign === 0 ? "the left" : sign === 1 ? "the right" : "both sides"}. What side(s) do we see in the table?</div>
-      <FunctionTable xTitle={`x`} yTitle={`g(x)`} data={data} />
-    </div>,
     <>
-      {ans === "dne" ?
-        <div>
-          Does the table show the sides that we need?
-        </div> :
-        <div>
-          Look closely at the values in the table near <Latex expression={`x = ${xVal}`} />. What do they seem to be approaching?
-        </div>}
+      <div>
+        We want to evaluate the limit as <Latex expression={`x`} /> approaches {xVal} from {sign === 0 ? <>the <strong>left</strong></> : sign === 1 ? <>the <strong>right</strong></> : <strong>both sides</strong>}. What side(s) do we see in the table?
+      </div>
     </>
   ]
+
+  if (ans === "dne") {
+    hints.push(
+      <>
+        <div>
+          Looking at the table, we only have data to the <strong>{xVal === startX ? "right" : "left"}</strong> of <Latex expression={`x = ${xVal}`} />, not {xVal === endX ? "the right" : xVal === endX ? "the left" : "both sides"}. We don't have enough information to evaluate the limit.
+        </div>
+      </>,
+      <>
+        <div>
+          Thus, the correct answer is:
+        </div>
+        <div className="hint-ans input correct ans">
+          dne
+        </div>
+      </>
+    )
+  } else {
+    hints.push(
+      <>
+        <div>
+          We have data on {xVal === endX ? <>the <strong>left</strong></> : xVal === startX ? <>the <strong>right</strong></> : <strong>both sides</strong>} of <Latex expression={`x = ${xVal}`} />.
+        </div>
+        <div>
+          This means we can estimate the limit!
+        </div>
+      </>,
+      <>
+        <div>
+          Remember that when finding limits, we want to focus on what the function is <strong>approaching</strong>, not necessarily the function value at that point.
+        </div>
+        <div>
+          Looking at the <Latex expression="y" /> values near <Latex expression={`x = ${xVal}`} />, it looks like the function is approaching <Latex expression={ans} />.
+        </div>
+      </>,
+      <>
+        <div>
+          Thus, the correct answer is:
+        </div>
+        <div className="hint-ans input correct ans">
+          {ans}
+        </div>
+      </>
+    )
+  }
 
   return { title, question, ans, type, nextToInput, hints }
 }

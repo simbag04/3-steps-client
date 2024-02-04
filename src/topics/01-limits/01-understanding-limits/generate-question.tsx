@@ -88,7 +88,7 @@ const graphToLimit = (): Question => {
     <>
       <div className="flex vertical center medium-gap">
         Thus, the correct answer is:
-        <div className="correct ans">
+        <div className="hint-ans input correct ans">
           {o1.component}
         </div>
       </div>

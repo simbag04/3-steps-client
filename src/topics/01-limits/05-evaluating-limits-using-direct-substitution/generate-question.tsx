@@ -7,6 +7,7 @@ import React from "react";
 import { PiecewiseFunction } from "../../../@types/PiecewiseFunction";
 import { Option } from "../../../@types/Option";
 import { Question } from "../../../@types/Question";
+import { LEFT_LIMIT, RIGHT_LIMIT } from "../../../helpers/constants";
 const nerdamer = require("nerdamer/all.min")
 
 /**
@@ -75,16 +76,21 @@ const piecewiseToLimit = (): Question => {
   const sign = getRandomNumber(0, 2);
   const x = xValues[getRandomNumber(0, xValues.length - 1)];
   let ans: number | string;
+  const fsToUse = []
   for (let i = 0; i < xValues.length; i++) {
     if (x === xValues[i]) {
       let f1 = Math.round(mathFs[i](x));
       let f2 = Math.round(mathFs[i + 1](x));
       if (sign === 0) {
         ans = f1;
+        fsToUse.push({ f: functions[i].f, value: f1 })
       } else if (sign === 1) {
         ans = f2;
+        fsToUse.push({ f: functions[i + 1].f, value: f2 })
       } else {
         ans = f1 === f2 ? f1 : 'dne'
+        fsToUse.push({ f: functions[i].f, value: f1 })
+        fsToUse.push({ f: functions[i + 1].f, value: f2 })
       }
     }
   }
@@ -96,21 +102,66 @@ const piecewiseToLimit = (): Question => {
   </span>
 
   const hints = [
-    <div className="flex vertical center small-gap">
+    <>
       <div>
-        {question}
-      </div>
-      <div>
-        {nextToInput} ?
-      </div>
-      <div>
+        In this case, we want to evaluate the limit as <Latex expression="x" /> approaches <Latex expression={`${x}`} /> from {sign === 2 ? <strong>both sides</strong> : sign === 1 ? <>the <strong>right</strong></> : <>the <strong>left</strong></>}.
         Focus on the functions around <Latex expression={`x = ${x}`} />.
       </div>
-    </div>,
-    <div>
-      Which side(s) are we evaluating the limit from? Based on that, which function(s) should we use to find the limit?
-    </div>
+    </>
   ]
+
+  if (sign === 2) {
+    hints.push(
+      <div>
+        Since we want to evaluate the limit from both sides, we need to look at the limits from both the left and the right of <Latex expression={`x = ${x}`} />.
+      </div>,
+      <>
+        <div>
+          Evaluating from the left, you should get:
+        </div>
+        <div>
+          <Latex expression={`\\lim_{x \\to ${x}${LEFT_LIMIT}} f(x) = \\lim_{x \\to ${x}${LEFT_LIMIT}} ${fsToUse[0].f} = ${fsToUse[0].value}`} display={true} />
+        </div>
+
+        <div>
+          Evaluating from the right, you should get:
+        </div>
+        <div>
+          <Latex expression={`\\lim_{x \\to ${x}${RIGHT_LIMIT}} f(x) = \\lim_{x \\to ${x}${RIGHT_LIMIT}} ${fsToUse[1].f} = ${fsToUse[1].value}`} display={true} />
+        </div>
+      </>,
+      <>
+        <div>
+          Since these limits are {ans === "dne" ? "not" : ""} equal, we know the correct answer is:
+        </div>
+        <div className="hint-ans input correct ans">
+          {ans}
+        </div>
+      </>
+    )
+  } else {
+    hints.push(
+      <div>
+        Since we want to evaluate the limit from the <strong>{sign === 0 ? "left" : "right"}</strong> of <Latex expression={`x = ${x}`} />, we should use the function <Latex expression={fsToUse[0].f} />.
+      </div>,
+      <>
+        <div>
+          Evaluating the limit, we get:
+        </div>
+        <div>
+          <Latex expression={`\\lim_{x \\to ${x}${sign === 0 ? LEFT_LIMIT : RIGHT_LIMIT}} f(x) = \\lim_{x \\to ${x}${sign === 0 ? LEFT_LIMIT : RIGHT_LIMIT}} ${fsToUse[0].f} = ${fsToUse[0].value}`} display={true} />
+        </div>
+      </>,
+      <>
+        <div>
+          Thus, the correct answer is:
+        </div>
+        <div className="hint-ans input correct ans">
+          {ans}
+        </div>
+      </>
+    )
+  }
 
   return { title, question, ans, type: 'math', nextToInput, hints }
 }
@@ -202,18 +253,47 @@ const absValueToPiecewise = (): Question => {
   ]
 
   const hints = [
-    <div className="flex vertical center small-gap">
-      <div>
-        Remember we need to find where the function inside the absolute value is <Latex expression={`>`} /> or <Latex expression={`<`} /> 0. How can we do that with a quadratic?
-      </div>
-      <Latex expression={`g(x) = |${neg ? negExpanded : expanded}|`} classes={'large-font'} />
-    </div>,
     <>
       <div>
-        Once you've found when the function is <Latex expression={`>`} /> or <Latex expression={`<`} /> 0, how can we structure that in the piecewise format?
+        In order to convert an absolute value function to a piecewise function, the first thing we have to do is find where the function inside is <Latex expression={`>`} /> or <Latex expression={`<`} /> 0.
       </div>
       <div>
-        Remember we need to make the whole function negative for points where the function is <Latex expression={`<`} /> 0.
+        In this case, we have a quadratic equation inside the absolute value. In order to find where this is above or below 0, first find its zeros.
+      </div>
+    </>,
+    <>
+      <div>
+        You should've found that the zeros are <Latex expression={`x = ${xvalues[0]}`} /> and <Latex expression={`x = ${xvalues[1]}`} />.
+      </div>
+      <div>
+        Now, think about whether the parabola is right side up or upside down.
+      </div>
+    </>,
+    <>
+      <div>
+        Since the coefficient of the <Latex expression="x^2" /> term is {neg ? "negative" : "positive"}, we know the parabola is {neg ? "upside down" : "right side up"}.
+      </div>
+      <div>
+        This means that when <Latex expression={`x < ${xvalues[0]}`} /> and <Latex expression={`x > ${xvalues[1]}`} />, the quadratic is {neg ? "negative" : "positive"}. When <Latex expression={`${xvalues[0]} < x < ${xvalues[1]}`} />, the quadratic is {!neg ? "negative" : "positive"}.
+      </div>
+    </>,
+    <>
+      <div>
+        We can use this to create our piecewise function. Absolute value basically means that negative values are made positive. Thus, wherever our quadratic is negative, for that domain only, we will multiply the quadratic by <Latex expression="-1" />. 
+      </div>
+      <div>
+        Basically, when {neg ? <><Latex expression={`x < ${xvalues[0]}`} /> and <Latex expression={`x > ${xvalues[1]}`} /></> : <Latex expression={`${xvalues[0]} < x < ${xvalues[1]}`} />}, our piecewise function will be <Latex expression={`${neg ? expanded : negExpanded}`} />. 
+      </div>
+      <div>
+        Otherwise, when {!neg ? <><Latex expression={`x < ${xvalues[0]}`} /> and <Latex expression={`x > ${xvalues[1]}`} /></> : <Latex expression={`${xvalues[0]} < x < ${xvalues[1]}`} />} it will be <Latex expression={`${neg ? negExpanded : expanded}`} />.
+      </div>
+    </>,
+    <>
+      <div>
+        This means that the correct answer is:
+      </div>
+      <div className="hint-ans input correct ans">
+        {options[0].component}
       </div>
     </>
 

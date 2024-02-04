@@ -21,14 +21,18 @@ export const Hints: React.FC<HintsProps> = ({ currQ, explain, scroll, firstExpla
 
   useEffect(() => {
     if (!firstExplainRender) {
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })
+      setTimeout(() => {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })
+      }, 0)
     }
   }, [firstExplainRender, step])
 
   useEffect(() => {
     if (!firstExplainRender) {
-      let obj = document.getElementById("hints-section")
-      window.scrollTo({ top: obj.offsetTop - height, behavior: "smooth" })
+      setTimeout(() => {
+        let obj = document.getElementById("hints-section")
+        window.scrollTo({ top: obj.offsetTop - height, behavior: "smooth" })
+      }, 0)
     }
   }, [scroll, firstExplainRender, height])
 
