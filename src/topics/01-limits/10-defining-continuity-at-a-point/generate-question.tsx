@@ -97,7 +97,6 @@ const piecewiseToLimit = (): Question => {
   }
 
   fsToUse.sort((a, b) => a.type - b.type)
-  console.log(fsToUse)
   const question = <div className="flex vertical center medium-gap">
     <h3>Is the function continuous at <Latex expression={`x = ${x}`} />?</h3>
     <Piecewise functions={functions} title={`f(x)`} />

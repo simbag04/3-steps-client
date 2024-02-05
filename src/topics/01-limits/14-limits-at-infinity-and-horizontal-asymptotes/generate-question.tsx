@@ -14,24 +14,28 @@ const generateAsymptoticFunction = () => {
   const bottomSqrt = Boolean(getRandomNumber(0, 1))
 
   // leading coefficients of top and bottom
-  const topLC = getRandomNumber(1, 5)
-  const bottomLC = getRandomNumber(1, 5)
+  const topLC = getRandomNumber(2, 5)
+  const bottomLC = getRandomNumber(2, 5)
 
   // get expressions for numerator and denominator
   const numerator = getFunction(numDegree, topLC, topSqrt)
+  const withoutSqrtNum = topSqrt ? `|${topLC}x${numDegree > 1 ? `^${numDegree}` : ''}|` : numerator
   const denominator = getFunction(denDegree, bottomLC, bottomSqrt)
+  const withoutSqrtDen = bottomSqrt ? `|${bottomLC}x${denDegree > 1 ? `^${denDegree}` : ''}|` : denominator
 
   const approaches = Boolean(getRandomNumber(0, 1)) // false: approaches inf, true: approaches -inf
-  const func = `\\lim_{x \\to ${approaches ? `-` : ``}\\infty} \\frac{${numerator}}{${denominator}}`
+  const limitText = `\\lim_{x \\to ${approaches ? `-` : ``}\\infty}`
+  const func = `${limitText} \\frac{${numerator}}{${denominator}}`
 
   let ans: string
+  const topSign = topSqrt || numDegree % 2 === 0 || !approaches
+  const bottomSign = bottomSqrt || denDegree % 2 === 0 || !approaches
+  const overallSign = (topSign && bottomSign) || (!topSign && !bottomSign)
   if (numDegree < denDegree) {
     ans = "0"
   } else {
     ans = numDegree === denDegree ? math.simplify(`${topLC}/${bottomLC}`).toString() : `\\infty`
-    const topSign = topSqrt || numDegree % 2 === 0 || !approaches
-    const bottomSign = bottomSqrt || denDegree % 2 === 0 || !approaches
-    if ((topSign && !bottomSign) || (bottomSign && !topSign)) {
+    if (!overallSign) {
       ans = `-${ans}`
     }
   }
@@ -43,26 +47,9 @@ const generateAsymptoticFunction = () => {
   </div>
 
   const hints = [
-    <div className="flex vertical center medium-gap">
-      We are trying to evaluate <Latex expression={`${func}`} display={true} />
-    </div>
-  ]
-
-  if (topSqrt || bottomSqrt) {
-    hints.push(<div className="flex vertical center medium-gap">
+    <>
       <div>
-        We can see there are roots in this function. Remember, to simplify these, we want to focus on the highest degree term and take the root of that.
-      </div>
-      <div>
-        Keep in mind, though, that when we take the root, we want to surround the result with an absolute value so we remember it is positive!
-      </div>
-    </div>)
-  }
-
-  hints.push(
-    <div className="flex vertical center medium-gap">
-      <div>
-        {topSqrt || bottomSqrt ? "Once you've done that, the next step is to " : "In order to solve this, we "}just need to find the horizontal asymptotes. Remember our 3 rules for that:
+        In order to solve this, we need to find the horizontal asymptotes. Remember our 3 rules for that:
       </div>
       <ul className="text-start">
         <li>
@@ -75,16 +62,91 @@ const generateAsymptoticFunction = () => {
           If <Latex expression="n > d" />, there is no horizontal asymptote.
         </li>
       </ul>
-    </div>)
+    </>
+  ]
 
-  hints.push(<div className="flex vertical center medium-gap">
-    <div>
-      Looking at the degrees of the top and bottom of this function, is there a horizontal asymptote? If yes, then that is your answer!
-    </div>
-    <div>
-      If not, however, remember you can focus on the highest degree terms again. After doing that, try simpliying the remaining equation, and from there plugging in <Latex expression={`x = ${approaches ? `-` : ``}\\infty`} /> to find the result. Remember to keep the signs of the values in mind!
-    </div>
-  </div>)
+  if (topSqrt || bottomSqrt) {
+    hints.push(
+      <>
+        <div>
+          Before we can do that, however, we need to get rid of the square roots. Remember, to simplify these, we want to focus on the highest degree term and take the root of that.
+        </div>
+        <div>
+          We also want to surround the result with an absolute value so we remember it is positive!
+        </div>
+      </>,
+      <>
+        <div>
+          Simplifying the square roots, you should get:
+        </div>
+        <div>
+          <Latex expression={`${limitText} \\frac{${numerator}}{${denominator}} \\approx ${limitText} \\frac{${withoutSqrtNum}}{${withoutSqrtDen}}`} display={true} />
+        </div>
+      </>
+    )
+  }
+
+  if (numDegree < denDegree) {
+    hints.push(
+      <>
+        <div>
+          Since <Latex expression="n < d" />, <Latex expression="f(x)" /> has a horizontal asymptote of 0.
+        </div>
+      </>,
+      <>
+        <div>
+          Thus, the correct answer is:
+        </div>
+        <div className="hint-ans input correct ans">
+          {ans}
+        </div>
+      </>
+    )
+  } else {
+    if (numDegree === denDegree) {
+      hints.push(
+        <>
+          <div>
+            In this case, since <Latex expression="n = d" />, the horizontal asymptotes is the ratio of the leading coefficients.
+          </div>
+        </>
+      )
+    } else {
+      hints.push(
+        <>
+          <div>
+            Since <Latex expression="n > d" />, there is no horizontal asymptote. However, we know the limit must be <Latex expression={`\\infty`} /> or <Latex expression={`-\\infty`} />.
+          </div>
+        </>
+      )
+    }
+
+    if (topSqrt || bottomSqrt || numDegree > denDegree) {
+      hints.push(
+        <>
+          {numDegree > denDegree ? null :
+            <div>
+              Since there are absolute values, make sure you account for the sign of the answer.
+            </div>
+          }
+          <div>
+            Plugging in <Latex expression={`x = ${approaches ? '-' : ''}\\infty`} />, you should get a <strong>{topSign ? 'positive' : 'negative'}</strong> numerator and a <strong>{bottomSign ? 'positive' : 'negative'}</strong> denominator. This means the final answer should be <strong>{overallSign ? 'positive' : 'negative'}</strong>.
+          </div>
+        </>
+      )
+    }
+
+    hints.push(
+      <>
+        <div>
+          Thus, the correct answer is:
+        </div>
+        <div className="hint-ans input correct ans">
+          {ans.includes('infty') ? <Latex expression={ans} /> : ans}
+        </div>
+      </>
+    )
+  }
 
   return { question, ans, type: 'math', title, hints, math_input_buttons: ["infinity"] }
 }

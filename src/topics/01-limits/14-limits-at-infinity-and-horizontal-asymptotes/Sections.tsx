@@ -154,6 +154,9 @@ const Section8 = <>
     <Latex classes="bold" expression={`\\lim_{x \\to \\infty} h(x) = \\lim_{x \\to \\infty} x = \\infty`} display={true} />
     <Latex classes="bold" expression={`\\lim_{x \\to -\\infty} h(x) = \\lim_{x \\to -\\infty} x = -\\infty`} display={true} />
   </div>
+  <div>
+    If you have a situation where <Latex expression="n > d" />, your answer will always be <Latex expression={`\\infty`} /> or <Latex expression={`-\\infty`} />.
+  </div>
 </>
 
 const Section9 = <>

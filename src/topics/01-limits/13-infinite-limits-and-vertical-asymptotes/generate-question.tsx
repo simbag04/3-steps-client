@@ -3,6 +3,7 @@ import { getRandomNumber, getRandomWithExclusions, getStringFactorFromXval, sort
 import React from "react"
 import * as math from "mathjs"
 import { Option } from "../../../@types/Option"
+import { LEFT_LIMIT, RIGHT_LIMIT } from "../../../helpers/constants"
 
 const nerdamer = require("nerdamer/all.min")
 
@@ -46,8 +47,8 @@ const asymptoticLimitQuestion = () => {
   denominator = sortPolynomialByDegree(nerdamer(`${factoredBottom}`).expand())
 
   const expression = `f(x) = \\frac{${numerator}}{${denominator}}`
-  const leftLimit = `\\lim_{x \\to ${x}^{\\footnotesize\\texttt{-}}} f(x)`
-  const rightLimit = `\\lim_{x \\to ${x}^{\\footnotesize\\texttt{+}}} f(x)`
+  const leftLimit = `\\lim_{x \\to ${x}${LEFT_LIMIT}} f(x)`
+  const rightLimit = `\\lim_{x \\to ${x}${RIGHT_LIMIT}} f(x)`
 
   const title = <></>
   const question = <>
@@ -55,8 +56,12 @@ const asymptoticLimitQuestion = () => {
     <Latex expression={expression} display={true} />
   </>
 
-  const leftAns = Number(math.evaluate(`(${numerator})/(${denominator})`, { x: x - 0.1 }).toString())
-  const rightAns = Number(math.evaluate(`(${numerator})/(${denominator})`, { x: x + 0.1 }).toString())
+  const leftNum = Number(math.evaluate(numerator, { x: x - 0.1 }).toString())
+  const leftDen = Number(math.evaluate(denominator, { x: x - 0.1 }).toString())
+  const rightNum = Number(math.evaluate(numerator, { x: x + 0.1 }).toString())
+  const rightDen = Number(math.evaluate(denominator, { x: x + 0.1 }).toString())
+  const leftAns = leftNum * leftDen
+  const rightAns = rightNum * rightDen
 
   const options: Option[] = [
     {
@@ -85,50 +90,70 @@ const asymptoticLimitQuestion = () => {
     }
   ]
 
+  const correctAns = options.filter((opt) => opt.correct)
   const hints = [
     <>
-      <div className="flex vertical center medium-gap">
-        <div>
-          We need to find <Latex expression={leftLimit} /> and <Latex expression={rightLimit} />
-        </div>
-        <div>
-          <Latex expression={expression} display={true} />
-        </div>
-        <div>
-          Plugging in <Latex expression={`x = ${x}`} />, you should get a denominator of 0, which means there's an asymptote at <Latex expression={`x = ${x}`} />
-        </div>
+      <div>
+        Plugging in <Latex expression={`x = ${x}`} />, you should get a denominator of 0, which means there's an asymptote at <Latex expression={`x = ${x}`} />.
       </div>
     </>,
-    <div className="flex vertical center medium-gap">
+    <>
       <div>
         Since there's an asymptote, the limits must be either <Latex expression={`\\infty`} /> or <Latex expression={`-\\infty`} />.
       </div>
       <div>
         The first step to figuring out whether it's <Latex expression={`\\infty`} /> or <Latex expression={`-\\infty`} /> is to factor <Latex expression="f(x)" />.
       </div>
-    </div>,
-    <div className="flex vertical center medium-gap">
-      <div>
-        This should give you: 
-      </div>
-        <Latex expression={`f(x) = \\frac{${factoredTop}}{${factoredBottom}}`} display={true} />
-      <div>
-        Now, remember that "as <Latex expression="x" /> approaches {x} from the left" is another way of saying <Latex expression="x" /> is extremely close to {x} on the left side. What is an <Latex expression="x" /> value you could use to represent this?
-      </div>
-    </div>,
+    </>,
     <>
       <div>
-        Using this <Latex expression="x" /> value, plug this into the factored <Latex expression="f(x)" /> equation. Remember that you don't have to find the actual value - you just need to find the <strong>sign</strong> of <Latex expression="f(x)" /> at your <Latex expression="x" /> value.
+        This should give you:
+      </div>
+      <Latex expression={`f(x) = \\frac{${factoredTop}}{${factoredBottom}}`} display={true} />
+      <div>
+        Now, remember that "as <Latex expression="x" /> approaches {x} from the left" is another way of saying <Latex expression="x" /> is extremely close to {x} on the left side. You could use <Latex expression={`${x - 0.1}`} /> to represent this.
       </div>
     </>,
-    <div className="flex vertical center medium-gap">
+    <>
       <div>
-        If your sign is negative, you know the answer is <Latex expression={`-\\infty`} />. If it's positive the answer is <Latex expression={`\\infty`} /> for <Latex expression={leftLimit} />.
+        Using this <Latex expression="x" /> value, plug this into the factored <Latex expression="f(x)" /> equation.
       </div>
       <div>
-        Repeat this process for the right-sided limit, and that should bring you to the correct answer!
+        This should give you a <strong>{leftNum > 0 ? "positive" : "negative"}</strong> numerator and a <strong>{leftDen > 0 ? "positive" : "negative"}</strong> denominator.
       </div>
-    </div>
+    </>,
+    <>
+      <div>
+        This means the left-sided limit must be <strong>{leftAns > 0 ? "positive" : "negative"}</strong>. Thus,
+      </div>
+      <div>
+        <Latex expression={`${leftLimit} = ${leftAns > 0 ? '' : '-'}\\infty`} display={true} />
+      </div>
+    </>,
+    <>
+      <div>
+        Now, repeat this process with <Latex expression={`${x + 0.1}`} /> for the right-sided limit.
+      </div>
+    </>,
+    <>
+      <div>
+        You should get a <strong>{rightNum > 0 ? "positive" : "negative"}</strong> numerator and a <strong>{rightDen > 0 ? "positive" : "negative"}</strong> denominator.
+      </div>
+      <div>
+        This means the right-sided limit must be <strong>{rightAns > 0 ? "positive" : "negative"}</strong>. Thus,
+      </div>
+      <div>
+        <Latex expression={`${rightLimit} = ${rightAns > 0 ? '' : '-'}\\infty`} display={true} />
+      </div>
+    </>,
+    <>
+      <div>
+        Thus, the correct answer is: 
+      </div>
+      <div className="hint-ans input correct ans">
+        {correctAns[0].component}
+      </div>
+    </>
   ]
 
   return { type: 'mc', title, question, input: options, hints }

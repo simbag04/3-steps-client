@@ -50,14 +50,14 @@ const piecewise1: PiecewiseFunction[] = [
     domain: `x \\neq 1`
   },
   {
-    f: `a`,
+    f: `b`,
     domain: `x = 1`
   }
 ]
 
 const piecewise2: PiecewiseFunction[] = [
   {
-    f: `ax^2 - 3`,
+    f: `bx^2 - 3`,
     domain: `x < 1`
   },
   {
@@ -99,7 +99,7 @@ const Section3 = <>
     <Piecewise title="f(x)" functions={piecewise1} display={true} />
   </div>
   <div>
-    What is the value of <Latex expression="a" /> that will make <Latex expression="f(x)" /> continuous at <Latex expression="x = 1" />?
+    What is the value of <Latex expression="b" /> that will make <Latex expression="f(x)" /> continuous at <Latex expression="x = 1" />?
   </div>
 </>
 
@@ -145,7 +145,7 @@ const Section6 = <>
 
 const Section7 = <>
   <div>
-    Since <Latex expression="f(1) = a" /> and <Latex expression={`\\lim_{x \\to 1} f(x) = -3`} />, this means we need <Latex classes="bold" expression="a = 3" /> in order for <Latex expression="f(x)" /> to be continuous at <Latex expression="x = 1." />
+    Since <Latex expression="f(1) = b" /> and <Latex expression={`\\lim_{x \\to 1} f(x) = -3`} />, this means we need <Latex classes="bold" expression="b = -3" /> in order for <Latex expression="f(x)" /> to be continuous at <Latex expression="x = 1." />
   </div>
 </>
 
@@ -157,7 +157,7 @@ const Section8 = <>
     <Piecewise title="g(x)" functions={piecewise2} />
   </div>
   <div>
-    For what value of <Latex expression="a" /> will <Latex expression="g(x)" /> be continuous at <Latex expression="x = 1" />?
+    For what value of <Latex expression="b" /> will <Latex expression="g(x)" /> be continuous at <Latex expression="x = 1" />?
   </div>
 </>
 
@@ -175,18 +175,18 @@ const Section10 = <>
     Evaluating these, we get:
   </div>
   <div>
-    <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{-}}} g(x) = \\lim_{x \\to 1} (ax^2 - 3) = a - 3`} display={true} />
+    <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{-}}} g(x) = \\lim_{x \\to 1} (bx^2 - 3) = b - 3`} display={true} />
     <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{+}}} g(x) = \\lim_{x \\to 1} (x + 2) = 3`} display={true} />
   </div>
 </>
 
 const Section11 = <>
   <div>
-    In order for the limit to exist, both of these must equal each other. Thus, <Latex expression="a - 3 = 3" display={true} />
-    <Latex classes="bold" expression="a = 6" />
+    In order for the limit to exist, both of these must equal each other. Thus, <Latex expression="b - 3 = 3" display={true} />
+    <Latex classes="bold" expression="b = 6" />
   </div>
   <div>
-    When <Latex expression="a = 6" />, <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{-}}} g(x) = \\lim_{x \\to 1^{\\footnotesize\\texttt{+}}} g(x) = 3`} />.
+    When <Latex expression="b = 6" />, <Latex expression={`\\lim_{x \\to 1^{\\footnotesize\\texttt{-}}} g(x) = \\lim_{x \\to 1^{\\footnotesize\\texttt{+}}} g(x) = 3`} />.
   </div>
 </>
 
@@ -195,7 +195,7 @@ const Section12 = <>
     Now that the first condition is verified, we can also check the  second condition.
   </div>
   <div>
-    We know <Latex expression="g(1) = 1 + 2 = 3" />. Since <Latex expression={`\\lim_{x \\to 1} g(x) = g(1) = 3`} />, we know that the function is continuous at <Latex expression="x = 1" /> when <Latex classes="bold" expression="a = 6" />!
+    We know <Latex expression="g(1) = 1 + 2 = 3" />. Since <Latex expression={`\\lim_{x \\to 1} g(x) = g(1) = 3`} />, we know that the function is continuous at <Latex expression="x = 1" /> when <Latex classes="bold" expression="b = 6" />!
   </div>
 </>
 
