@@ -14,7 +14,6 @@ const optionsForLimitSteps = (): Question => {
   const finalFunction = `${trigFunction}${toAdd === 0 ? `` : `+ ${toAdd}`}`
   const multiplyByNegative = Boolean(getRandomNumber(0, 1))
 
-
   const o1: Option = {
     component: <div className="flex vertical center medium-gap">
       <div className="flex vertical">
@@ -83,11 +82,38 @@ const optionsForLimitSteps = (): Question => {
   const question = <div className="flex vertical center small-gap">
     <h3>Select the option which correctly uses the Squeeze Theorem to evaluate:</h3>
     <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction}`} display={true}></Latex>
-      </div>
+  </div>
+
   const hints: JSX.Element[] = []
-  hints.push(<div>
-    Focus on the step where the inequality is multiplied. When we multiply by a {multiplyByNegative ? "negative" : "positive"} quantity, do we flip the inequality?
-  </div>)
+  hints.push(
+    <>
+      <div>
+        Focus on the step in both options where the inequality is multiplied.
+      </div>
+      <div>
+        In one option, the inequality is flipped, and in the other option, it is not flipped:
+      </div>
+      <div>
+        <Latex expression={`${multiplyByNegative ? `x^2 \\geq -x^2${trigFunction} \\geq -x^2` : `-x^2 \\leq x^2${trigFunction} \\leq x^2`}`} display={true}></Latex>
+        <Latex expression={`${!multiplyByNegative ? `-x^2 \\geq -x^2${trigFunction} \\geq x^2` : `x^2 \\leq x^2${trigFunction} \\leq -x^2`}`} display={true}></Latex>
+      </div>
+    </>,
+    <>
+      <div>
+        We know <Latex expression={`-x^2 \\leq x^2`} />. Looking at both of the options, the one that is consistent with this is:
+      </div>
+      <div>
+        <Latex expression={`${multiplyByNegative ? `x^2 \\geq -x^2${trigFunction} \\geq -x^2` : `-x^2 \\leq x^2${trigFunction} \\leq x^2`}`} display={true}></Latex>
+      </div>
+    </>,
+    <>
+      <div>
+        Thus, the correct answer is:
+      </div>
+      <div className="hint-ans input correct ans">
+        {o1.component}
+      </div>
+    </>)
   return { type: 'mc', title, question, input: shuffleArray([o1, o2]), hints }
 }
 
@@ -103,29 +129,91 @@ const evaluateLimit = (): Question => {
     <h2>Evaluate the limit.</h2>
     <div>Hint: Use the Squeeze Theorem.</div>
   </div>
-  const nextToInput = <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction} =`}></Latex>
-  const hints: JSX.Element[] = []
-  hints.push(<div>
-    We need to solve <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction}`}></Latex>. Here, we see a <Latex expression={trig}/> function. What do we know about the bounds of this function?
-  </div>)
 
-  hints.push(<div>
-    Using these bounds, what can you multiply all 3 sides of the inequality by to make the middle of the inequality closer to the limit?
-  </div>)
+  const nextToInput = <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction} =`}></Latex>
+
+  const hints: JSX.Element[] = []
+  hints.push(
+    <>
+      <div>
+        In this problem, we see a <Latex expression={trig} /> function. We know that:
+      </div>
+      <div>
+        <Latex expression={`-1 \\leq ${trigFunction} \\leq 1`} display={true} />
+      </div>
+    </>
+  )
+
+  hints.push(
+    <>
+      <div>
+        Now, we want to get the middle expression to be exactly the function we are finding the limit of.
+      </div>
+      <div>
+        To do this, first we can multiply all 3 sides of the inequality by <Latex expression={`${multiplyByNegative ? `-x^2` : `x^2`}`} />.
+      </div>
+      {multiplyByNegative ?
+        <div>
+          However, remember that when we multiply by a negative quantity like <Latex expression="-x^2" />, we need to flip the inequality.
+        </div> :
+        null
+      }
+    </>,
+    <>
+      <div>
+        Thus, we get:
+      </div>
+      <div>
+        <Latex expression={`${multiplyByNegative ? `x^2 \\geq -x^2${trigFunction} \\geq -x^2` : `-x^2 \\leq x^2${trigFunction} \\leq x^2`}`} display={true}></Latex>
+      </div>
+    </>
+  )
 
   if (toAdd !== 0) {
-    hints.push(<div>
-      You should be getting closer to the actual limit function now! What can you add to all sides of the inequality to make the middle inequality exactly the same as the limit function?
-    </div>)
+    hints.push(
+      <>
+        <div>
+          Now, we can add <Latex expression={`${toAdd}`} /> to all 3 sides of the limit to get:
+        </div>
+        <div>
+          <Latex expression={`${multiplyByNegative ?
+            `x^2 + ${toAdd} \\geq -x^2${trigFunction} + ${toAdd} \\geq -x^2 + ${toAdd}` :
+            `-x^2 + ${toAdd} \\leq x^2${trigFunction} + ${toAdd} \\leq x^2 + ${toAdd}`}`} display={true}></Latex>
+        </div>
+      </>
+    )
   }
 
-  hints.push(<div>
-    Now, the middle inequality should be exactly like the limit function. The next step is to take the limit of all 3 sides of the inequality.
-  </div>)
+  hints.push(
+    <>
+      <div>
+        Now, the middle inequality should be exactly like the limit function. The next step is to {multiplyByNegative ? "flip the inequality and " : ""}take the limit of all 3 sides of the inequality.
+      </div>
+      <div>
+        <Latex expression={`\\lim_{x \\to 0} -x^2 ${toAdd === 0 ? `` : `+${toAdd}`} \\leq \\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction} \\leq \\lim_{x \\to 0} x^2 ${toAdd === 0 ? `` : `+${toAdd}`}`} display="display"></Latex>
+        <Latex expression={`${toAdd} \\leq \\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction} \\leq ${toAdd}`} display="display"></Latex>
+      </div>
+    </>
+  )
 
-  hints.push(<div>
-    Now, you can directly apply the Squeeze Theorem to find the limit!
-  </div>)
+  hints.push(
+    <>
+      <div>
+        Now, directly applying the Squeeze Theorem, we know:
+      </div>
+      <div>
+        <Latex expression={`\\lim_{x \\to 0} ${multiplyByNegative ? `-x^2` : `x^2`}${finalFunction} = ${toAdd}`} display={true} />
+      </div>
+    </>,
+    <>
+      <div>
+        Thus, the correct answer is:
+      </div>
+      <div className="hint-ans input correct ans">
+        {toAdd}
+      </div>
+    </>
+  )
 
   return { type: 'math', title, question, ans: toAdd, hints, nextToInput }
 
@@ -209,7 +297,7 @@ const checkTheoremApplication = (): Question => {
 
   const o2: Option = {
     component: <div>
-      Yes, because {!incorrectBorderFunctions ? <><Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} /> near <Latex expression={`x = 0`} /></> : <><Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="f(x)" classes="c1" /><Latex expression={`=`} /><Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="h(x)" classes="c3" /></>}
+      Yes, because {!incorrectBorderFunctions ? <><Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} /> near <Latex expression={`x = 0`} /></> : <><Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="f(x)" classes="c1" /><Latex expression={` = `} /><Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="h(x)" classes="c3" /></>}
     </div>,
     correct: false
   }
@@ -223,14 +311,14 @@ const checkTheoremApplication = (): Question => {
 
   const o4: Option = {
     component: <div>
-      No, because it is not true that <> <Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="f(x)" classes="c1" /><Latex expression={`=`} /><Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="h(x)" classes="c3" />
+      No, because it is not true that <> <Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="f(x)" classes="c1" /><Latex expression={` = `} /><Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="h(x)" classes="c3" />
       </>
     </div>,
     correct: constant2 !== 0
   }
 
   const hints: JSX.Element[] = []
-  hints.push(<div className="flex vertical center">
+  hints.push(<>
     <div>
       Recall that there are two conditions that need to be satisified to apply the Squeeze Theorem for a function <Latex classes={'c2'} expression={`g(x)`} />:
     </div>
@@ -240,28 +328,80 @@ const checkTheoremApplication = (): Question => {
           <Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} />
         </li>
         <li>
-          <Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="f(x)" classes="c1" /><Latex expression={`=`} /><Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="h(x)" classes="c3" />
+          <Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="f(x)" classes="c1" /><Latex expression={` = `} /><Latex expression={`\\lim_{x \\to 0}`} /><Latex expression="h(x)" classes="c3" />
         </li>
       </ul>
     </div>
-  </div>)
+  </>)
 
-  hints.push(<div className="flex vertical center medium-gap">
-    <div>
-      Are both of these conditions satisfied in the graph?
-    </div>
-    <div>
-      <h3>Graph of <Latex expression="f(x)" classes="c1" />, <Latex expression="g(x)" classes="c2" />, <Latex expression="h(x)" classes="c3" /></h3>
-      <FunctionGraph functions={functions} size={GRAPH_SIZE} minx={-0.3} maxx={0.3} miny={-0.3} maxy={0.3} />
-    </div>
-  </div>)
+  if (incorrectBorderFunctions) {
+    hints.push(
+      <>
+        <div>
+          Looking at the graph, it is clear that <Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} /> does <strong>not</strong> hold.
+        </div>
+      </>,
+      <>
+        <div>
+          Thus, we cannot apply the Squeeze Theorem. The correct answer is:
+        </div>
+        <div className="hint-ans input correct ans">
+          {o3.component}
+        </div>
+      </>
+    )
+  } else {
+    hints.push(
+      <>
+        <div>
+          Looking at the graph, it is clear that <Latex classes={'c1'} expression={`f(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c2'} expression={`g(x)`} /> <Latex expression={`\\leq`} /> <Latex classes={'c3'} expression={`h(x)`} /> holds.
+        </div>
+        <div>
+          Thus, the first condition is satisfied.
+        </div>
+      </>
+    )
+
+    if (constant2 !== 0) {
+      hints.push(
+        <>
+          <div>
+            While the first condition is satisfied, as <Latex expression="x" /> approaches 0, the limits of <Latex classes={'c1'} expression={`f(x)`} /> and <Latex classes={'c3'} expression={`h(x)`} /> are <strong>not</strong> equal.
+          </div>
+        </>,
+        <>
+          <div>
+            Thus, we cannot apply the Squeeze Theorem. The correct answer is:
+          </div>
+          <div className="hint-ans input correct ans">
+            {o4.component}
+          </div>
+        </>
+      )
+    } else {
+      hints.push(
+        <>
+          <div>
+            The graph shows that as <Latex expression="x" /> approaches 0, the limits of <Latex classes={'c1'} expression={`f(x)`} /> and <Latex classes={'c3'} expression={`h(x)`} /> are equal.
+          </div>
+        </>,
+        <>
+          <div>
+            Thus, both conditions of the Squeeze Theorem are satisfied, and we can apply it. The correct answer is:
+          </div>
+          <div className="hint-ans input correct ans">
+            {o1.component}
+          </div>
+        </>
+      )
+    }
+  }
 
   return { type: 'mc', title, question, input: [o1, o2, o3, o4], hints }
-
 }
 
 const generateRandomQuestion = (): Question => {
-  const rand = getRandomNumber(1, 10);
+  const rand = 9 // getRandomNumber(1, 10);
   let q: Question = null;
   if (rand <= 2) {
     q = optionsForLimitSteps();

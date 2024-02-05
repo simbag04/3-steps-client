@@ -174,33 +174,33 @@ const generateOptionsAndHints =
     let title: React.JSX.Element;
     let options: Option[];
     const hints = []
-    hints.push(<>
-      <div>
-        Recall our 3 types of discontinuities:
-        <ul className="text-start">
-          <li>
-            a <strong>jump</strong> discontinuity - when there is a jump in the graph
-          </li>
-          <li>
-            an <strong>infinite</strong> discontinuity - when a graph has asymptotes
-          </li>
-          <li>
-            a <strong>removable</strong> discontinuity - when only the value of the function is inconsistent with the rest of the graph
-          </li>
-        </ul>
-      </div>
-    </>)
+    hints.push(
+      <>
+        <div>
+          Recall our 3 types of discontinuities:
+        </div>
+        <div>
+          <ul className="text-start">
+            <li>
+              <div>
+                a <strong>removable</strong> discontinuity - when only the value of the function
+                is inconsistent with the rest of the graph
+              </div>
+            </li>
+            <li>
+              a <strong>jump</strong> discontinuity - when there is a jump in the graph
+            </li>
+            <li>
+              an <strong>infinite</strong> discontinuity - when a graph has asymptotes
+            </li>
+          </ul>
+        </div>
+      </>)
 
     if (continuous || getRandomNumber(0, 1) === 0) {
       title = <h3>
         Is the graph below continuous?
       </h3>
-      hints.push(<div className="flex vertical center medium-gap">
-        <div>
-          Are any of these discontinuities present in this graph?
-        </div>
-        {question}
-      </div>)
 
       options = [
         {
@@ -212,16 +212,26 @@ const generateOptionsAndHints =
           correct: !continuous
         },
       ]
+
+      hints.push(
+        <>
+          <div>
+            Looking at the graph, {continuous ? "none of these discontinuities are present" : `we see a${graphType === "infinite" ? 'n' : ''} ${graphType} discontinuity.`}
+          </div>
+        </>,
+        <>
+          <div>
+            Thus, the correct answer is:
+          </div>
+          <div className="hint-ans input correct ans">
+            {continuous ? options[0].component : options[1].component}
+          </div>
+        </>
+      )
     } else {
       title = <h3>
         What type  of discontinuity is shown in the graph below?
       </h3>
-      hints.push(<div className="flex vertical center medium-gap">
-        <div>
-          What type of discontinuity is shown here?
-        </div>
-        {question}
-      </div>)
 
       options = [
         {
@@ -237,6 +247,22 @@ const generateOptionsAndHints =
           correct: graphType === "removable"
         }
       ]
+
+      hints.push(
+        <>
+          <div>
+            Looking at the graph, {`we see a${graphType === "infinite" ? 'n' : ''} ${graphType} discontinuity.`}
+          </div>
+        </>,
+        <>
+          <div>
+            Thus, the correct answer is:
+          </div>
+          <div className="hint-ans input correct ans">
+            {graphType === "jump" ? options[0].component : graphType === "infinite" ? options[1].component : options[2].component}
+          </div>
+        </>
+      )
     }
 
     return { title, options, hints }

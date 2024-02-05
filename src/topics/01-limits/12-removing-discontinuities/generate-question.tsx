@@ -286,7 +286,7 @@ const generateRandomQuestion = () => {
   if (rand <= 1) {
     return factoringFunctionValueDiscontinuity()
   } else if (rand <= 3) {
-    return trigFunctionValueDiscontinuity
+    return trigFunctionValueDiscontinuity()
   } else {
     return limitDiscontinuity()
   }
