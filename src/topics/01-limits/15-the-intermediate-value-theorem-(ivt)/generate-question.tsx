@@ -6,6 +6,7 @@ import React from "react"
 import { PiecewiseFunction } from "../../../@types/PiecewiseFunction"
 import { Piecewise } from "../../../components/latex/Piecewise"
 import * as math from "mathjs"
+import { LEFT_LIMIT, RIGHT_LIMIT } from "../../../helpers/constants"
 
 const applyIVT = () => {
   const x1 = getRandomNumber(-8, 3)
@@ -64,12 +65,30 @@ const applyIVT = () => {
         The IVT guarantees that for any <Latex expression="L" /> between <Latex expression="f(a)" /> and <Latex expression="f(b)" />, there exists a number <Latex expression="c" /> in <Latex expression="[a, b]" /> for which <Latex expression="f(c) = L" />.
       </div>
     </>,
-    <div>
-      Thus, the <Latex expression="c" /> value should be in between the <Latex expression="x" /> values and the <Latex expression="L" /> value should be in between the <Latex expression="y" /> values. 
-    </div>,
-    <div>
-      Match these up in the options to find the correct answer!
-    </div>
+    <>
+      <div>
+        This means the <Latex expression="c" /> value should be in between the <Latex expression="x" /> values, which are which are <Latex expression={`${x1}`} /> and <Latex expression={`${x2}`} />. Thus,
+      </div>
+      <div>
+        <Latex expression="c" /> is in <Latex expression={`[${x1}, ${x2}]`} />.
+      </div>
+    </>,
+    <>
+      <div>
+        Also the <Latex expression="L" /> value should be in between the <Latex expression="y" /> values, which are <Latex expression={`${Math.min(y1, y2)}`} /> and <Latex expression={`${Math.max(y1, y2)}`} />.
+      </div>
+      <div>
+        Out of <Latex expression={`${withinYVal}`} /> and <Latex expression={`${outsideYVal}`} />, it is clear that <Latex expression={`${withinYVal}`} /> is in between <Latex expression={`${Math.min(y1, y2)}`} /> and <Latex expression={`${Math.max(y1, y2)}`} />, not <Latex expression={`${outsideYVal}`} />.
+      </div>
+    </>,
+    <>
+      <div>
+        Thus, the correct answer is:
+      </div>
+      <div className="hint-ans input correct ans">
+        {options[0].component}
+      </div>
+    </>
   ]
 
   return { type: 'mc', input: shuffleArray(options), title, question, hints }
@@ -161,48 +180,98 @@ const checkIfIVTApplies = () => {
     },
   ]
 
+  const midExp = `\\lim_{x \\to ${midX}${LEFT_LIMIT}} = \\lim_{x \\to ${midX}${RIGHT_LIMIT}}`
+  const leftExp = `\\lim_{x \\to ${x1}${RIGHT_LIMIT}} = f(${x1})`
+  const rightExp = `\\lim_{x \\to ${x2}${LEFT_LIMIT}} = f(${x2})`
+
   const hints = [
-    <div className="flex vertical center medium-gap">
+    <>
       <div>
         In order to apply the IVT, first we need to confirm that <Latex expression="f(x)" /> is continuous over the interval <Latex expression={`[${x1}, ${x2}]`} />.
       </div>
-      <Piecewise title="f(x)" functions={piecewiseFunctions} display={true} />
-    </div>,
-    <div>
-      Remember, in order to confirm continuity over this interval, we need to check 3 things:
+    </>,
+    <>
+      <div>
+        Remember, in order to confirm continuity over this interval, we need to check 3 things:
+      </div>
       <ul className="text-start">
         <li>
           <Latex expression="f(x)" /> is continuous on <Latex expression={`(${x1}, ${x2})`} />
         </li>
         <li>
-          <Latex expression={`\\lim_{x \\to ${x1}^{\\footnotesize\\texttt{+}}} = f(${x1})`} />
+          <Latex expression={leftExp} />
         </li>
         <li>
-          <Latex expression={`\\lim_{x \\to ${x2}^{\\footnotesize\\texttt{-}}} = f(${x2})`} />
+          <Latex expression={rightExp} />
         </li>
       </ul>
-    </div>,
-    <>
-      <div>
-        If you were not able to verify continuity, then IVT cannot be applied.
-      </div>
-    </>,
-    <>
-      <div>
-        However, if you were able to verify continuity, you can check the <Latex expression="y" /> values for which IVT applies. Do this by finding <Latex expression={`f(${x1})`} /> and <Latex expression={`f(${x2})`} />.
-      </div>
-      <div>
-        If the <Latex expression="y" /> value is in between these 2 values, we know IVT can be applied. Otherwise, it cannot be.
-      </div>
     </>
   ]
 
-  return { title, type: 'mc', question, input: shuffleArray(options), hints }
+  const continuityCondition = continuityCheck === 0 ? leftExp : continuityCheck === 1 ? midExp : rightExp
+
+  if (!isContinuous) {
+    hints.push(
+      <>
+        <div>
+          You should've found that <Latex expression="f(x)" /> is <strong>not</strong> continuous over <Latex expression={`[${x1}, ${x2}]`} /> because <Latex expression={continuityCondition.replace('=', `\\neq`)} />
+        </div>
+        <div>
+          This means we cannot apply IVT. 
+        </div>
+      </>,
+      <>
+        <div>
+          Thus, the correct answer is:
+        </div>
+        <div className="hint-ans input correct ans">
+          {options[3].component}
+        </div>
+      </>
+    )
+  } else {
+    hints.push(
+      <>
+        <div>
+          You should have been able to verify continuity. Now, you need to check whether the IVT applies for the specific <Latex expression="y" /> value given.
+        </div>
+        <div>
+          Recall that the IVT guarantees that for any <Latex expression="L" /> between <Latex expression="f(a)" /> and <Latex expression="f(b)" />, there exists a number <Latex expression="c" /> in <Latex expression="[a, b]" /> for which <Latex expression="f(c) = L" />.
+        </div>
+      </>,
+      <>
+        <div>
+          The guarantee is for <Latex expression="y" /> values between <Latex expression={`f(${x1})`} /> and <Latex expression={`f(${x2})`} />.
+        </div>
+        <div>
+          First, find <Latex expression={`f(${x1})`} /> and <Latex expression={`f(${x2})`} />.
+        </div>
+      </>,
+      <>
+        <div>
+          You should've found that <Latex expression={`f(${x1}) = ${intervalY1}`} /> and <Latex expression={`f(${x2}) = ${intervalY2}`} />.
+        </div>
+        <div>
+          Since <Latex expression={`${yToAsk}`} /> is {yToAsk === withinYVal ? '' : <><strong>not </strong></>}in between <Latex expression={`f(${x1})`} /> and <Latex expression={`f(${x2})`} />, the IVT {yToAsk === withinYVal ? 'can' : 'cannot'} be applied.
+        </div>
+      </>,
+      <>
+        <div>
+          Thus, the correct answer is:
+        </div>
+        <div className="hint-ans input correct ans">
+          {yToAsk === withinYVal ? options[0].component : options[2].component}
+        </div>
+      </>
+    )
+  }
+
+  return { title, type: 'mc', question, input: options, hints }
 }
 
 const generateRandomQuestion = () => {
   const rand = getRandomNumber(0, 9)
-  if (rand <= 9) {
+  if (rand <= 7) {
     return checkIfIVTApplies()
   } else {
     return applyIVT()
