@@ -26,7 +26,6 @@ export const Course = () => {
   }
 
   const countStars = (topicJson: any): any => {
-    console.log(topicJson)
     let bronze = 0;
     let silver = 0;
     let gold = 0;
@@ -39,14 +38,16 @@ export const Course = () => {
       if (topic.next_star_goal >= 3) silver += 1
       if (topic.next_star_goal >= 4) gold += 1
 
-      const rdp = review_date_passed(topic.next_review_date.date)
-      const rd = new Date(topic.next_review_date.date)
+      const rdp = topic.next_review_date ? review_date_passed(topic.next_review_date.date) : -1
+      const rd = topic.next_review_date ? new Date(topic.next_review_date.date) : null
       if (rdp >= 0) review += 1
       else {
-        if (earliestReview === null) {
-          earliestReview = new Date(topic.next_review_date.date)
-        } else if (earliestReview.getTime() > rd.getTime()) {
-          earliestReview = rd
+        if (rd !== null) {
+          if (earliestReview === null) {
+            earliestReview = new Date(topic.next_review_date.date)
+          } else if (earliestReview.getTime() > rd.getTime()) {
+            earliestReview = rd
+          }
         }
       }
 
@@ -95,7 +96,7 @@ export const Course = () => {
         {/* Links to each unit with appropriate formatting */}
         {units &&
           units.map((unit, i) => {
-            return (<Link className="element unit-el center small-gap" to={`/${cname}/${unit.slug}`}>
+            return (<Link key={i} className="element unit-el center small-gap" to={`/${cname}/${unit.slug}`}>
               <>
                 <h2>{unit.name}</h2>
                 {unitsInfo[i] ?
@@ -111,14 +112,13 @@ export const Course = () => {
                         <>
                           {unitsInfo[i].review} skills to review!
                         </> : unitsInfo[i].bronze > 0 ?
-                        <>
-                          No skills to review till {format_review_date(unitsInfo[i].earliestReview)}!
-                        </> : null}
+                          <>
+                            No skills to review till {format_review_date(unitsInfo[i].earliestReview)}!
+                          </> : null}
                     </span>
                   </>
                   : null}
               </>
-
             </Link>)
           })}
       </div>
