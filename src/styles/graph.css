@@ -78,3 +78,7 @@
 .c4 {
   color: var(--color4);
 }
+
+.high-width {
+  stroke-width: 3px;
+}
